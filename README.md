@@ -9,4 +9,5 @@ Team 404's code for FRC 2023.
 - Ola Amr - olaSamr
 - Assa Sacko - AssaSko
 - Agastyya Kala - EngineerKid
-- ? - TheToon5
+- Ethan Thompson - TheToon5
+- Anisha Steadman - momo-beat
