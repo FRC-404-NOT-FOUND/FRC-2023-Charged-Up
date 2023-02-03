@@ -22,8 +22,8 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    s_drivetrain.setInvertfrontRightMotor(true);
     s_drivetrain.setInvertBackLeftMotor(true);
-    s_drivetrain.setInvertfrontLeftMotor(true);
     s_drivetrain.setDefaultCommand(
       new MecanumDrive(s_drivetrain, 
         () -> oi.getDriverRawAxis(Constants.LEFT_STICK_X), 
