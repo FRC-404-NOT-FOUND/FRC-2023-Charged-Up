@@ -37,8 +37,8 @@ public class MecanumDrive extends CommandBase {
     double vertical = verticalFunction.getAsDouble();
     double pivot = pivotFunction.getAsDouble();
 
-    if (Math.abs(horizontal) >= Constants.DEADZONE || Math.abs(vertical) >= Constants.DEADZONE
-        || Math.abs(pivot) >= Constants.DEADZONE) {
+    if (Math.abs(horizontal) >= Constants.GAMEPAD_DEADZONE || Math.abs(vertical) >= Constants.GAMEPAD_DEADZONE
+        || Math.abs(pivot) >= Constants.GAMEPAD_DEADZONE) {
       drivetrain.driveCartesian​(horizontal, vertical, pivot);
     } else {
       drivetrain.driveCartesian​(0, 0, 0);

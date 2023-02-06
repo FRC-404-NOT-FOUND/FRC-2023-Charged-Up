@@ -5,10 +5,19 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.subArm.A_Extension;
+import frc.robot.subsystems.subArm.A_Pivot;
 
 public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
-  public Arm() {}
+
+  private A_Extension extension;
+  private A_Pivot pivot;
+
+  public Arm(A_Extension e, A_Pivot p) {
+    extension = e;
+    pivot = p;
+  }
 
   @Override
   public void periodic() {

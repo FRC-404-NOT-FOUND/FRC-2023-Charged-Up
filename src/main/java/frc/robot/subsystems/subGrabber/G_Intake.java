@@ -8,13 +8,16 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class G_Intake extends SubsystemBase {
   
-  private final CANSparkMax motorLeft = new CANSparkMax(0, MotorType.kBrushless); // INSERT CONSTANT
-  private final CANSparkMax motorRight = new CANSparkMax(1, MotorType.kBrushless); // INSERT CONSTANT
+  private final CANSparkMax motorLeft = new CANSparkMax(Constants.INTAKE_LEFT_MOTOR_INDEX, MotorType.kBrushless); // INSERT CONSTANT
+  private final CANSparkMax motorRight = new CANSparkMax(Constants.INTAKE_RIGHT_MOTOR_INDEX, MotorType.kBrushless); // INSERT CONSTANT
 
-  //CREATE ENCODER
+  //ADD ENCODERS HERE!!!
+
+  
   /** Creates a new G_Intake. */
   public G_Intake() {}
 

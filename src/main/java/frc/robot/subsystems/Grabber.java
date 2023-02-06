@@ -5,10 +5,19 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.subArm.A_Extension;
+import frc.robot.subsystems.subGrabber.G_Hopper;
+import frc.robot.subsystems.subGrabber.G_Intake;
 
 public class Grabber extends SubsystemBase {
   /** Creates a new Grabber. */
-  public Grabber() {}
+  private G_Hopper hopper;
+  private G_Intake intake;
+  
+  public Grabber(G_Hopper h, G_Intake i) {
+    hopper = h;
+    intake = i;
+  }
 
   @Override
   public void periodic() {

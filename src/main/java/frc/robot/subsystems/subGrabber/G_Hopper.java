@@ -8,10 +8,12 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class G_Hopper extends SubsystemBase {
   public Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-  public DoubleSolenoid doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0); //CONSTANT THESE
+  public DoubleSolenoid doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 
+                Constants.HOPPER_PNEUMATIC_FWD_PORT, Constants.HOPPER_PNEUMATIC_REV_PORT); 
   /** Creates a new G_Hopper. */
   public G_Hopper() {}
 

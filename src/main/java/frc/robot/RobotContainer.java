@@ -17,7 +17,6 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final OI oi = new OI();
   private final Drivetrain s_drivetrain = new Drivetrain();
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -26,9 +25,9 @@ public class RobotContainer {
     s_drivetrain.setInvertBackLeftMotor(true);
     s_drivetrain.setDefaultCommand(
       new MecanumDrive(s_drivetrain, 
-        () -> oi.getDriverRawAxis(Constants.LEFT_STICK_X), 
-        () -> oi.getDriverRawAxis(Constants.LEFT_STICK_Y),
-        () -> oi.getDriverRawAxis(Constants.RIGHT_STICK_X))
+        () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
+        () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
+        () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X))
       );
 
     // Configure the button bindings
