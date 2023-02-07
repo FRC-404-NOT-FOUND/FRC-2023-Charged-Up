@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -19,6 +20,14 @@ public class Drivetrain extends SubsystemBase {
   private VictorSP frontRightMotor = new VictorSP(Constants.FRONT_RIGHT_MOTOR_INDEX);
   private VictorSP backLeftMotor = new VictorSP(Constants.BACK_LEFT_MOTOR_INDEX);
   private VictorSP backRightMotor = new VictorSP(Constants.BACK_RIGHT_MOTOR_INDEX);
+
+  //https://github.wpilib.org/allwpilib/docs/beta/java/edu/wpi/first/math/kinematics/MecanumDriveKinematics.html
+  //Input relative distance for each wheel from middle of robot, IN METERS
+  private MecanumDriveKinematics mcmDriveKinematics = new MecanumDriveKinematics(
+    Constants.FRONT_LEFT_WHEEL_TO_CENTER, 
+    Constants.FRONT_RIGHT_WHEEL_TO_CENTER, 
+    Constants.BACK_LEFT_WHEEL_TO_CENTER, 
+    Constants.BACK_RIGHT_WHEEL_TO_CENTER);
 
   //ADD ENCODERS HERE!!!
 
@@ -42,22 +51,26 @@ public class Drivetrain extends SubsystemBase {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
   }
 
-  public Supplier<MecanumDriveWheelPositions> getWheelPositions(){
+  public MecanumDriveWheelPositions getWheelPositions(){
     //Once we get encoders, we can put them to use here.
-    return () -> new MecanumDriveWheelPositions(
+    return new MecanumDriveWheelPositions(
       0, 
       0, 
       0, 
       0);
   }
 
-  public Supplier<MecanumDriveWheelSpeeds> getWheelSpeeds(){
+  public MecanumDriveWheelSpeeds getWheelSpeeds(){
     //Once we get encoders, we can put them to use here.
-    return () -> new MecanumDriveWheelSpeeds(
+    return new MecanumDriveWheelSpeeds(
       0, 
       0, 
       0, 
       0);
+  }
+
+  public MecanumDriveKinematics getMecanumDriveKinematics(){
+    return mcmDriveKinematics;
   }
 
   // Setters

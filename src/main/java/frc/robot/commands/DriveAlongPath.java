@@ -14,8 +14,6 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.Constants;
 
 public class DriveAlongPath extends CommandBase {
-  //https://github.wpilib.org/allwpilib/docs/beta/java/edu/wpi/first/math/kinematics/MecanumDriveKinematics.html
-  MecanumDriveKinematics mcmDriveKinematics;
   //https://github.wpilib.org/allwpilib/docs/beta/java/edu/wpi/first/wpilibj2/command/MecanumControllerCommand.html
   MecanumControllerCommand mcmCtrCmd;
   
@@ -26,31 +24,23 @@ public class DriveAlongPath extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
-    //Input relative distance for each wheel from middle of robot, IN METERS
-    //Let's use constants for these. May move over to the drivetrain subsystem.
-    mcmDriveKinematics = new MecanumDriveKinematics(
-      null, 
-      null, 
-      null, 
-      null);
-
     mcmCtrCmd = new MecanumControllerCommand(
       trajectory, 
-      null,                 //PUT THE POSE SUPPLIER HERE! Uses the current pose.
-      null,          //TBD, I'm still working out what this is.
-      mcmDriveKinematics,         //Gets the chassis + measurements of the robot.
-      null,          //TrajectoryTracker PID Controller for the X movement of the robot
-      null,          //TrajectoryTracker PID Controller for the Y movement of the robot
-      null,      //TrajectoryTracker PID Controller for the Theta angle of the robot
-      null,      //Desired rotation at the end
-      0, //Put in constant HERE
-      null,  //PID controller for the voltage of the Front Left wheel
-      null,   //PID controller for the voltage of the Rear Left wheel
-      null, //PID controller for the voltage of the Front Right wheel
-      null,  //PID controller for the voltage of the Rear Right wheel
-      drivetrain.getWheelSpeeds(),//Supplier for the MecanumDriveWheelspeeds.
-      null,  //Consumer for the output MecanumDriveMotorVoltages
-      drivetrain                  //The required Subsystem(s)
+      null,                                  //PUT THE POSE SUPPLIER HERE! Uses the current pose.
+      null,                           //TBD, I'm still working out what this is.
+      drivetrain.getMecanumDriveKinematics(),     //Gets the chassis + measurements of the robot.
+      null,                           //TrajectoryTracker PID Controller for the X movement of the robot
+      null,                           //TrajectoryTracker PID Controller for the Y movement of the robot
+      null,                       //TrajectoryTracker PID Controller for the Theta angle of the robot
+      null,                       //Desired rotation at the end
+      Constants.MAX_AUTONOMOUS_WHEEL_SPEED,       //The max speed the wheels can travel at
+      null,                   //PID controller for the voltage of the Front Left wheel
+      null,                    //PID controller for the voltage of the Rear Left wheel
+      null,                  //PID controller for the voltage of the Front Right wheel
+      null,                   //PID controller for the voltage of the Rear Right wheel
+      ()-> drivetrain.getWheelSpeeds(),            //Supplier for the MecanumDriveWheelspeeds.
+      null,                   //Consumer for the output MecanumDriveMotorVoltages
+      drivetrain                                   //The required Subsystem(s)
       );
   }
 
