@@ -53,7 +53,7 @@ MUST USE getDoubleArray(new double[6]) TO BE USEFUL
     public static double getPrimaryAprilTag(){
         return limelightTable.get().getEntry("tid").getDouble(0.0);
     }
-    //BotPose in Field Space. Helpful for Filtering.
+    //BotPose in Field Space. Helpful for Filtering + averaging
     public static double[] getBotPose(){
         return limelightTable.get().getEntry("botpose").getDoubleArray(new double[6]);
     }
