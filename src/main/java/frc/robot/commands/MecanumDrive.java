@@ -39,16 +39,16 @@ public class MecanumDrive extends CommandBase {
 
     if (Math.abs(horizontal) >= Constants.GAMEPAD_DEADZONE || Math.abs(vertical) >= Constants.GAMEPAD_DEADZONE
         || Math.abs(pivot) >= Constants.GAMEPAD_DEADZONE) {
-      drivetrain.driveCartesian​(horizontal, vertical, pivot);
+      drivetrain.driveCartesian(horizontal, vertical, pivot);
     } else {
-      drivetrain.driveCartesian​(0, 0, 0);
+      drivetrain.driveCartesian(0, 0, 0);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.driveCartesian​(0, 0, 0);
+    drivetrain.driveCartesian(0, 0, 0);
   }
 
   // Returns true when the command should end.

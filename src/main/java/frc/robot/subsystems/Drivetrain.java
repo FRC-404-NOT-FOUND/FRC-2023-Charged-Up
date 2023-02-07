@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,11 +38,27 @@ public class Drivetrain extends SubsystemBase {
     super.setDefaultCommand(defaultCommand);
   }
 
-  public void driveCartesian​(double xSpeed, double ySpeed, double zRotation) {
+  public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
   }
 
-  
+  public Supplier<MecanumDriveWheelPositions> getWheelPositions(){
+    //Once we get encoders, we can put them to use here.
+    return () -> new MecanumDriveWheelPositions(
+      0, 
+      0, 
+      0, 
+      0);
+  }
+
+  public Supplier<MecanumDriveWheelSpeeds> getWheelSpeeds(){
+    //Once we get encoders, we can put them to use here.
+    return () -> new MecanumDriveWheelSpeeds(
+      0, 
+      0, 
+      0, 
+      0);
+  }
 
   // Setters
   public void setFrontLeftMotor(double speed) {
