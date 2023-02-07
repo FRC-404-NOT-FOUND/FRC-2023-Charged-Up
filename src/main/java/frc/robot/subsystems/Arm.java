@@ -23,4 +23,17 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+  
+  public double getExtensionEncoderPosition(){
+    return extension.getEncoderPosition();
+  }
+  public double getExtensionEncoderVelocity(){
+    return extension.getEncoderVelocity();
+  }
+  public double getPivotEncoderPosition(){
+    return pivot.getEncoderPosition();
+  }
+  public double getPivotEncoderVelocity(){
+    return pivot.getEncoderVelocity();
+  }
 }

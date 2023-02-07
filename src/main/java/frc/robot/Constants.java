@@ -26,6 +26,10 @@ public final class Constants {
     //Arm_Pivot
     public static final int PIVOT_MOTOR_INDEX = 0;
 
+    public static final double PIVOT_KP = 0;
+    public static final double PIVOT_KI = 0;
+    public static final double PIVOT_KD = 0;
+
     //OI
     public static final int DRIVER_LEFT_CONTROL_PORT = 0;
     public static final int DRIVER_RIGHT_CONTROL_PORT= 1;

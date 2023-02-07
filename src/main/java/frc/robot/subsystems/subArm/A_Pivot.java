@@ -7,6 +7,7 @@ package frc.robot.subsystems.subArm;
 import java.lang.constant.Constable;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,13 +15,19 @@ import frc.robot.Constants;
 
 public class A_Pivot extends SubsystemBase {
   public final CANSparkMax pivotMotor = new CANSparkMax(Constants.PIVOT_MOTOR_INDEX, MotorType.kBrushless);
-  //CREATE ENCODER
-  
+  RelativeEncoder encoder = pivotMotor.getEncoder();
+
   /** Creates a new A_Rotation. */
   public A_Pivot() {}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+  public double getEncoderPosition(){
+    return encoder.getPosition();
+  }
+  public double getEncoderVelocity(){
+    return encoder.getVelocity();
   }
 }
