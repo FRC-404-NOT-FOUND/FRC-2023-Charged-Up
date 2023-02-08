@@ -9,17 +9,34 @@ import edu.wpi.first.math.geometry.Translation2d;
 public final class Constants {
 
 //Drivetrain
+    //PWM
     public static final int FRONT_LEFT_MOTOR_INDEX = 2;
     public static final int FRONT_RIGHT_MOTOR_INDEX = 3;
     public static final int BACK_LEFT_MOTOR_INDEX = 1;
     public static final int BACK_RIGHT_MOTOR_INDEX = 0;
 
-    //THESE WILL NEED TO BE DEFINED
+    //CAN
+    public static final int FRONT_LEFT_ENCODER_INDEX = 0;
+    public static final int FRONT_RIGHT_ENCODER_INDEX = 0;
+    public static final int BACK_LEFT_ENCODER_INDEX = 0;
+    public static final int BACK_RIGHT_ENCODER_INDEX = 0;
+    
+    //Find the radius of the wheel, multiply by 2*pi*r
+    public static final double ROTATIONS_TO_METERS = 2 * Math.PI /* * WheelRadius */;
+
+    //Kinematics (THESE WILL NEED TO BE DEFINED)
     public static Translation2d FRONT_LEFT_WHEEL_TO_CENTER;
     public static Translation2d FRONT_RIGHT_WHEEL_TO_CENTER;
     public static Translation2d BACK_LEFT_WHEEL_TO_CENTER;
     public static Translation2d BACK_RIGHT_WHEEL_TO_CENTER;
 
+    //Misc.
+    public static final double DRIVETRAIN_TRANSFORM_KP = 0.0;
+    public static final double DRIVETRAIN_TRANSFORM_KI = 0.0;
+    public static final double DRIVETRAIN_TRANSFORM_KD = 0.0;
+    public static final double DRIVETRAIN_ROTATE_KP = 0.0;
+    public static final double DRIVETRAIN_ROTATE_KI = 0.0;
+    public static final double DRIVETRAIN_ROTATE_KD = 0.0;
     public static final double MAX_AUTONOMOUS_WHEEL_SPEED = 0.0; //In Meters per Second
 
 //Grabber_Intake

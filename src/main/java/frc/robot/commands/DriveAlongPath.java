@@ -4,43 +4,58 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPMecanumControllerCommand;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import frc.robot.subsystems.Drivetrain;
 
 import frc.robot.Constants;
 
 public class DriveAlongPath extends CommandBase {
+  //WPILIB version of MecanumControllerCommand
   //https://github.wpilib.org/allwpilib/docs/beta/java/edu/wpi/first/wpilibj2/command/MecanumControllerCommand.html
-  MecanumControllerCommand mcmCtrCmd;
-  
+  //MecanumControllerCommand mcmCtrCmd;
+
+  //Team 3015 Ranger Robotics's Path Planner MecanumControllerCommand
+  //If we wanted to, we could use WPI-Lib's PathFollower... But do we really?
+  //https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#ppmecanumcontrollercommand
+  //Here's the pathplanner API: https://robotpy.readthedocs.io/projects/pathplannerlib/en/stable/api.html
+  PPMecanumControllerCommand mcmCtrCmd;
+
+  //NOTE: The PathPlanner also comes with a full auto generator. We should Implement that.
+  //Leave this one though, it'll be good for driverside automation.
+  //https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#autobuilder
 
   /** Creates a new DriveAlongPath. */
-
-  public DriveAlongPath(Drivetrain drivetrain, Trajectory trajectory) {
+  public DriveAlongPath(PathPlannerTrajectory trajectory, Drivetrain drivetrain, boolean isFirstPath) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
-    mcmCtrCmd = new MecanumControllerCommand(
-      trajectory, 
-      null,                                  //PUT THE POSE SUPPLIER HERE! Uses the current pose.
-      null,                           //TBD, I'm still working out what this is.
-      drivetrain.getMecanumDriveKinematics(),     //Gets the chassis + measurements of the robot.
-      null,                           //TrajectoryTracker PID Controller for the X movement of the robot
-      null,                           //TrajectoryTracker PID Controller for the Y movement of the robot
-      null,                       //TrajectoryTracker PID Controller for the Theta angle of the robot
-      null,                       //Desired rotation at the end
-      Constants.MAX_AUTONOMOUS_WHEEL_SPEED,       //The max speed the wheels can travel at
-      null,                   //PID controller for the voltage of the Front Left wheel
-      null,                    //PID controller for the voltage of the Rear Left wheel
-      null,                  //PID controller for the voltage of the Front Right wheel
-      null,                   //PID controller for the voltage of the Rear Right wheel
-      ()-> drivetrain.getWheelSpeeds(),            //Supplier for the MecanumDriveWheelspeeds.
-      null,                   //Consumer for the output MecanumDriveMotorVoltages
-      drivetrain                                   //The required Subsystem(s)
+    if(isFirstPath){
+      drivetrain.resetOdometry(
+        trajectory.getInitialState().holonomicRotation,
+        drivetrain.getWheelPositions(),
+        trajectory.getInitialState().poseMeters
+      );
+    }
+
+    mcmCtrCmd = new PPMecanumControllerCommand(
+      trajectory,                               //PathPlannerTrajectory
+      () -> drivetrain.getCurrentPose(),        //Pose Supplier (GETS THE CURRENT POSE EVERY TIME)
+      drivetrain.getKinematics(),               //Kinematics of robot
+                                                //X and Y PID COntrollers, using 0 for all uses feedforwards, TO BE TUNED in Constants
+      new PIDController(Constants.DRIVETRAIN_TRANSFORM_KP, Constants.DRIVETRAIN_TRANSFORM_KI, Constants.DRIVETRAIN_TRANSFORM_KD),
+      new PIDController(Constants.DRIVETRAIN_TRANSFORM_KP, Constants.DRIVETRAIN_TRANSFORM_KI, Constants.DRIVETRAIN_TRANSFORM_KD), 
+                                                //Rotation PID controller, using 0 for all uses feedforwards, TO BE TUNED in Constants
+      new PIDController(Constants.DRIVETRAIN_ROTATE_KP, Constants.DRIVETRAIN_ROTATE_KI, Constants.DRIVETRAIN_ROTATE_KD),
+      Constants.MAX_AUTONOMOUS_WHEEL_SPEED,     //Max Wheel Speed
+      output -> { drivetrain.setWheelSpeeds(output); }, 
+      drivetrain                                //Requirements
       );
   }
 
