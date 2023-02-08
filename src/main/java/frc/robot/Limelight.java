@@ -55,7 +55,10 @@ MUST USE getDoubleArray(new double[6]) TO BE USEFUL
     }
     //BotPose in Field Space. Helpful for Filtering.
     public static double[] getBotPose(){
-        return limelightTable.get().getEntry("botpose").getDoubleArray(new double[6]);
+        if(isValidTarget() == 1.0)
+            return limelightTable.get().getEntry("botpose").getDoubleArray(new double[6]);
+        else
+            return null;
     }
 
     //We may want to have different pipelines for different apriltags...
