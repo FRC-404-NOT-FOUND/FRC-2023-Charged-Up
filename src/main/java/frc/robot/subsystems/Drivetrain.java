@@ -4,12 +4,11 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.Consumer;
-
 import com.ctre.phoenixpro.hardware.CANcoder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
@@ -20,6 +19,7 @@ import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Limelight;
 
 public class Drivetrain extends SubsystemBase {
   //Motors
@@ -46,10 +46,21 @@ public class Drivetrain extends SubsystemBase {
 
   private MecanumDrive mDrive;
 
+  private IMU imu;
+
   public Drivetrain() {
     mDrive = new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
+    imu = new IMU();
 
-    odometry = new MecanumDriveOdometry(kinematics, getGyroAngle(), getWheelPositions() /*, INITIAL POSE!!! */);
+    Pose2d initialPose;
+
+    if (Limelight.isValidTarget()) {
+      initialPose = getVisionPose();
+    } else {
+      initialPose = new Pose2d(); // Possibly replace with possible values for start positions based on the map
+    }
+
+    odometry = new MecanumDriveOdometry(kinematics, getCurrentRotation(), getWheelPositions(), initialPose);
   }
 
   @Override
@@ -70,13 +81,24 @@ public class Drivetrain extends SubsystemBase {
     return kinematics;
   }
   
-  //This should be the main pose. Here, we should combine
-  //The IDEAL data from Odometry, 
-  //The MEASURED data from Vision, 
-  //And maybe the gyro?
-  //We should also use some kind of filter/average within this to get an accurate result.
+  // This should be the main pose. Here, we should combine
+  // The IDEAL data from Odometry, 
+  // The MEASURED data from Vision and gyro, 
+  // In the future, we should also use some kind of filter/average within this to get an accurate result.
   public Pose2d getCurrentPose(){
-    return null;
+    if (Limelight.isValidTarget()) {
+      return getVisionPose();
+    } else {
+      return getOdometryPose();
+    }
+  }
+
+  public Rotation2d getCurrentRotation(){
+    if (Limelight.isValidTarget()) {
+      return getVisionRotation();
+    } else {
+      return getGyroAngle();
+    }
   }
 
   ////////////////////////////////////////////////
@@ -94,6 +116,7 @@ public class Drivetrain extends SubsystemBase {
       backRightEncoder.getPosition().getValue() * Constants.ROTATIONS_TO_METERS
     );
   }
+
   //These are in rotations a second, will have to convert to meters per second. (Using a constant value)
   public MecanumDriveWheelSpeeds getWheelSpeeds(){
     return new MecanumDriveWheelSpeeds(
@@ -104,11 +127,9 @@ public class Drivetrain extends SubsystemBase {
     );
   }
   
-  //TO BE IMPLEMENTED
+  // Returns a Rotation2d based on the Gyro's rotation z after calibration
   public Rotation2d getGyroAngle(){
-    //Here we'll send a signal through the GYRO (maybe different subsytem) to the Arduino, asking it for current information.
-    //It then sends that requested data back to us
-    return null;
+    return new Rotation2d(imu.getGyroZ()); // Need to investigate how the gyro returns values
   }
 
   ////////////////////////////////////////////////
@@ -128,6 +149,26 @@ public class Drivetrain extends SubsystemBase {
   //Resets the odometry to the selected values.
   public void resetOdometry(Rotation2d angle, MecanumDriveWheelPositions wheelPositions, Pose2d pose){
     odometry.resetPosition(angle, wheelPositions, pose);
+  }
+
+  ////////////////////////////////////////////////
+  /////               Vision                 /////
+  ////////////////////////////////////////////////
+
+  // This uses the Limelight botpose x, y, and yaw values to determine the Pose2d of the robot
+  // This should only be called if there is a valid target, as it updates the odometry position
+  public Pose2d getVisionPose(){
+    double[] pose = Limelight.getBotPose();
+    Translation2d t = new Translation2d(pose[0], pose[1]); // x and y values for determining coordinates
+    Rotation2d r = Rotation2d.fromDegrees(pose[5]); // yaw for determining rotation
+    Pose2d p = new Pose2d(t, r);
+    return p;
+  }
+
+  // Gets the current Rotation2d of the robot based on the botpose yaw
+  public Rotation2d getVisionRotation(){
+    double[] pose = Limelight.getBotPose();
+    return Rotation2d.fromDegrees(pose[5]); // Important! Limelight returns in degrees, Rotation2d needs radians
   }
 
 
