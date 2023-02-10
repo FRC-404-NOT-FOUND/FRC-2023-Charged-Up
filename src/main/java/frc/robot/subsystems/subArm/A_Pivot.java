@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.subArm;
 
-import java.lang.constant.Constable;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 

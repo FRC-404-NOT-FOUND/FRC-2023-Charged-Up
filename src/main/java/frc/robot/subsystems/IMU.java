@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.io.Serial;
-
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
