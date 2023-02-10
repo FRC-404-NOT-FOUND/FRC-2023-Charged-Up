@@ -45,9 +45,11 @@ MUST USE getDoubleArray(new double[6]) TO BE USEFUL
 
     /// To be used in automation ///
 
-    //Is there a valid target? if so, then return 1.
-    public static double isValidTarget(){
-        return limelightTable.get().getEntry("tv").getDouble(0.0);
+    //Is there a valid target? if so, then return true.
+    public static boolean isValidTarget(){
+        double dval = limelightTable.get().getEntry("tv").getDouble(0.0);
+        if (dval == 1) return true;
+        return false;
     }
     //Gets the Primary apriltag in view.
     public static double getPrimaryAprilTag(){
@@ -55,7 +57,7 @@ MUST USE getDoubleArray(new double[6]) TO BE USEFUL
     }
     //BotPose in Field Space. Helpful for Filtering.
     public static double[] getBotPose(){
-        if(isValidTarget() == 1.0)
+        if(isValidTarget())
             return limelightTable.get().getEntry("botpose").getDoubleArray(new double[6]);
         else
             return null;

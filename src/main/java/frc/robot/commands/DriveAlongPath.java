@@ -8,15 +8,11 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
 import frc.robot.Constants;
 
-public class DriveAlongPath extends CommandBase {
+public class DriveAlongPath extends PPMecanumControllerCommand {
   //WPILIB version of MecanumControllerCommand
   //https://github.wpilib.org/allwpilib/docs/beta/java/edu/wpi/first/wpilibj2/command/MecanumControllerCommand.html
   //MecanumControllerCommand mcmCtrCmd;
@@ -25,26 +21,12 @@ public class DriveAlongPath extends CommandBase {
   //If we wanted to, we could use WPI-Lib's PathFollower... But do we really?
   //https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#ppmecanumcontrollercommand
   //Here's the pathplanner API: https://robotpy.readthedocs.io/projects/pathplannerlib/en/stable/api.html
-  PPMecanumControllerCommand mcmCtrCmd;
 
   //NOTE: The PathPlanner also comes with a full auto generator. We should Implement that.
   //Leave this one though, it'll be good for driverside automation.
   //https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#autobuilder
-
-  /** Creates a new DriveAlongPath. */
   public DriveAlongPath(PathPlannerTrajectory trajectory, Drivetrain drivetrain, boolean isFirstPath) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drivetrain);
-
-    if(isFirstPath){
-      drivetrain.resetOdometry(
-        trajectory.getInitialState().holonomicRotation,
-        drivetrain.getWheelPositions(),
-        trajectory.getInitialState().poseMeters
-      );
-    }
-
-    mcmCtrCmd = new PPMecanumControllerCommand(
+    super(
       trajectory,                               //PathPlannerTrajectory
       () -> drivetrain.getCurrentPose(),        //Pose Supplier (GETS THE CURRENT POSE EVERY TIME)
       drivetrain.getKinematics(),               //Kinematics of robot
@@ -58,24 +40,26 @@ public class DriveAlongPath extends CommandBase {
       drivetrain                                //Requirements
       );
   }
+  //These methods do exist, however, only in the super class.
 
   // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+  // @Override
+  // public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    mcmCtrCmd.execute();
-  }
+  // // Called every time the scheduler runs while the command is scheduled.
+  // @Override
+  // public void execute() {}
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+  // // Called once the command ends or is interrupted.
+  // @Override
+  // public void end(boolean interrupted) {
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+  // }
+
+  // // Returns true when the command should end.
+  // @Override
+  // public boolean isFinished() {
+  //   return false;
+  // }
+
 }
