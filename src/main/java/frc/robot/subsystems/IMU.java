@@ -24,17 +24,26 @@ public class IMU extends SubsystemBase {
       imu_gyro = new IMU_Gyroscope(arduinoTeensy);
       imu_accel = new IMU_Accelerometer(arduinoTeensy);
     }
+
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(getGyroRotation());
   }
 
+  //Connects to, and sets up the serial port
   public boolean connectSerialPort(){
     try{
       arduinoTeensy = new SerialPort(Constants.SERIAL_BAUD_RATE, SerialPort.Port.kUSB);
       System.out.println("Connected to Serial Port kUSB");
+      arduinoTeensy.setTimeout(10);
+
+      while(arduinoTeensy.readString() != "READY"){
+        System.out.println("IMU Not ready...");
+      }
       return true;
     }
     catch(Exception e){
@@ -42,6 +51,11 @@ public class IMU extends SubsystemBase {
       try{
         arduinoTeensy = new SerialPort(Constants.SERIAL_BAUD_RATE, SerialPort.Port.kUSB1);
         System.out.println("Connected to Serial Port kUSB1");
+        arduinoTeensy.setTimeout(10);
+
+        while(arduinoTeensy.readString() != "READY"){
+          System.out.println("IMU Not ready...");
+        }
         return true;
       }
       catch(Exception e1){
@@ -49,6 +63,12 @@ public class IMU extends SubsystemBase {
         try{
           arduinoTeensy = new SerialPort(Constants.SERIAL_BAUD_RATE, SerialPort.Port.kUSB2);
           System.out.println("Connected to Serial Port kUSB2");
+          arduinoTeensy.setTimeout(10);
+          
+          while(arduinoTeensy.readString() != "READY"){
+            System.out.println("IMU Not ready...");
+          }
+          System.out.println("YIPPEE: IMU Ready!");
           return true;
         }
         catch(Exception e2){
@@ -67,14 +87,14 @@ public class IMU extends SubsystemBase {
   public double[] getGyroRotation(){
     return imu_gyro.getRotation();
   }
-  public double getGyroX(){
-    return imu_gyro.getX();
+  public double getGyroYaw(){
+    return imu_gyro.getYaw();
   }
   public double getGyroY(){
-    return imu_gyro.getY();
+    return imu_gyro.getPitch();
   }
-  public double getGyroZ(){
-    return imu_gyro.getZ();
+  public double getGyroRoll(){
+    return imu_gyro.getRoll();
   }
 
   //Gets ALL Acceleration

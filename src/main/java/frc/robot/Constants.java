@@ -25,10 +25,10 @@ public final class Constants {
     public static final double ROTATIONS_TO_METERS = 2 * Math.PI /* * WheelRadius */;
 
     //Kinematics (THESE WILL NEED TO BE DEFINED)
-    public static Translation2d FRONT_LEFT_WHEEL_TO_CENTER;
-    public static Translation2d FRONT_RIGHT_WHEEL_TO_CENTER;
-    public static Translation2d BACK_LEFT_WHEEL_TO_CENTER;
-    public static Translation2d BACK_RIGHT_WHEEL_TO_CENTER;
+    public static Translation2d FRONT_LEFT_WHEEL_TO_CENTER = new Translation2d(-1, 1);
+    public static Translation2d FRONT_RIGHT_WHEEL_TO_CENTER = new Translation2d(1, 1);;
+    public static Translation2d BACK_LEFT_WHEEL_TO_CENTER = new Translation2d(-1, -1);;
+    public static Translation2d BACK_RIGHT_WHEEL_TO_CENTER= new Translation2d(1, -1);;
 
     //IMU
     public static final int SERIAL_BAUD_RATE = 115200;

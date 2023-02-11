@@ -129,7 +129,9 @@ public class Drivetrain extends SubsystemBase {
   
   // Returns a Rotation2d based on the Gyro's rotation z after calibration
   public Rotation2d getGyroAngle(){
-    return new Rotation2d(imu.getGyroZ()); // Need to investigate how the gyro returns values
+    //Here we'll send a signal through the GYRO (maybe different subsytem) to the Arduino, asking it for current information.
+    //It then sends that requested data back to us
+    return new Rotation2d(imu.getGyroYaw());
   }
 
   ////////////////////////////////////////////////

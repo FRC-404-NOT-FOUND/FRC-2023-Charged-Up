@@ -32,6 +32,12 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
   public void calibrate() {
     // TODO Auto-generated method stub
     arduinoTeensy.writeString("gC");
+    System.out.println(arduinoTeensy.readString()); //Calibrating IMU...
+    String done = arduinoTeensy.readString();
+    while(done == ""){
+      done = arduinoTeensy.readString();
+    }
+    System.out.println(arduinoTeensy.readString()); //DONE!
   }
 
   @Override
@@ -43,7 +49,7 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
   @Override
   public double getAngle() {
     // TODO Auto-generated method stub
-    getZ();
+    getYaw();
     return 0;
   }
 
@@ -55,30 +61,26 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
 
   //Get ALL rotation values.
   public double[] getRotation(){
-    arduinoTeensy.writeString("gE");
+    arduinoTeensy.writeString("gR");
 
-    String x = arduinoTeensy.readString();
-    String y = arduinoTeensy.readString();
-    String z = arduinoTeensy.readString();
+    double y = Double.parseDouble(arduinoTeensy.readString());
+    double p = Double.parseDouble(arduinoTeensy.readString());
+    double r = Double.parseDouble(arduinoTeensy.readString());
 
-    double X = Double.parseDouble(x);
-    double Y = Double.parseDouble(y);
-    double Z = Double.parseDouble(z);
-
-    double[] array = {X, Y, Z};
+    double[] array = {y, p, r};
     
     return array;
   }
-  public double getX(){
-    arduinoTeensy.writeString("gX");
-    return 0;
+  public double getYaw(){
+    arduinoTeensy.writeString("gY"); 
+    return Double.parseDouble(arduinoTeensy.readString());
   }
-  public double getY(){
-    arduinoTeensy.writeString("gY");
-    return 0;
+  public double getPitch(){
+    arduinoTeensy.writeString("gP");
+    return Double.parseDouble(arduinoTeensy.readString());
   }
-  public double getZ(){
-    arduinoTeensy.writeString("gZ");
-    return 0;
+  public double getRoll(){
+    arduinoTeensy.writeString("gR");
+    return Double.parseDouble(arduinoTeensy.readString());
   }
 }
