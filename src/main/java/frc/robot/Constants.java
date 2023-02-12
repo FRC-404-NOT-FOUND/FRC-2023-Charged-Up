@@ -31,7 +31,7 @@ public final class Constants {
     public static Translation2d BACK_RIGHT_WHEEL_TO_CENTER= new Translation2d(1, -1);;
 
     //IMU
-    public static final int SERIAL_BAUD_RATE = 115200;
+    public static final int SERIAL_BAUD_RATE = 9600;
 
     //Misc.
     public static final double DRIVETRAIN_TRANSFORM_KP = 0.0;

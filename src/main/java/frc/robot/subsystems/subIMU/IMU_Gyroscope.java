@@ -62,6 +62,7 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
   //Get ALL rotation values.
   public double[] getRotation(){
     arduinoTeensy.writeString("gR");
+    while(arduinoTeensy.getBytesReceived() == 0){}
 
     double y = Double.parseDouble(arduinoTeensy.readString());
     double p = Double.parseDouble(arduinoTeensy.readString());
@@ -72,8 +73,30 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
     return array;
   }
   public double getYaw(){
-    arduinoTeensy.writeString("gY"); 
-    return Double.parseDouble(arduinoTeensy.readString());
+    arduinoTeensy.writeString("gY");
+
+    while(arduinoTeensy.getBytesReceived() == 0){}
+
+    int availableBytes = arduinoTeensy.getBytesReceived();
+    System.out.println(availableBytes);
+    boolean messageIsReady = false;
+
+    while (!messageIsReady){
+      byte[] mes = arduinoTeensy.read(availableBytes);
+      String message = new String(mes);
+
+      try {
+        double yaw = Double.parseDouble(message);
+        System.out.print("YAW: ");
+        System.out.println(message);
+        return yaw;
+      } 
+      catch (Exception e) {
+        return 0.0;
+      }
+    }
+    //This shouldn't happen
+    return 0.0;
   }
   public double getPitch(){
     arduinoTeensy.writeString("gP");
