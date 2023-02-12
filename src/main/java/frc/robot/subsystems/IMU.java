@@ -4,10 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.Supplier;
-
-import javax.swing.text.html.HTMLDocument.BlockElement;
-
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;

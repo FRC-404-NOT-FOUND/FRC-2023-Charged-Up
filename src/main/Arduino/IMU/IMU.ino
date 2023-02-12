@@ -144,8 +144,7 @@ void loop() {
 
             char message[100]; //Read the latest string.
             int availableBytes = Serial.available();
-            for(int i = 0; i < availableBytes; i++)
-            {
+            for(int i = 0; i < availableBytes; i++) {
                 message[i] = Serial.read();
                 Serial.print(message[i]);
             } 
@@ -153,26 +152,35 @@ void loop() {
             message[availableBytes] = '\0'; // Append a null
             //Sorry for the if-elseif-elseif-elseif-elseif-elseif :(((
             if(message[0] == 'g'){
-                if(message[1] == 'Y'){
-                    Serial.println(ypr[0] * 180/M_PI);
-                }
-                else if(message[1] == 'P'){
-                    Serial.println(ypr[1] * 180/M_PI);
-                }
-                else if(message[1] == 'P'){
-                    Serial.println(ypr[2] * 180/M_PI);
-                }
-                else if(message[1] == 'R'){
-                    Serial.println(ypr[0] * 180/M_PI);
-                    Serial.println(ypr[1] * 180/M_PI);
-                    Serial.println(ypr[2] * 180/M_PI);
-                }
-                else if(message[1] == 'C'){ //Calibrate the sensor.
-                    Serial.println("Calibrating IMU...");
-                    mpu.CalibrateAccel(6);
-                    mpu.CalibrateGyro(6);
-                    Serial.println("");
-                    Serial.println("DONE!");
+                switch (message[1]) {
+                    case 'Y': // yaw
+                        Serial.println(ypr[0] * 180/M_PI);
+                        break;
+
+                    case 'P': // pitch
+                        Serial.println(ypr[1] * 180/M_PI);
+                        break;
+
+                    case 'R': // roll
+                        Serial.println(ypr[2] * 180/M_PI);
+                        break;
+
+                    case 'A': // all
+                        Serial.println(ypr[0] * 180/M_PI);
+                        Serial.println(ypr[1] * 180/M_PI);
+                        Serial.println(ypr[2] * 180/M_PI);
+                        break;
+
+                    case 'C': // calibrate
+                        Serial.println("Calibrating IMU...");
+                        mpu.CalibrateAccel(6);
+                        mpu.CalibrateGyro(6);
+                        Serial.println("");
+                        Serial.println("DONE!");
+                        break;
+                    
+                    default: // unreachable but you know just in case someone does something really stupid at least we'll know
+                        break;
                 }
             }   
             // blink LED to indicate activity

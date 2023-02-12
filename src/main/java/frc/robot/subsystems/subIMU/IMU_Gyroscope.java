@@ -61,7 +61,7 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
 
   //Get ALL rotation values.
   public double[] getRotation(){
-    arduinoTeensy.writeString("gR");
+    arduinoTeensy.writeString("gA");
     while(arduinoTeensy.getBytesReceived() == 0){}
 
     double y = Double.parseDouble(arduinoTeensy.readString());
