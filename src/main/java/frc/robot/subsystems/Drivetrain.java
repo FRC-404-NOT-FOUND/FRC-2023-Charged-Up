@@ -34,7 +34,7 @@ public class Drivetrain extends SubsystemBase {
     super.setDefaultCommand(defaultCommand);
   }
 
-  public void driveCartesian​(double xSpeed, double ySpeed, double zRotation) {
+  public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
   }
 

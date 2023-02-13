@@ -21,7 +21,9 @@ public final class Constants {
     public static final int HOPPER_PNEUMATIC_REV_PORT = 1;
 
     //Arm_Extension
-    public static final int EXTENSION_WHEEL_MOTOR_INDEX = 0;
+    public static final int EXTENSION_WHEEL_MOTOR_INDEX = 1;
+    public static final int EXTENSION_WHEEL_MAX_POSITION = -62;
+    public static final int EXTENSION_WHEEL_MIN_POSITION = 133;
 
     //Arm_Pivot
     public static final int PIVOT_MOTOR_INDEX = 0;
@@ -31,9 +33,9 @@ public final class Constants {
     public static final double PIVOT_KD = 0;
 
     //OI
-    public static final int DRIVER_LEFT_CONTROL_PORT = 0;
-    public static final int DRIVER_RIGHT_CONTROL_PORT= 1;
-    public static final int DRIVER_GAMEPAD_CONTROL_PORT = 2;
+    public static final int DRIVER_LEFT_CONTROL_PORT = 1;
+    public static final int DRIVER_RIGHT_CONTROL_PORT= 2;
+    public static final int DRIVER_GAMEPAD_CONTROL_PORT = 0;
 
     public static final int GAMEPAD_LEFT_STICK_X = 0;
     public static final int GAMEPAD_LEFT_STICK_Y = 1;
