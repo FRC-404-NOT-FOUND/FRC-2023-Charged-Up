@@ -35,7 +35,7 @@ public class IMU extends SubsystemBase {
       mes[availableBytes] = '\0';
       
       String message = new String(mes);
-      System.out.println(message);
+      System.out.print(message);
 
       if(message.contains("READY")){
         System.out.println("IMU IS READY!");
@@ -96,8 +96,15 @@ public class IMU extends SubsystemBase {
   public double[] getGyroRotation(){
     return imu_gyro.getRotation();
   }
+
   public double getGyroYaw(){
-    return imu_gyro.getYaw();
+    try{
+      return imu_gyro.getYaw();
+    }
+    catch(Exception e){
+      System.out.println("Could not get yaw.");
+      return 0.0;
+    }
   }
   public double getGyroPitch(){
     return imu_gyro.getPitch();

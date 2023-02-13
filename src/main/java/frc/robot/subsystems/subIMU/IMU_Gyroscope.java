@@ -49,8 +49,13 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
   @Override
   public double getAngle() {
     // TODO Auto-generated method stub
-    getYaw();
-    return 0;
+    try{
+      return getYaw();
+    }
+    catch(Exception e){
+      return 0;
+    }
+    
   }
 
   @Override
@@ -72,31 +77,25 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
     
     return array;
   }
-  public double getYaw(){
+
+  public double getYaw() throws Exception{
     arduinoTeensy.writeString("gY");
+    String mes = "";
 
     while(arduinoTeensy.getBytesReceived() == 0){}
-
     int availableBytes = arduinoTeensy.getBytesReceived();
-    System.out.println(availableBytes);
-    boolean messageIsReady = false;
+    byte[] serialBuffer = arduinoTeensy.read(availableBytes);
 
-    while (!messageIsReady){
-      byte[] mes = arduinoTeensy.read(availableBytes);
-      String message = new String(mes);
-
-      try {
-        double yaw = Double.parseDouble(message);
+    for (int i = 0; i < availableBytes; i++){
+      if ((char) serialBuffer[i] == ';'){
+        double yaw = Double.parseDouble(mes);
         System.out.print("YAW: ");
-        System.out.println(message);
+        System.out.println(yaw);
         return yaw;
-      } 
-      catch (Exception e) {
-        return 0.0;
-      }
+        }
+      mes = mes + ((char) serialBuffer[i]);
     }
-    //This shouldn't happen
-    return 0.0;
+    throw new Exception("Could not read string in Time");
   }
   public double getPitch(){
     arduinoTeensy.writeString("gP");

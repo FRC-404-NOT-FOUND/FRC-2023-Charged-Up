@@ -62,13 +62,13 @@ void setup() {
     while (!Serial); // wait for Leonardo enumeration, others continue immediately
 
     // initialize device
-    Serial.println(F("Initializing I2C devices..."));
+    Serial.println(F("Initializing I2C devices...; "));
     mpu.initialize();
     // pinMode(INTERRUPT_PIN, INPUT);
 
     // verify connection
-    Serial.println(F("Testing device connections..."));
-    Serial.println(mpu.testConnection() ? F("MPU6050 connection successful") : F("MPU6050 connection failed"));
+    Serial.println(F("Testing device connections... "));
+    Serial.println(mpu.testConnection() ? F("MPU6050 connection successful; ") : F("MPU6050 connection failed; "));
 
     // load and configure the DMP
     Serial.println(F("Initializing DMP..."));
@@ -154,21 +154,24 @@ void loop() {
             if(message[0] == 'g'){
                 switch (message[1]) {
                     case 'Y': // yaw
-                        Serial.println(ypr[0] * 180/M_PI);
+                        Serial.print(ypr[0] * 180/M_PI);
+                        Serial.println(";");
                         break;
 
                     case 'P': // pitch
-                        Serial.println(ypr[1] * 180/M_PI);
+                        Serial.print(ypr[1] * 180/M_PI);
+                        Serial.println(";");
                         break;
 
                     case 'R': // roll
-                        Serial.println(ypr[2] * 180/M_PI);
+                        Serial.print(ypr[2] * 180/M_PI);
+                        Serial.println(";");
                         break;
 
                     case 'A': // all
-                        Serial.println(ypr[0] * 180/M_PI);
-                        Serial.println(ypr[1] * 180/M_PI);
-                        Serial.println(ypr[2] * 180/M_PI);
+                        Serial.print(ypr[0] * 180/M_PI);
+                        Serial.print(ypr[1] * 180/M_PI);
+                        Serial.print(ypr[2] * 180/M_PI);
                         break;
 
                     case 'C': // calibrate
