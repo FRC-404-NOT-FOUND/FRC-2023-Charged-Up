@@ -146,7 +146,6 @@ void loop() {
             int availableBytes = Serial.available();
             for(int i = 0; i < availableBytes; i++) {
                 message[i] = Serial.read();
-                Serial.print(message[i]);
             } 
             
             message[availableBytes] = '\0'; // Append a null
