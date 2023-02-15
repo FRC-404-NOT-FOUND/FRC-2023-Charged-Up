@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.subIMU;
 
+import javax.naming.directory.SearchResult;
+
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,7 +39,7 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
     while(done == ""){
       done = arduinoTeensy.readString();
     }
-    System.out.println(arduinoTeensy.readString()); //DONE!
+    System.out.println(done); //DONE!
   }
 
   @Override
@@ -78,25 +80,26 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
     return array;
   }
 
-  public double getYaw() throws Exception{
+  public double getYaw(){
     arduinoTeensy.writeString("gY");
-    String mes = "";
+    Boolean trigger = false;
+    String serialBuffer = "";
 
-    while(arduinoTeensy.getBytesReceived() == 0){}
-    int availableBytes = arduinoTeensy.getBytesReceived();
-    byte[] serialBuffer = arduinoTeensy.read(availableBytes);
-
-    for (int i = 0; i < availableBytes; i++){
-      if ((char) serialBuffer[i] == ';'){
-        double yaw = Double.parseDouble(mes);
-        System.out.print("YAW: ");
-        System.out.println(yaw);
-        return yaw;
-        }
-      mes = mes + ((char) serialBuffer[i]);
+    while (!trigger){
+      while(arduinoTeensy.getBytesReceived() == 0){}
+      serialBuffer.concat(arduinoTeensy.readString());
+      
+      if (serialBuffer.contains(";")){
+          serialBuffer = serialBuffer.substring(0, serialBuffer.indexOf(";"));
+          double yaw = Double.parseDouble(serialBuffer);
+          System.out.print("YAW: ");
+          System.out.println(yaw);
+          return yaw;
+      }
     }
-    throw new Exception("Could not read string in Time");
+    return 0.0;
   }
+  
   public double getPitch(){
     arduinoTeensy.writeString("gP");
     return Double.parseDouble(arduinoTeensy.readString());

@@ -25,19 +25,13 @@ public class IMU extends SubsystemBase {
       imu_gyro = new IMU_Gyroscope(arduinoTeensy);
       imu_accel = new IMU_Accelerometer(arduinoTeensy);
     }
-    while(!isReady){
-      char[] mes = new char[200];
-      int availableBytes = arduinoTeensy.getBytesReceived();
-      for(int i = 0; i < availableBytes; i++)
-        {
-          mes[i] = (char) arduinoTeensy.read(1)[0];
-        }
-      mes[availableBytes] = '\0';
-      
-      String message = new String(mes);
-      System.out.print(message);
+    String serialBuffer = "";
 
-      if(message.contains("READY")){
+    while(!isReady){
+      while(arduinoTeensy.getBytesReceived() == 0){}
+      serialBuffer.concat(arduinoTeensy.readString());
+
+      if(serialBuffer.contains("READY")){
         System.out.println("IMU IS READY!");
         isReady = true;
       }
@@ -55,7 +49,6 @@ public class IMU extends SubsystemBase {
     try{
       arduinoTeensy = new SerialPort(Constants.SERIAL_BAUD_RATE, SerialPort.Port.kUSB);
       System.out.println("Connected to Serial Port kUSB");
-      arduinoTeensy.setTimeout(10);
 
       return true;
     }
@@ -64,7 +57,6 @@ public class IMU extends SubsystemBase {
       try{
         arduinoTeensy = new SerialPort(Constants.SERIAL_BAUD_RATE, SerialPort.Port.kUSB1);
         System.out.println("Connected to Serial Port kUSB1");
-        arduinoTeensy.setTimeout(10);
 
         return true;
       }
@@ -72,8 +64,7 @@ public class IMU extends SubsystemBase {
         System.out.println("Failed to Connect to kUSB1");
         try{
           arduinoTeensy = new SerialPort(Constants.SERIAL_BAUD_RATE, SerialPort.Port.kUSB2);
-          System.out.println("Connected to Serial Port kUSB2");
-          arduinoTeensy.setTimeout(10);       
+          System.out.println("Connected to Serial Port kUSB2");    
           return true;
         }
         catch(Exception e2){
