@@ -14,7 +14,7 @@ public class A_Pivot extends SubsystemBase {
   public final CANSparkMax pivotMotor = new CANSparkMax(Constants.PIVOT_MOTOR_INDEX, MotorType.kBrushless);
   //CREATE ENCODER
   
-  /** Creates a new A_Rotation. */
+  /** Creates a new A_Pivot. */
   public A_Pivot() {}
 
   @Override

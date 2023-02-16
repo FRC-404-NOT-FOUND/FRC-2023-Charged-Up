@@ -50,7 +50,7 @@ public class Drivetrain extends SubsystemBase {
 
   public Drivetrain() {
     mDrive = new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
-    imu = new IMU();
+    imu = IMU.create();
 
     Pose2d initialPose;
 

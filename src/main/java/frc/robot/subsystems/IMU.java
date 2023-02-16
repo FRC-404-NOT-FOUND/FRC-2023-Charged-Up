@@ -16,24 +16,34 @@ public class IMU extends SubsystemBase {
   private SerialPort arduinoTeensy;
   private IMU_Gyroscope imu_gyro;
   private IMU_Accelerometer imu_accel;
+  private static IMU instance = null;
 
-  /** Creates a new IMU. */
-  public IMU() {
+  public static IMU create() {
+    if (instance == null) {
+      instance = new IMU();
+    }
+
+    return instance;
+  }
+
+  public void connect() {
     isActive = connectSerialPort();
 
     if(isActive){
       imu_gyro = new IMU_Gyroscope(arduinoTeensy);
       imu_accel = new IMU_Accelerometer(arduinoTeensy);
-    }
-    String serialBuffer = "";
 
-    while(!isReady){
-      while(arduinoTeensy.getBytesReceived() == 0){}
-      serialBuffer.concat(arduinoTeensy.readString());
+      while(!isReady){
+        if (arduinoTeensy.getBytesReceived() > 0) {
+          String data = arduinoTeensy.readString();
+          System.out.println(data);
 
-      if(serialBuffer.contains("READY")){
-        System.out.println("IMU IS READY!");
-        isReady = true;
+          if(data.contains("READY")){
+            System.out.println("IMU IS READY!");
+            isReady = true;
+            break;
+          }
+        }
       }
     }
   }
@@ -41,7 +51,7 @@ public class IMU extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(getGyroYaw());
+    System.out.println(getGyroPitch());
   }
 
   //Connects to, and sets up the serial port
