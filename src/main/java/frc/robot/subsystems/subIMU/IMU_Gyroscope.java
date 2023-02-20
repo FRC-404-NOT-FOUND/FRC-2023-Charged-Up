@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.subIMU;
 
-import javax.naming.directory.SearchResult;
-
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;

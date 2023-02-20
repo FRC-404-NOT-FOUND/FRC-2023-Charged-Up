@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SPI.Port;
 
 public final class Constants {
 
@@ -41,6 +43,10 @@ public final class Constants {
     public static final double DRIVETRAIN_ROTATE_KI = 0.0;
     public static final double DRIVETRAIN_ROTATE_KD = 0.0;
     public static final double MAX_AUTONOMOUS_WHEEL_SPEED = 0.0; //In Meters per Second
+
+    //Analog Gyro/Accel
+    public static final Port ADXRS450_GYRO_PORT = SPI.Port.kOnboardCS0;
+    public static final Port ADXL362_ACCEL_PORT = SPI.Port.kOnboardCS1;
 
 //Grabber_Intake
     public static final int INTAKE_LEFT_MOTOR_INDEX = 0;
