@@ -5,9 +5,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.ADXL362.AllAxes;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.subIMU.IMU_Accelerometer;
+import frc.robot.subsystems.subIMU.Accelerometer;
+import frc.robot.subsystems.subIMU.Gyroscope;
 import frc.robot.subsystems.subIMU.IMU_Gyroscope;
 
 public class IMU extends SubsystemBase {
@@ -15,7 +17,8 @@ public class IMU extends SubsystemBase {
   private boolean isReady = false;
   private SerialPort arduinoTeensy;
   private IMU_Gyroscope imu_gyro;
-  private IMU_Accelerometer imu_accel;
+  private Accelerometer accel;
+  private Gyroscope gyro;
   private static IMU instance = null;
 
   public static IMU create() {
@@ -28,10 +31,11 @@ public class IMU extends SubsystemBase {
 
   public void connect() {
     isActive = connectSerialPort();
+    gyro = new Gyroscope();
+    accel = new Accelerometer();
 
     if(isActive){
       imu_gyro = new IMU_Gyroscope(arduinoTeensy);
-      imu_accel = new IMU_Accelerometer(arduinoTeensy);
 
       while(!isReady){
         if (arduinoTeensy.getBytesReceived() > 0) {
@@ -115,21 +119,21 @@ public class IMU extends SubsystemBase {
   }
 
   //Gets ALL Acceleration
-  public double[] getAcceleration(){
-    return imu_accel.getAcceleration();
+  public AllAxes getAcceleration(){
+    return accel.getAccelerations();
   }
   public double getAccelX(){
-    return imu_accel.getX();
+    return accel.getX();
   }
   public double getAccelY(){
-    return imu_accel.getY();
+    return accel.getY();
   }
   public double getAccelZ(){
-    return imu_accel.getZ();
+    return accel.getZ();
   }
 
   public void calibrate(){
-    imu_accel.calibrate();
     imu_gyro.calibrate();
+    gyro.calibrate();
   }
 }
