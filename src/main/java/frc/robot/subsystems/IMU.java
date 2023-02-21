@@ -99,17 +99,12 @@ public class IMU extends SubsystemBase {
 
   //gets all angles
   public double[] getGyroRotation(){
-    return imu_gyro.getRotation();
+    double[] arr = {getGyroYaw(), getGyroPitch(), getGyroRoll()}; // we still want the yaw from the ADXRS450 gyro
+    return arr;
   }
 
   public double getGyroYaw(){
-    try{
-      return imu_gyro.getYaw();
-    }
-    catch(Exception e){
-      System.out.println("Could not get yaw.");
-      return 0.0;
-    }
+    return gyro.getYaw();
   }
   public double getGyroPitch(){
     return imu_gyro.getPitch();

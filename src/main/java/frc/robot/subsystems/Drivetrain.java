@@ -96,10 +96,8 @@ public class Drivetrain extends SubsystemBase {
   public Rotation2d getCurrentRotation(){
     if (Limelight.isValidTarget()) {
       return getVisionRotation();
-    } else if (imu.isIMUReady()) {
-      return getGyroAngle();
     } else {
-      return new Rotation2d(0.0, 0.0);
+      return getGyroAngle();
     }
   }
 
