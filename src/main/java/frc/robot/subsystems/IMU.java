@@ -30,9 +30,9 @@ public class IMU extends SubsystemBase {
   }
 
   public void connect() {
-    isActive = connectSerialPort();
     gyro = new Gyroscope();
     accel = new Accelerometer();
+    isActive = connectSerialPort();
 
     if(isActive){
       imu_gyro = new IMU_Gyroscope(arduinoTeensy);
@@ -55,7 +55,9 @@ public class IMU extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(getGyroPitch());
+    if (isActive) {
+      System.out.println(getGyroYaw());
+    }
   }
 
   //Connects to, and sets up the serial port
