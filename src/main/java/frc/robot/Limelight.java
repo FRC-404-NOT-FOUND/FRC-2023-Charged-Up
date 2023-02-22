@@ -45,22 +45,36 @@ MUST USE getDoubleArray(new double[6]) TO BE USEFUL
 
     /// To be used in automation ///
 
-    //Is there a valid target? if so, then return 1.
-    public static double isValidTarget(){
-        return limelightTable.get().getEntry("tv").getDouble(0.0);
+    //Is there a valid target? if so, then return true.
+    public static boolean isValidTarget(){
+        double dval = getTableEntry("tv").getDouble(0.0);
+        if (dval == 1) return true;
+        return false;
     }
     //Gets the Primary apriltag in view.
     public static double getPrimaryAprilTag(){
-        return limelightTable.get().getEntry("tid").getDouble(0.0);
+        return getTableEntry("tid").getDouble(0.0);
     }
     //BotPose in Field Space. Helpful for Filtering + averaging
     public static double[] getBotPose(){
-        return limelightTable.get().getEntry("botpose").getDoubleArray(new double[6]);
+        if(isValidTarget())
+            return getTableEntry("botpose").getDoubleArray(new double[6]);
+        else
+            return null;
     }
 
-    //We may want to have different pipelines for different apriltags...
-    //If so, use this, AND PUT A CHART HERE FOR WHAT PIPLELINES GO WHERE.
+    // Pipeline map:
+    // 0 - Generic apriltag detection
+    // 1 - Retroflective mode
     public static void setLimelightPipeline(int pipeline){
-        limelightTable.get().getEntry("pipeline").setNumber(pipeline);
+        getTableEntry("pipeline").setNumber(pipeline);
+    }
+
+    public static void setRetroflective() {
+        setLimelightPipeline(1);
+    }
+
+    public static void setAprilTag(double aprilTag) {
+        setLimelightPipeline(0); // possibly use aprilTag param to set to specific pipeline for specific apriltag
     }
 }

@@ -25,5 +25,9 @@
       }
     },
   ],
-  "java.test.defaultConfig": "WPIlibUnitTests"
+  "java.test.defaultConfig": "WPIlibUnitTests",
+  "arduino.path": "C:\\Program Files (x86)\\Arduino", 
+  "arduino.additionalUrls": "", 
+  "arduino.logLevel": "info", 
+  "arduino.enableUSBDetection": true
 }
