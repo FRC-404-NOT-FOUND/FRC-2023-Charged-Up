@@ -24,6 +24,14 @@ public class Arm extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   
+  public A_Extension getExtension(){
+    return extension;
+  }
+
+  public A_Pivot getPivot(){
+    return pivot;
+  }
+
   public double getExtensionEncoderPosition(){
     return extension.getEncoderPosition();
   }

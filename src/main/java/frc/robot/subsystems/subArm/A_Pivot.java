@@ -6,6 +6,8 @@ package frc.robot.subsystems.subArm;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,6 +16,7 @@ import frc.robot.Constants;
 public class A_Pivot extends SubsystemBase {
   public final CANSparkMax pivotMotor = new CANSparkMax(Constants.PIVOT_MOTOR_INDEX, MotorType.kBrushless);
   RelativeEncoder encoder = pivotMotor.getEncoder();
+  SparkMaxPIDController pid = pivotMotor.getPIDController();
 
   /** Creates a new A_Rotation. */
   public A_Pivot() {}
@@ -27,5 +30,9 @@ public class A_Pivot extends SubsystemBase {
   }
   public double getEncoderVelocity(){
     return encoder.getVelocity();
+  }
+
+  public SparkMaxPIDController getPIDController(){
+    return pid;
   }
 }

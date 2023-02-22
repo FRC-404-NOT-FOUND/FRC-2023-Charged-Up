@@ -4,43 +4,32 @@
 
 package frc.robot.commands.Arm;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Grabber.G_PneumaticsOpen;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Grabber;
 
-public class A_Disengage extends CommandBase {
-  
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class A_Disengage extends SequentialCommandGroup {
+  Arm s_arm;
+  Grabber s_grabber;
+
   //One-Shot Command
   //Retracts Arm to 0.
   //Opens Pnumatics (If they aren't already)
   //Swings arm back to 0 Degrees (SLOWLY)
-
-  Arm s_arm;
-  A_extendTo extendTo;
-
-  public A_Disengage(Arm arm) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm);
+  public A_Disengage(Arm arm, Grabber grabber) {
+    addRequirements(arm, grabber);
 
     s_arm = arm;
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
+    s_grabber = grabber;
     
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+    addCommands(
+      new A_extendTo(0, s_arm),
+      new G_PneumaticsOpen(s_grabber),
+      new A_pivotTo(0, s_arm)
+    );
   }
 }

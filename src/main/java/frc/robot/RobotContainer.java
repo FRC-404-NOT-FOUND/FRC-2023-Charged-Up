@@ -9,8 +9,13 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Arm.A_extendTo;
 import frc.robot.commands.MecanumDrive;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.subArm.A_Extension;
+import frc.robot.subsystems.subArm.A_Pivot;
+import frc.robot.subsystems.subGrabber.G_Hopper;
+import frc.robot.subsystems.subGrabber.G_Intake;
 
 
 /**
@@ -21,8 +26,18 @@ import frc.robot.subsystems.subArm.A_Extension;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drivetrain s_drivetrain = new Drivetrain();
-  private final A_Extension s_aExtension = new A_Extension();
+    //Drivetrain
+    private final Drivetrain s_drivetrain = new Drivetrain();
+
+    //Arm
+    private final A_Extension s_aExtension = new A_Extension();
+    private final A_Pivot s_aPivot = new A_Pivot();
+    private final Arm s_Arm = new Arm(s_aExtension, s_aPivot);
+
+    //Grabber
+    private final G_Hopper s_gHopper = new G_Hopper();
+    private final G_Intake s_gIntake = new G_Intake();
+    private final Grabber s_Grabber = new Grabber(s_gHopper, s_gIntake);
 
   //OI and Buttons
   private final Trigger oi_aExtendToMax = new JoystickButton(OI.gamepad, XboxController.Button.kRightBumper.value);
@@ -30,12 +45,12 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    s_drivetrain.setDefaultCommand(
-      new MecanumDrive(s_drivetrain, 
-        () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
-        () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
-        () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X))
-      );
+    s_drivetrain.setDefaultCommand(new MecanumDrive(
+      s_drivetrain, 
+      () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
+      () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
+      () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X)
+    ));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -48,8 +63,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    oi_aExtendToMax.whenActive(new A_extendTo(Constants.EXTENSION_WHEEL_MAX_POSITION, s_aExtension));
-    oi_aExtendToMin.whenActive(new A_extendTo(Constants.EXTENSION_WHEEL_MIN_POSITION, s_aExtension));
+    oi_aExtendToMax.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MAX_POSITION, s_Arm));
+    oi_aExtendToMin.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MIN_POSITION, s_Arm));
+
+    
   }
 
 

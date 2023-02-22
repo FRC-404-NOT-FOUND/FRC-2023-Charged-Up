@@ -3,33 +3,32 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.Arm;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Grabber.G_PneumaticsOpen;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Grabber;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+public class A_Engage extends SequentialCommandGroup {
+  
 
-public class A_Engage extends CommandBase {
+  Arm s_arm;
+  Grabber s_grabber;
+  A_extendTo extendTo;
+
+  //One-Shot Commmand
   //Opens Pnumatics (If they aren't already)
   //Swings arm out to X Degrees (Such that it's just beyond the frame perimeter)
   //Extends arm to the floor. (This is the default position.)
+  public A_Engage(Arm arm, Grabber grabber) {
+    addRequirements(arm, grabber);
 
-  public A_Engage() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+    s_arm = arm;
+    s_grabber = grabber;
+    
+    addCommands(
+      new G_PneumaticsOpen(s_grabber),
+      new A_pivotToSLOW(0, s_arm),
+      new A_extendTo(10, s_arm)
+    );
   }
 }
