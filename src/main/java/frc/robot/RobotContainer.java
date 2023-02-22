@@ -5,10 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.A_extendTo;
+import frc.robot.commands.Arm.A_extendTo;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.subArm.A_Extension;
