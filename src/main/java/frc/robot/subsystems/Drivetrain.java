@@ -27,6 +27,7 @@ public class Drivetrain extends SubsystemBase {
   private VictorSP frontRightMotor = new VictorSP(Constants.FRONT_RIGHT_MOTOR_INDEX);
   private VictorSP backLeftMotor = new VictorSP(Constants.BACK_LEFT_MOTOR_INDEX);
   private VictorSP backRightMotor = new VictorSP(Constants.BACK_RIGHT_MOTOR_INDEX);
+
   //Encoders
   private CANcoder frontLeftEncoder = new CANcoder(Constants.FRONT_LEFT_ENCODER_INDEX);
   private CANcoder frontRightEncoder = new CANcoder(Constants.FRONT_RIGHT_ENCODER_INDEX);
@@ -49,7 +50,13 @@ public class Drivetrain extends SubsystemBase {
   private IMU imu;
 
   public Drivetrain() {
+    frontLeftMotor.setInverted(false);
+    frontRightMotor.setInverted(true);
+    backLeftMotor.setInverted(false);
+    backRightMotor.setInverted(true);
+
     mDrive = new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
+
     imu = IMU.create();
 
     Pose2d initialPose;
@@ -73,6 +80,8 @@ public class Drivetrain extends SubsystemBase {
     super.setDefaultCommand(defaultCommand);
   }
 
+  // Positive Directions:
+  // XSpeed = forward, YSpeed = Left, zRotation = CCW
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
   }
@@ -129,7 +138,7 @@ public class Drivetrain extends SubsystemBase {
   
   // Returns a Rotation2d based on the Gyro's rotation z after calibration
   public Rotation2d getGyroAngle(){
-    if (imu.isIMUActive()) {
+    if (imu.isGyroReady()) {
     //Here we'll send a signal through the GYRO (maybe different subsytem) to the Arduino, asking it for current information.
     //It then sends that requested data back to us
       return new Rotation2d(imu.getGyroYaw());

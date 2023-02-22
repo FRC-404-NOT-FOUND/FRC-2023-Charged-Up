@@ -24,13 +24,11 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
 
   @Override
   public void close() throws Exception {
-    // TODO Auto-generated method stub
     
   }
 
   @Override
   public void calibrate() {
-    // TODO Auto-generated method stub
     arduinoTeensy.writeString("gC");
     System.out.println(arduinoTeensy.readString()); //Calibrating IMU...
     String done = arduinoTeensy.readString();
@@ -42,13 +40,11 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
 
   @Override
   public void reset() {
-    // TODO Auto-generated method stub
     
   }
 
   @Override
   public double getAngle() {
-    // TODO Auto-generated method stub
     try{
       return getYaw();
     }
@@ -60,7 +56,6 @@ public class IMU_Gyroscope extends SubsystemBase implements Gyro {
 
   @Override
   public double getRate() {
-    // TODO Auto-generated method stub
     return 0;
   }
 

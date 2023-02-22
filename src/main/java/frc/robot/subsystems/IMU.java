@@ -5,20 +5,24 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
+
+import edu.wpi.first.wpilibj.ADXL362;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.ADXL362.AllAxes;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.subIMU.Accelerometer;
-import frc.robot.subsystems.subIMU.Gyroscope;
 import frc.robot.subsystems.subIMU.IMU_Gyroscope;
 
 public class IMU extends SubsystemBase {
-  private boolean isActive;
+  private boolean arduinoConnected = false;
+  private boolean devicesConnected = false;
   private boolean isReady = false;
   private SerialPort arduinoTeensy;
   private IMU_Gyroscope imu_gyro;
-  private Accelerometer accel;
-  private Gyroscope gyro;
+  private BuiltInAccelerometer accel;
+  private ADXRS450_Gyro gyro;
   private static IMU instance = null;
 
   public static IMU create() {
@@ -29,44 +33,46 @@ public class IMU extends SubsystemBase {
     return instance;
   }
 
-  public void connect() {
-    gyro = new Gyroscope();
-    accel = new Accelerometer();
-    isActive = connectSerialPort();
-
-    if(isActive){
+  @Override
+  public void periodic() {
+    System.out.println("Gyro ready: " + isGyroReady());
+    // This method will be called once per scheduler run
+    if(arduinoConnected && !isReady){
       imu_gyro = new IMU_Gyroscope(arduinoTeensy);
+      if (arduinoTeensy.getBytesReceived() > 0) {
+        String data = arduinoTeensy.readString();
+        System.out.println(data);
 
-      while(!isReady){
-        if (arduinoTeensy.getBytesReceived() > 0) {
-          String data = arduinoTeensy.readString();
-          System.out.println(data);
-
-          if(data.contains("READY")){
-            System.out.println("IMU IS READY!");
-            isReady = true;
-            break;
-          }
+        if(data.contains("READY")){
+          System.out.println("IMU IS READY!");
+          isReady = true;
+          calibrateArduino();
         }
       }
     }
-  }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    if (isActive) {
-      System.out.println(getGyroYaw());
+    if(isGyroReady()){
+      System.out.println("Heading: " + getGyroYaw());
+      System.out.println("AccelX: " + getAccelX());
+      System.out.println("AccelY: " + getAccelY());
+      System.out.println("AccelZ: " + getAccelZ());
     }
   }
 
+  public void connectDevices() {
+    gyro = new ADXRS450_Gyro();
+    calibrateGyro();
+    accel = new BuiltInAccelerometer(Range.k2G);
+    devicesConnected = true;
+  }
+
   //Connects to, and sets up the serial port
-  public boolean connectSerialPort(){
+  public void connectArduino(){
     try{
       arduinoTeensy = new SerialPort(Constants.SERIAL_BAUD_RATE, SerialPort.Port.kUSB);
       System.out.println("Connected to Serial Port kUSB");
 
-      return true;
+      arduinoConnected = true;
     }
     catch(Exception e){
       System.out.println("Failed to Connect to kUSB");
@@ -74,39 +80,45 @@ public class IMU extends SubsystemBase {
         arduinoTeensy = new SerialPort(Constants.SERIAL_BAUD_RATE, SerialPort.Port.kUSB1);
         System.out.println("Connected to Serial Port kUSB1");
 
-        return true;
+        arduinoConnected = true;
       }
       catch(Exception e1){
         System.out.println("Failed to Connect to kUSB1");
         try{
           arduinoTeensy = new SerialPort(Constants.SERIAL_BAUD_RATE, SerialPort.Port.kUSB2);
           System.out.println("Connected to Serial Port kUSB2");    
-          return true;
+          
+          arduinoConnected = true;
         }
         catch(Exception e2){
           System.out.println("Failed to Connect to kUSB2, all USB connections failed.");
         }
       }
     }
-    return false;
   }
 
-  public boolean isIMUActive(){
-    return isActive;
+  public boolean isArduinoConnected(){
+    return arduinoConnected;
+  }
+
+  public boolean areDevicesConnected(){
+    return devicesConnected;
   }
 
   public boolean isIMUReady(){
     return isReady;
   }
 
-  //gets all angles
-  public double[] getGyroRotation(){
-    double[] arr = {getGyroYaw(), getGyroPitch(), getGyroRoll()}; // we still want the yaw from the ADXRS450 gyro
-    return arr;
+  public boolean isGyroReady(){
+    return devicesConnected && gyro.isConnected();
   }
 
   public double getGyroYaw(){
-    return gyro.getYaw();
+    if (isGyroReady()) {
+      return gyro.getAngle();
+    }
+
+    return 0.0;
   }
   public double getGyroPitch(){
     return imu_gyro.getPitch();
@@ -116,9 +128,6 @@ public class IMU extends SubsystemBase {
   }
 
   //Gets ALL Acceleration
-  public AllAxes getAcceleration(){
-    return accel.getAccelerations();
-  }
   public double getAccelX(){
     return accel.getX();
   }
@@ -129,8 +138,11 @@ public class IMU extends SubsystemBase {
     return accel.getZ();
   }
 
-  public void calibrate(){
+  public void calibrateArduino(){
     imu_gyro.calibrate();
+  }
+
+  public void calibrateGyro() {
     gyro.calibrate();
   }
 }

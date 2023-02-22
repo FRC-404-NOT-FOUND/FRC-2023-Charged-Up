@@ -12,9 +12,9 @@ public final class Constants {
 
 //Drivetrain
     //PWM
-    public static final int FRONT_LEFT_MOTOR_INDEX = 2;
-    public static final int FRONT_RIGHT_MOTOR_INDEX = 3;
-    public static final int BACK_LEFT_MOTOR_INDEX = 1;
+    public static final int FRONT_LEFT_MOTOR_INDEX = 8;
+    public static final int FRONT_RIGHT_MOTOR_INDEX = 1;
+    public static final int BACK_LEFT_MOTOR_INDEX = 9;
     public static final int BACK_RIGHT_MOTOR_INDEX = 0;
 
     //CAN
@@ -46,7 +46,7 @@ public final class Constants {
 
     //Analog Gyro/Accel
     public static final Port ADXRS450_GYRO_PORT = SPI.Port.kOnboardCS0;
-    public static final Port ADXL362_ACCEL_PORT = SPI.Port.kOnboardCS1;
+    public static final Port ADXL362_ACCEL_PORT = SPI.Port.kOnboardCS0;
 
 //Grabber_Intake
     public static final int INTAKE_LEFT_MOTOR_INDEX = 0;
