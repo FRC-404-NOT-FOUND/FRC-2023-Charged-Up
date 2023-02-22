@@ -14,9 +14,6 @@ public class G_Intake extends SubsystemBase {
   
   private final CANSparkMax motorLeft = new CANSparkMax(Constants.INTAKE_LEFT_MOTOR_INDEX, MotorType.kBrushless); // INSERT CONSTANT
   private final CANSparkMax motorRight = new CANSparkMax(Constants.INTAKE_RIGHT_MOTOR_INDEX, MotorType.kBrushless); // INSERT CONSTANT
-
-  //ADD ENCODERS HERE!!!
-
   
   /** Creates a new G_Intake. */
   public G_Intake() {}

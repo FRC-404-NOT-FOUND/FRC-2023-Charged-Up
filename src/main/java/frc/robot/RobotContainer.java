@@ -5,8 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Arm.A_extendTo;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.subArm.A_Extension;
 
 
 /**
@@ -18,6 +22,11 @@ import frc.robot.subsystems.Drivetrain;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain s_drivetrain = new Drivetrain();
+  private final A_Extension s_aExtension = new A_Extension();
+
+  //OI and Buttons
+  private final Trigger oi_aExtendToMax = new JoystickButton(OI.gamepad, XboxController.Button.kRightBumper.value);
+  private final Trigger oi_aExtendToMin = new JoystickButton(OI.gamepad, XboxController.Button.kLeftBumper.value);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -40,7 +49,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    oi_aExtendToMax.whenActive(new A_extendTo(Constants.EXTENSION_WHEEL_MAX_POSITION, s_aExtension));
+    oi_aExtendToMin.whenActive(new A_extendTo(Constants.EXTENSION_WHEEL_MIN_POSITION, s_aExtension));
+  }
+
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
