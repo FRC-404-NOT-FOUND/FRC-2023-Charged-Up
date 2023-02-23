@@ -14,14 +14,18 @@ public class Grabber extends SubsystemBase {
   private G_Hopper hopper;
   private G_Intake intake;
   
-  public Grabber(G_Hopper h, G_Intake i) {
-    hopper = h;
-    intake = i;
+  public Grabber() {
+    hopper = new G_Hopper();
+    intake = new G_Intake();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void toggleCompressor(){
+    hopper.toggleCompressor();
   }
 
   public void turnCompressorOn(){
@@ -38,5 +42,17 @@ public class Grabber extends SubsystemBase {
 
   public void pneumaticsClose(){
     hopper.getDoubleSolenoid().set(DoubleSolenoid.Value.kReverse);
+  }
+
+  public void startIntake() {
+    intake.start();
+  }
+
+  public void stopIntake() {
+    intake.stop();
+  }
+
+  public void startSpit() {
+    intake.spit();
   }
 }

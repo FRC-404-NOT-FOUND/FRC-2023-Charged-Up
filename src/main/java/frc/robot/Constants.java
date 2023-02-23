@@ -57,12 +57,12 @@ public final class Constants {
     public static final int HOPPER_PNEUMATIC_REV_PORT = 1;
 
 //Arm_Extension
-    public static final int EXTENSION_WHEEL_MOTOR_INDEX = 1;
+    public static final int EXTENSION_WHEEL_MOTOR_INDEX = 11;
     public static final int EXTENSION_WHEEL_MAX_POSITION = -62;
     public static final int EXTENSION_WHEEL_MIN_POSITION = 133;
 
 //Arm_Pivot
-    public static final int PIVOT_MOTOR_INDEX = 11;
+    public static final int PIVOT_MOTOR_INDEX = 1;
     public static final int PIVOT_SLOW_PID_SLOT = 0;
     public static final int PIVOT_QUICK_PID_SLOT = 1;
 

@@ -5,11 +5,17 @@
 package frc.robot.commands.Grabber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Grabber;
 
 public class G_Succ extends CommandBase {
+  public final Grabber grabber;
+
   /** Creates a new G_Succ. */
-  public G_Succ() {
+  public G_Succ(Grabber g) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(g);
+
+    grabber = g;
   }
 
   // Called when the command is initially scheduled.
@@ -18,11 +24,15 @@ public class G_Succ extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    grabber.startIntake();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    grabber.stopIntake();
+  }
 
   // Returns true when the command should end.
   @Override

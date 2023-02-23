@@ -22,4 +22,19 @@ public class G_Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  public void start() {
+    motorLeft.set(0.2);
+    motorRight.set(0.2);
+  }
+
+  public void stop() {
+    motorLeft.set(0);
+    motorRight.set(0);
+  }
+
+  public void spit() {
+    motorLeft.set(-0.2);
+    motorRight.set(-0.2);
+  }
 }

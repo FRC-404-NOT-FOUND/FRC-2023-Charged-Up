@@ -14,12 +14,23 @@ public class G_Hopper extends SubsystemBase {
   private Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
   private DoubleSolenoid doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 
                 Constants.HOPPER_PNEUMATIC_FWD_PORT, Constants.HOPPER_PNEUMATIC_REV_PORT); 
+  
+  private boolean enabled = false;
   /** Creates a new G_Hopper. */
   public G_Hopper() {}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void toggleCompressor() {
+    enabled = !enabled;
+    if (enabled) {
+      compressor.enableDigital();
+    } else {
+      compressor.disable();
+    }
   }
 
   public Compressor getCompressor(){

@@ -8,18 +8,15 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Arm.A_extendTo;
-import frc.robot.commands.Grabber.G_CompressorOff;
-import frc.robot.commands.Grabber.G_CompressorOn;
+import frc.robot.commands.Grabber.G_Blow;
+import frc.robot.commands.Grabber.G_CompressorToggle;
 import frc.robot.commands.Grabber.G_PneumaticsClose;
 import frc.robot.commands.Grabber.G_PneumaticsOpen;
+import frc.robot.commands.Grabber.G_Succ;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
-import frc.robot.subsystems.subArm.A_Extension;
-import frc.robot.subsystems.subArm.A_Pivot;
-import frc.robot.subsystems.subGrabber.G_Hopper;
-import frc.robot.subsystems.subGrabber.G_Intake;
 
 
 /**
@@ -34,14 +31,10 @@ public class RobotContainer {
     private final Drivetrain s_drivetrain = new Drivetrain();
 
     //Arm
-    private final A_Extension s_aExtension = new A_Extension();
-    private final A_Pivot s_aPivot = new A_Pivot();
-    private final Arm s_Arm = new Arm(s_aExtension, s_aPivot);
+    private final Arm s_arm = new Arm();
 
     //Grabber
-    private final G_Hopper s_gHopper = new G_Hopper();
-    private final G_Intake s_gIntake = new G_Intake();
-    private final Grabber s_Grabber = new Grabber(s_gHopper, s_gIntake);
+    private final Grabber s_grabber = new Grabber();
 
   //OI and Buttons
   private final Trigger oi_aExtendToMax = new JoystickButton(OI.gamepad, XboxController.Button.kRightBumper.value);
@@ -49,6 +42,8 @@ public class RobotContainer {
   private final Trigger oi_CompressorToggle = new JoystickButton(OI.gamepad, XboxController.Button.kStart.value);
   private final Trigger oi_GrabberPneumaticsExtend = new JoystickButton(OI.gamepad, XboxController.Button.kX.value);
   private final Trigger oi_GrabberPneumaticsRetract = new JoystickButton(OI.gamepad, XboxController.Button.kY.value);
+  private final Trigger oi_gIntake = new JoystickButton(OI.gamepad, XboxController.Axis.kRightTrigger.value);
+  private final Trigger oi_gRetract = new JoystickButton(OI.gamepad, XboxController.Axis.kLeftTrigger.value);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -73,11 +68,13 @@ public class RobotContainer {
     //oi_aExtendToMax.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MAX_POSITION, s_Arm));
     //oi_aExtendToMin.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MIN_POSITION, s_Arm));
 
-    oi_CompressorToggle.onTrue(new G_CompressorOn(s_Grabber));
-    oi_CompressorToggle.onFalse(new G_CompressorOff(s_Grabber));
+    oi_CompressorToggle.onTrue(new G_CompressorToggle(s_grabber));
 
-    oi_GrabberPneumaticsExtend.onTrue(new G_PneumaticsOpen(s_Grabber));
-    oi_GrabberPneumaticsRetract.onTrue(new G_PneumaticsClose(s_Grabber));
+    oi_GrabberPneumaticsExtend.onTrue(new G_PneumaticsOpen(s_grabber));
+    oi_GrabberPneumaticsRetract.onTrue(new G_PneumaticsClose(s_grabber));
+
+    oi_gIntake.whileTrue(new G_Succ(s_grabber));
+    oi_gRetract.whileTrue(new G_Blow(s_grabber));
   }
 
 

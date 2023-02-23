@@ -14,9 +14,9 @@ public class Arm extends SubsystemBase {
   private A_Extension extension;
   private A_Pivot pivot;
 
-  public Arm(A_Extension e, A_Pivot p) {
-    extension = e;
-    pivot = p;
+  public Arm() {
+    extension = new A_Extension();
+    pivot = new A_Pivot();
   }
 
   @Override

@@ -7,10 +7,10 @@ package frc.robot.commands.Grabber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Grabber;
 
-public class G_CompressorOn extends CommandBase {
+public class G_CompressorToggle extends CommandBase {
   Grabber s_grabber;
 
-  public G_CompressorOn(Grabber grabber) {
+  public G_CompressorToggle(Grabber grabber) {
     addRequirements(grabber);
 
     s_grabber = grabber;
@@ -23,7 +23,7 @@ public class G_CompressorOn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_grabber.turnCompressorOn();
+    s_grabber.toggleCompressor();
   }
 
   // Called once the command ends or is interrupted.
