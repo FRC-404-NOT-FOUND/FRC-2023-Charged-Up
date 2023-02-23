@@ -8,6 +8,10 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Arm.A_extendTo;
+import frc.robot.commands.Grabber.G_CompressorOff;
+import frc.robot.commands.Grabber.G_CompressorOn;
+import frc.robot.commands.Grabber.G_PneumaticsClose;
+import frc.robot.commands.Grabber.G_PneumaticsOpen;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -42,6 +46,9 @@ public class RobotContainer {
   //OI and Buttons
   private final Trigger oi_aExtendToMax = new JoystickButton(OI.gamepad, XboxController.Button.kRightBumper.value);
   private final Trigger oi_aExtendToMin = new JoystickButton(OI.gamepad, XboxController.Button.kLeftBumper.value);
+  private final Trigger oi_CompressorToggle = new JoystickButton(OI.gamepad, XboxController.Button.kStart.value);
+  private final Trigger oi_GrabberPneumaticsExtend = new JoystickButton(OI.gamepad, XboxController.Button.kX.value);
+  private final Trigger oi_GrabberPneumaticsRetract = new JoystickButton(OI.gamepad, XboxController.Button.kY.value);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -63,10 +70,14 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    oi_aExtendToMax.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MAX_POSITION, s_Arm));
-    oi_aExtendToMin.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MIN_POSITION, s_Arm));
+    //oi_aExtendToMax.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MAX_POSITION, s_Arm));
+    //oi_aExtendToMin.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MIN_POSITION, s_Arm));
 
-    
+    oi_CompressorToggle.onTrue(new G_CompressorOn(s_Grabber));
+    oi_CompressorToggle.onFalse(new G_CompressorOff(s_Grabber));
+
+    oi_GrabberPneumaticsExtend.onTrue(new G_PneumaticsOpen(s_Grabber));
+    oi_GrabberPneumaticsRetract.onTrue(new G_PneumaticsClose(s_Grabber));
   }
 
 

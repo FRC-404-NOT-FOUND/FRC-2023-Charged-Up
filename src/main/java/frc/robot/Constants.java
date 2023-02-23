@@ -49,8 +49,8 @@ public final class Constants {
     public static final Port ADXL362_ACCEL_PORT = SPI.Port.kOnboardCS0;
 
 //Grabber_Intake
-    public static final int INTAKE_LEFT_MOTOR_INDEX = 0;
-    public static final int INTAKE_RIGHT_MOTOR_INDEX = 0;
+    public static final int INTAKE_LEFT_MOTOR_INDEX = 21;
+    public static final int INTAKE_RIGHT_MOTOR_INDEX = 22;
     
 //Grabber_Hopper (the pneumatics)
     public static final int HOPPER_PNEUMATIC_FWD_PORT = 0;
@@ -62,7 +62,7 @@ public final class Constants {
     public static final int EXTENSION_WHEEL_MIN_POSITION = 133;
 
 //Arm_Pivot
-    public static final int PIVOT_MOTOR_INDEX = 0;
+    public static final int PIVOT_MOTOR_INDEX = 11;
     public static final int PIVOT_SLOW_PID_SLOT = 0;
     public static final int PIVOT_QUICK_PID_SLOT = 1;
 

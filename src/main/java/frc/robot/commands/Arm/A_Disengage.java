@@ -29,7 +29,7 @@ public class A_Disengage extends SequentialCommandGroup {
     addCommands(
       new A_extendTo(0, s_arm),
       new G_PneumaticsOpen(s_grabber),
-      new A_pivotTo(0, s_arm)
+      new A_pivotToSLOW(0, s_arm)
     );
   }
 }

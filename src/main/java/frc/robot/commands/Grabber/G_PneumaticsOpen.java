@@ -8,7 +8,6 @@ import frc.robot.subsystems.Grabber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class G_PneumaticsOpen extends CommandBase {
-  /** Creates a new G_PneumaticsOpen. */
   Grabber s_grabber;
   public G_PneumaticsOpen(Grabber grabber) {
     addRequirements(grabber);
@@ -22,7 +21,9 @@ public class G_PneumaticsOpen extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    s_grabber.pneumaticsExtend();
+  }
 
   // Called once the command ends or is interrupted.
   @Override

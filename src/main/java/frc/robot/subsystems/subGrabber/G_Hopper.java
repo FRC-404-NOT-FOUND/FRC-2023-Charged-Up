@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class G_Hopper extends SubsystemBase {
-  public Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-  public DoubleSolenoid doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 
+  private Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+  private DoubleSolenoid doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 
                 Constants.HOPPER_PNEUMATIC_FWD_PORT, Constants.HOPPER_PNEUMATIC_REV_PORT); 
   /** Creates a new G_Hopper. */
   public G_Hopper() {}
@@ -20,5 +20,13 @@ public class G_Hopper extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public Compressor getCompressor(){
+    return compressor;
+  }
+
+  public DoubleSolenoid getDoubleSolenoid(){
+    return doubleSolenoid;
   }
 }
