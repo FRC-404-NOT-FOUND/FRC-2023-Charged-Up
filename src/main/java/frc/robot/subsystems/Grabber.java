@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.subGrabber.G_Hopper;
@@ -33,11 +32,11 @@ public class Grabber extends SubsystemBase {
     hopper.getCompressor().disable();
   }
 
-  public void pneumaticsExtend(){
+  public void pneumaticsOpen(){
     hopper.getDoubleSolenoid().set(DoubleSolenoid.Value.kForward);
   }
 
-  public void pneumaticsRetract(){
+  public void pneumaticsClose(){
     hopper.getDoubleSolenoid().set(DoubleSolenoid.Value.kReverse);
   }
 }

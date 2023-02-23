@@ -22,7 +22,7 @@ public class G_PneumaticsClose extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_grabber.pneumaticsRetract();
+    s_grabber.pneumaticsClose();
   }
 
   // Called once the command ends or is interrupted.
