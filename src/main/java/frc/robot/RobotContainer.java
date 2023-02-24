@@ -5,17 +5,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.event.EventLoop;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Arm.A_extendTo;
 import frc.robot.commands.Grabber.G_Spit;
 import frc.robot.commands.Grabber.G_CompressorToggle;
-import frc.robot.commands.Grabber.G_PneumaticsClose;
-import frc.robot.commands.Grabber.G_PneumaticsOpen;
 import frc.robot.commands.Grabber.G_PneumaticsToggle;
 import frc.robot.commands.Grabber.G_Succ;
-import frc.robot.commands.MecanumDrive;
+import frc.robot.commands.MecanumDriveWithMotorOffsets;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -47,7 +43,7 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    s_drivetrain.setDefaultCommand(new MecanumDrive(
+    s_drivetrain.setDefaultCommand(new MecanumDriveWithMotorOffsets(
       s_drivetrain, 
       () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
       () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
@@ -68,8 +64,8 @@ public class RobotContainer {
     //oi_aExtendToMax.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MAX_POSITION, s_Arm));
     //oi_aExtendToMin.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MIN_POSITION, s_Arm));
 
-    oi_gCompressorToggle.toggleOnFalse(new G_CompressorToggle(s_grabber));
-    oi_gPneumaticsToggle.toggleOnFalse(new G_PneumaticsToggle(s_grabber));
+    oi_gCompressorToggle.toggleOnTrue(new G_CompressorToggle(s_grabber));
+    oi_gPneumaticsToggle.toggleOnTrue(new G_PneumaticsToggle(s_grabber));
 
     oi_gSucc.whileTrue(new G_Succ(s_grabber));
     oi_gSpit.whileTrue(new G_Spit(s_grabber));

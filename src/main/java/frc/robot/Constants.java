@@ -30,10 +30,10 @@ public final class Constants {
     public static final double ROTATIONS_TO_METERS = 2 * Math.PI * Constants.DRIVETRAIN_WHEEL_RADIUS;
 
     //Motor Speed Offsets
-    public static final double FRONT_LEFT_MOTOR_SPEED_OFFSET = 0.0;
-    public static final double FRONT_RIGHT_MOTOR_SPEED_OFFSET = 0.0;
-    public static final double BACK_LEFT_MOTOR_SPEED_OFFSET = 0.0;
-    public static final double BACK_RIGHT_MOTOR_SPEED_OFFSET = 0.0;
+    public static final double FRONT_LEFT_MOTOR_SPEED_OFFSET = 0.60;
+    public static final double FRONT_RIGHT_MOTOR_SPEED_OFFSET = 0.55;
+    public static final double BACK_LEFT_MOTOR_SPEED_OFFSET = 1.0;
+    public static final double BACK_RIGHT_MOTOR_SPEED_OFFSET = 0.60;
 
     //Kinematics (THESE WILL NEED TO BE DEFINED)
     public static Translation2d FRONT_LEFT_WHEEL_TO_CENTER = new Translation2d(-1, 1);
