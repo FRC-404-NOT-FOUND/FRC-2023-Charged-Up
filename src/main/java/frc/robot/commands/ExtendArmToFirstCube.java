@@ -9,8 +9,13 @@ import frc.robot.commands.Arm.A_extendTo;
 import frc.robot.commands.Arm.A_pivotToSLOW;
 import frc.robot.subsystems.Arm;
 
+//Assume that we are coming from the Default Position.
 public class ExtendArmToFirstCube extends SequentialCommandGroup {
   public ExtendArmToFirstCube(Arm arm) {
-    addCommands(new A_pivotToSLOW(0, arm), new A_extendTo(0, arm));  // Replace with angle and length of cube
+    addCommands(
+      // Replace with angle and length of cube
+      new A_pivotToSLOW(0, arm),
+      new A_extendTo(0, arm)
+    );  
   }
 }

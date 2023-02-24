@@ -7,11 +7,11 @@ package frc.robot.commands.Grabber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Grabber;
 
-public class G_Blow extends CommandBase {
+public class G_Spit extends CommandBase {
   private final Grabber grabber;
 
   /** Creates a new G_Blow. */
-  public G_Blow(Grabber g) {
+  public G_Spit(Grabber g) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(g);
 
@@ -20,7 +20,9 @@ public class G_Blow extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("DA SPIT");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

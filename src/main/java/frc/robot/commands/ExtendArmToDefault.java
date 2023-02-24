@@ -9,8 +9,13 @@ import frc.robot.commands.Arm.A_extendTo;
 import frc.robot.commands.Arm.A_pivotToSLOW;
 import frc.robot.subsystems.Arm;
 
+//This should be able to come from anywhere. 
+//It should compare the values (of current angle and extension), and implicity decide which command should come first.
 public class ExtendArmToDefault extends SequentialCommandGroup {
   public ExtendArmToDefault(Arm arm) {
-    addCommands(new A_pivotToSLOW(0, arm), new A_extendTo(0, arm));  // Replace with angle and length of initial position
+    addCommands(
+      new A_extendTo(0, arm),  // Replace with angle and length of initial position
+      new A_pivotToSLOW(0, arm)
+    );
   }
 }

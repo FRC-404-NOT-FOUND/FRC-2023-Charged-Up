@@ -13,6 +13,8 @@ public class Grabber extends SubsystemBase {
   /** Creates a new Grabber. */
   private G_Hopper hopper;
   private G_Intake intake;
+
+  private boolean isPneumaticsClosed = false;
   
   public Grabber() {
     hopper = new G_Hopper();
@@ -24,24 +26,36 @@ public class Grabber extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void toggleCompressor(){
-    hopper.toggleCompressor();
-  }
-
   public void turnCompressorOn(){
     hopper.getCompressor().enableDigital();
+    System.out.println("Compressor On!");
   }
 
   public void turnCompressorOff(){
     hopper.getCompressor().disable();
+    System.out.println("Compressor Off!");
   }
 
   public void pneumaticsOpen(){
     hopper.getDoubleSolenoid().set(DoubleSolenoid.Value.kForward);
+    isPneumaticsClosed = false;
+    System.out.println("Pneumatic Grabber Opened");
   }
 
   public void pneumaticsClose(){
     hopper.getDoubleSolenoid().set(DoubleSolenoid.Value.kReverse);
+    isPneumaticsClosed = true;
+    System.out.println("Pneumatic Grabber Closed");
+  }
+
+  //Returns true if the pneumatics system is closed
+  public boolean pneumaticsCloseState(){
+    return isPneumaticsClosed;
+  }
+
+  //Returns true if the pneumatics system is open
+  public boolean pneumaticsOpenState(){
+    return !isPneumaticsClosed;
   }
 
   public void startIntake() {

@@ -5,35 +5,30 @@
 package frc.robot.commands.Grabber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.subsystems.Grabber;
 
-public class G_Succ extends CommandBase {
-  public final Grabber grabber;
-
-  /** Creates a new G_Succ. */
-  public G_Succ(Grabber g) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(g);
-
-    grabber = g;
+public class G_PneumaticsToggle extends CommandBase {
+  Grabber s_grabber;
+  public G_PneumaticsToggle(Grabber grabber) {
+    addRequirements(grabber);
+    s_grabber = grabber;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("DA SUCC");
+    s_grabber.pneumaticsClose();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    grabber.startIntake();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    grabber.stopIntake();
+    s_grabber.pneumaticsOpen();
   }
 
   // Returns true when the command should end.

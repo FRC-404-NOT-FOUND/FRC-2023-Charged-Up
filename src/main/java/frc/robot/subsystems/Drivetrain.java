@@ -73,6 +73,7 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    updateOdometry(getGyroAngle(), getWheelPositions());
   }
 
   @Override
@@ -101,7 +102,7 @@ public class Drivetrain extends SubsystemBase {
       return getOdometryPose();
     }
   }
-
+  //Same deal as getCurrentPose.
   public Rotation2d getCurrentRotation(){
     if (Limelight.isValidTarget()) {
       return getVisionRotation();

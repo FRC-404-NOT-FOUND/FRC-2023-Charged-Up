@@ -11,6 +11,10 @@ import frc.robot.subsystems.Arm;
 
 public class ExtendArmToSecondCube extends SequentialCommandGroup {
   public ExtendArmToSecondCube(Arm arm) {
-    addCommands(new A_pivotToSLOW(0, arm), new A_extendTo(0, arm));  // Replace with angle and length of cube
+    addCommands(
+    // Replace with angle and length of cube
+      new A_pivotToSLOW(0, arm), 
+      new A_extendTo(0, arm)
+    ); 
   }
 }

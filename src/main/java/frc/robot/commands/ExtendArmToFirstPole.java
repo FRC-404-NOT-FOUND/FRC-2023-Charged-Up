@@ -11,6 +11,10 @@ import frc.robot.subsystems.Arm;
 
 public class ExtendArmToFirstPole extends SequentialCommandGroup {
   public ExtendArmToFirstPole(Arm arm) {
-    addCommands(new A_pivotToSLOW(0, arm), new A_extendTo(0, arm));  // Replace with angle and length of pole
+     // Replace with angle and length of pole
+    addCommands(
+      new A_pivotToSLOW(0, arm), 
+      new A_extendTo(0, arm)
+    ); 
   }
 }

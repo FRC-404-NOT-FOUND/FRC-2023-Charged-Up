@@ -33,9 +33,10 @@ public class IMU extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.println("Gyro ready: " + isGyroReady());
-    // This method will be called once per scheduler run
+    //System.out.println("Gyro ready: " + isGyroReady());
+    
     if(arduinoConnected && !isReady){
+      //NOTE: Must make this null in order for Simulations to work.
       imu_gyro = new IMU_Gyroscope(arduinoTeensy);
       if (arduinoTeensy.getBytesReceived() > 0) {
         String data = arduinoTeensy.readString();
@@ -48,13 +49,14 @@ public class IMU extends SubsystemBase {
         }
       }
     }
-
+    /*
     if(isGyroReady()){
       System.out.println("Heading: " + getGyroYaw());
       System.out.println("AccelX: " + getAccelX());
       System.out.println("AccelY: " + getAccelY());
       System.out.println("AccelZ: " + getAccelZ());
     }
+    */
   }
 
   public void connectDevices() {

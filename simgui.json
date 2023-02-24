@@ -5,6 +5,11 @@
         "header": {
           "open": true
         }
+      },
+      "Compressor[0]": {
+        "header": {
+          "open": true
+        }
       }
     },
     "PWM Outputs": {
@@ -18,6 +23,16 @@
       },
       "RoboRIO Input": {
         "open": true
+      }
+    },
+    "Solenoids": {
+      "0": {
+        "header": {
+          "open": true
+        }
+      },
+      "window": {
+        "visible": true
       }
     }
   },
