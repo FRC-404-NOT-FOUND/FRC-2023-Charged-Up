@@ -16,7 +16,7 @@ public class Accelerometer extends SubsystemBase {
 
   /** Creates a new Accelerometer. */
   public Accelerometer() {
-    accel = new ADXL362(Constants.ADXL362_ACCEL_PORT, Range.k4G);
+    accel = new ADXL362(Range.k4G);
   }
 
   @Override

@@ -22,9 +22,18 @@ public final class Constants {
     public static final int FRONT_RIGHT_ENCODER_INDEX = 0;
     public static final int BACK_LEFT_ENCODER_INDEX = 0;
     public static final int BACK_RIGHT_ENCODER_INDEX = 0;
+
+    //radius in meters
+    public static final double DRIVETRAIN_WHEEL_RADIUS = 0.1016; //4 inches
     
     //Find the radius of the wheel, multiply by 2*pi*r
-    public static final double ROTATIONS_TO_METERS = 2 * Math.PI /* * WheelRadius */;
+    public static final double ROTATIONS_TO_METERS = 2 * Math.PI * Constants.DRIVETRAIN_WHEEL_RADIUS;
+
+    //Motor Speed Offsets
+    public static final double FRONT_LEFT_MOTOR_SPEED_OFFSET = 0.0;
+    public static final double FRONT_RIGHT_MOTOR_SPEED_OFFSET = 0.0;
+    public static final double BACK_LEFT_MOTOR_SPEED_OFFSET = 0.0;
+    public static final double BACK_RIGHT_MOTOR_SPEED_OFFSET = 0.0;
 
     //Kinematics (THESE WILL NEED TO BE DEFINED)
     public static Translation2d FRONT_LEFT_WHEEL_TO_CENTER = new Translation2d(-1, 1);
@@ -43,10 +52,10 @@ public final class Constants {
     public static final double DRIVETRAIN_ROTATE_KI = 0.0;
     public static final double DRIVETRAIN_ROTATE_KD = 0.0;
     public static final double MAX_AUTONOMOUS_WHEEL_SPEED = 0.0; //In Meters per Second
+    public static final double MAX_AUTONOMOUS_WHEEL_ACCEL = 0.0;
 
     //Analog Gyro/Accel
     public static final Port ADXRS450_GYRO_PORT = SPI.Port.kOnboardCS0;
-    public static final Port ADXL362_ACCEL_PORT = SPI.Port.kOnboardCS0;
 
 //Grabber_Intake
     public static final int INTAKE_LEFT_MOTOR_INDEX = 21;
@@ -58,8 +67,8 @@ public final class Constants {
 
 //Arm_Extension
     public static final int EXTENSION_WHEEL_MOTOR_INDEX = 11;
-    public static final int EXTENSION_WHEEL_MAX_POSITION = -62;
-    public static final int EXTENSION_WHEEL_MIN_POSITION = 133;
+    public static final int EXTENSION_WHEEL_MAX_POSITION = 220;
+    public static final int EXTENSION_WHEEL_MIN_POSITION = 0;
 
 //Arm_Pivot
     public static final int PIVOT_MOTOR_INDEX = 1;

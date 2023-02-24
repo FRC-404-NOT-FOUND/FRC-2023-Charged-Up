@@ -29,8 +29,7 @@ public class EngageArm extends SequentialCommandGroup {
     
     addCommands(
       new G_PneumaticsOpen(s_grabber),
-      new A_pivotToSLOW(0, s_arm),
-      new A_extendTo(10, s_arm)
+      new ExtendArmToDefault(arm)
     );
   }
 }

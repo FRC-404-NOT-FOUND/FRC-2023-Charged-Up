@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class MecanumDrive extends CommandBase {
+public class MecanumDriveWithMotorOffsets extends CommandBase {
   private final Drivetrain drivetrain;
   DoubleSupplier horizontalFunction;
   DoubleSupplier verticalFunction;
   DoubleSupplier pivotFunction;
 
-  public MecanumDrive(Drivetrain d, DoubleSupplier h, DoubleSupplier v, DoubleSupplier p) {
+  public MecanumDriveWithMotorOffsets(Drivetrain d, DoubleSupplier h, DoubleSupplier v, DoubleSupplier p) {
     drivetrain = d;
     horizontalFunction = h;
     verticalFunction = v;
@@ -34,11 +34,19 @@ public class MecanumDrive extends CommandBase {
     double vertical = verticalFunction.getAsDouble();
     double pivot = pivotFunction.getAsDouble();
 
+    MecanumDriveWheelSpeeds wheelSpeeds = 
+      new MecanumDriveWheelSpeeds(
+        Constants.FRONT_LEFT_MOTOR_SPEED_OFFSET   * (-pivot + (vertical - horizontal)), 
+        Constants.FRONT_RIGHT_MOTOR_SPEED_OFFSET  * (pivot + (vertical + horizontal)), 
+        Constants.BACK_LEFT_MOTOR_SPEED_OFFSET    * (-pivot + (vertical + horizontal)), 
+        Constants.BACK_RIGHT_MOTOR_SPEED_OFFSET   * (pivot + (vertical - horizontal))
+      );
+
     if (Math.abs(horizontal) >= Constants.GAMEPAD_DEADZONE || Math.abs(vertical) >= Constants.GAMEPAD_DEADZONE
         || Math.abs(pivot) >= Constants.GAMEPAD_DEADZONE) {
-      drivetrain.driveCartesian(-vertical / 2, horizontal / 2, pivot / 2);
+      drivetrain.setWheelSpeeds(new MecanumDriveWheelSpeeds(0, 0, 0, 0));
     } else {
-      drivetrain.driveCartesian(0, 0, 0);
+      drivetrain.setWheelSpeeds(new MecanumDriveWheelSpeeds(0, 0, 0, 0));
     }
   }
 

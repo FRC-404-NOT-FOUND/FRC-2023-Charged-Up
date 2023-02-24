@@ -196,7 +196,7 @@ public class Drivetrain extends SubsystemBase {
   public void setWheelSpeeds(MecanumDriveWheelSpeeds wheelSpeeds){
     ChassisSpeeds cartesian = kinematics.toChassisSpeeds(wheelSpeeds);
 
-    MecanumDrive.driveCartesianIK(cartesian.vxMetersPerSecond, cartesian.vyMetersPerSecond, cartesian.omegaRadiansPerSecond);
+    mDrive.driveCartesian(cartesian.vxMetersPerSecond, cartesian.vyMetersPerSecond, cartesian.omegaRadiansPerSecond);
   }
   
   public void setInvertfrontLeftMotor(boolean isInverted) {
