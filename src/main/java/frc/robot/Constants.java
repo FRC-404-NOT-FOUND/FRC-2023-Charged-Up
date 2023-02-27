@@ -75,6 +75,12 @@ public final class Constants {
     public static final int PIVOT_SLOW_PID_SLOT = 0;
     public static final int PIVOT_QUICK_PID_SLOT = 1;
 
+//Positions
+    public static final int FIRST_POSITION_ANGLE = 0;
+    public static final int FIRST_POSITION_EXTENSION = 0;
+    public static final int SECOND_POSITION_ANGLE = 0;
+    public static final int SECOND_POSITION_EXTENSION = 0;
+
 
     //OI
     public static final int DRIVER_LEFT_CONTROL_PORT = 1;

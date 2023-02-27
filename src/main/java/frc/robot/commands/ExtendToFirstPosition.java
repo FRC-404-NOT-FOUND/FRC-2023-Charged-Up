@@ -8,13 +8,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Arm.A_extendTo;
 import frc.robot.commands.Arm.A_pivotToSLOW;
 import frc.robot.subsystems.Arm;
+import frc.robot.Constants;
 
-public class ExtendArmToFirstPole extends SequentialCommandGroup {
-  public ExtendArmToFirstPole(Arm arm) {
-     // Replace with angle and length of pole
+//Assume that we are coming from the Default Position.
+public class ExtendToFirstPosition extends SequentialCommandGroup {
+  public ExtendToFirstPosition(Arm arm) {
     addCommands(
-      new A_pivotToSLOW(0, arm), 
-      new A_extendTo(0, arm)
-    ); 
+      // Replace with angle and length of cube
+      new A_pivotToSLOW(Constants.FIRST_POSITION_ANGLE, arm),
+      new A_extendTo(Constants.FIRST_POSITION_EXTENSION, arm)
+    );  
   }
 }
