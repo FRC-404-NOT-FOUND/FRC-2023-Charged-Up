@@ -25,9 +25,9 @@ import frc.robot.subsystems.Grabber;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-    private final Drivetrain s_drivetrain = new Drivetrain();
-    private final Arm s_arm = new Arm();
-    private final Grabber s_grabber = new Grabber();
+  private final Drivetrain s_drivetrain = new Drivetrain();
+  private final Arm s_arm = new Arm();
+  private final Grabber s_grabber = new Grabber();
 
   //OI and Buttons
   private final Trigger oi_aExtendToMax = new Trigger(() -> OI.gamepad.getRightBumper());
@@ -70,8 +70,6 @@ public class RobotContainer {
     oi_gSucc.whileTrue(new G_Succ(s_grabber));
     oi_gSpit.whileTrue(new G_Spit(s_grabber));
   }
-
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

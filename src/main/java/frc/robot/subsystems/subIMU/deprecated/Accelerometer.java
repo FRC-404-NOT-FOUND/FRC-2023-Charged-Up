@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.ADXL362.AllAxes;
 import edu.wpi.first.wpilibj.ADXL362.Axes;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class Accelerometer extends SubsystemBase {
   private final ADXL362 accel;
