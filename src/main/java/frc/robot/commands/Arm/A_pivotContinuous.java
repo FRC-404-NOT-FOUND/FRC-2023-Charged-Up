@@ -2,17 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Grabber;
+package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Arm;
 
-public class G_PneumaticsClose extends CommandBase {
-  Grabber s_grabber;
-  public G_PneumaticsClose(Grabber grabber) {
-    addRequirements(grabber);
+public class A_pivotContinuous extends CommandBase {
+  private final Arm arm;
+  private final double multiplier;
 
-    s_grabber = grabber;
+  /** Creates a new A_pivotContinuous. */
+  public A_pivotContinuous(Arm a, double m) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(a);
+
+    arm = a;
+    multiplier = m;
   }
 
   // Called when the command is initially scheduled.
@@ -22,12 +27,14 @@ public class G_PneumaticsClose extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_grabber.pneumaticsClose();
+    arm.getPivot().pivotMotor.set(1 * multiplier);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    arm.getPivot().pivotMotor.set(0);
+  }
 
   // Returns true when the command should end.
   @Override

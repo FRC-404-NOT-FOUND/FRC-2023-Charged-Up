@@ -34,13 +34,11 @@ public class MecanumDriveWithMotorOffsets extends CommandBase {
     double vertical = verticalFunction.getAsDouble();
     double pivot = pivotFunction.getAsDouble();
 
-    MecanumDriveWheelSpeeds wheelSpeeds = 
-      new MecanumDriveWheelSpeeds(
-        Constants.FRONT_LEFT_MOTOR_SPEED_OFFSET   * (-pivot + (-vertical - horizontal)), 
-        Constants.FRONT_RIGHT_MOTOR_SPEED_OFFSET  * (pivot + (-vertical + horizontal)), 
-        Constants.BACK_LEFT_MOTOR_SPEED_OFFSET    * (-pivot + (-vertical + horizontal)), 
-        Constants.BACK_RIGHT_MOTOR_SPEED_OFFSET   * (pivot + (-vertical - horizontal))
-      );
+    MecanumDriveWheelSpeeds wheelSpeeds = drivetrain.driveCartesianIK(-vertical / 2, horizontal / 2, pivot / 2);
+    wheelSpeeds.frontLeftMetersPerSecond *= Constants.FRONT_LEFT_MOTOR_SPEED_OFFSET;
+    wheelSpeeds.frontRightMetersPerSecond *= Constants.FRONT_RIGHT_MOTOR_SPEED_OFFSET;
+    wheelSpeeds.rearLeftMetersPerSecond *= Constants.BACK_LEFT_MOTOR_SPEED_OFFSET;
+    wheelSpeeds.rearRightMetersPerSecond *= Constants.BACK_RIGHT_MOTOR_SPEED_OFFSET;
 
     if (Math.abs(horizontal) >= Constants.GAMEPAD_DEADZONE || Math.abs(vertical) >= Constants.GAMEPAD_DEADZONE
         || Math.abs(pivot) >= Constants.GAMEPAD_DEADZONE) {

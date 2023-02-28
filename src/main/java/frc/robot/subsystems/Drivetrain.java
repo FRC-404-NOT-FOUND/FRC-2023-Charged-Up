@@ -85,6 +85,11 @@ public class Drivetrain extends SubsystemBase {
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
   }
+
+  public MecanumDriveWheelSpeeds driveCartesianIK(double xSpeed, double ySpeed, double zRotation) {
+    MecanumDrive.WheelSpeeds wheelSpeeds = MecanumDrive.driveCartesianIK(xSpeed, ySpeed, zRotation);
+    return new MecanumDriveWheelSpeeds(wheelSpeeds.frontLeft, wheelSpeeds.frontRight, wheelSpeeds.rearLeft, wheelSpeeds.rearRight);
+  }
   
   public MecanumDriveKinematics getKinematics(){
     return kinematics;

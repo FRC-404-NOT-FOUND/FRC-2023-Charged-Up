@@ -5,13 +5,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Arm.A_extendTo;
+import frc.robot.commands.Arm.A_extendContinuous;
+import frc.robot.commands.Arm.A_pivotContinuous;
 import frc.robot.commands.Grabber.G_Spit;
-import frc.robot.commands.Grabber.G_CompressorToggle;
-import frc.robot.commands.Grabber.G_PneumaticsToggle;
 import frc.robot.commands.Grabber.G_Succ;
-import frc.robot.commands.MecanumDriveWithMotorOffsets;
+import frc.robot.commands.MecanumDrive;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -30,8 +30,10 @@ public class RobotContainer {
   private final Grabber s_grabber = new Grabber();
 
   //OI and Buttons
-  private final Trigger oi_aExtendToMax = new Trigger(() -> OI.gamepad.getRightBumper());
-  private final Trigger oi_aExtendToMin = new Trigger(() -> OI.gamepad.getLeftBumper());
+  private final Trigger oi_aExtend = new Trigger(() -> OI.gamepad.getRightBumper());
+  private final Trigger oi_aRetract = new Trigger(() -> OI.gamepad.getLeftBumper());
+  private final Trigger oi_aRaise = new Trigger(() -> OI.gamepad.getAButton());
+  private final Trigger oi_aLower = new Trigger(() -> OI.gamepad.getBButton());
 
   //Dpad down InputExample. (Up == 0, Goes CW around by units of degrees.)
   //private final Trigger oi_AgoToDefault = new Trigger(() -> OI.gamepad.getPOV() == 180 ? true : false);
@@ -43,7 +45,7 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    s_drivetrain.setDefaultCommand(new MecanumDriveWithMotorOffsets(
+    s_drivetrain.setDefaultCommand(new MecanumDrive(
       s_drivetrain, 
       () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
       () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
@@ -61,11 +63,26 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //oi_aExtendToMax.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MAX_POSITION, s_Arm));
-    //oi_aExtendToMin.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MIN_POSITION, s_Arm));
+    //oi_aExtend.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MAX_POSITION, s_Arm));
+    //oi_aRetract.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MIN_POSITION, s_Arm));
 
-    oi_gCompressorToggle.toggleOnTrue(new G_CompressorToggle(s_grabber));
-    oi_gPneumaticsToggle.toggleOnTrue(new G_PneumaticsToggle(s_grabber));
+    oi_aExtend.whileTrue(new A_extendContinuous(s_arm, 1));
+    oi_aRetract.whileTrue(new A_extendContinuous(s_arm, -1));
+
+    oi_aRaise.whileTrue(new A_pivotContinuous(s_arm, 1));
+    oi_aLower.whileTrue(new A_pivotContinuous(s_arm, -1));
+
+    oi_gCompressorToggle.toggleOnTrue(Commands.startEnd(
+      s_grabber::turnCompressorOn,
+      s_grabber::turnCompressorOff,
+      s_grabber
+    ));
+
+    oi_gPneumaticsToggle.toggleOnTrue(Commands.startEnd(
+      s_grabber::pneumaticsClose,
+      s_grabber::pneumaticsOpen,
+      s_grabber
+    ));
 
     oi_gSucc.whileTrue(new G_Succ(s_grabber));
     oi_gSpit.whileTrue(new G_Spit(s_grabber));
