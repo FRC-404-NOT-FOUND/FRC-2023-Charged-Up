@@ -3,9 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Arm.A_extendTo;
-import frc.robot.commands.Grabber.G_PneumaticsOpen;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Grabber;
 
@@ -27,7 +27,7 @@ public class EngageArm extends SequentialCommandGroup {
     s_grabber = grabber;
     
     addCommands(
-      new G_PneumaticsOpen(s_grabber),
+      Commands.run(s_grabber::pneumaticsOpen, s_grabber),
       new ExtendArmToDefault(arm)
     );
   }

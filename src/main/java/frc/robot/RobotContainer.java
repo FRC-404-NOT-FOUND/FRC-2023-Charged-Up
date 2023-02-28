@@ -7,10 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Arm.A_extendContinuous;
-import frc.robot.commands.Arm.A_pivotContinuous;
-import frc.robot.commands.Grabber.G_Spit;
-import frc.robot.commands.Grabber.G_Succ;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -63,14 +59,29 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //oi_aExtend.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MAX_POSITION, s_Arm));
-    //oi_aRetract.onTrue(new A_extendTo(Constants.EXTENSION_WHEEL_MIN_POSITION, s_Arm));
+    oi_aExtend.whileTrue(Commands.startEnd(
+      () -> s_arm.getExtension().setMotorWheel(0.2),
+      () -> s_arm.getExtension().setMotorWheel(0),
+      s_arm
+    ));
 
-    oi_aExtend.whileTrue(new A_extendContinuous(s_arm, 1));
-    oi_aRetract.whileTrue(new A_extendContinuous(s_arm, -1));
+    oi_aRetract.whileTrue(Commands.startEnd(
+      () -> s_arm.getExtension().setMotorWheel(-0.2),
+      () -> s_arm.getExtension().setMotorWheel(0),
+      s_arm
+    ));
 
-    oi_aRaise.whileTrue(new A_pivotContinuous(s_arm, 1));
-    oi_aLower.whileTrue(new A_pivotContinuous(s_arm, -1));
+    oi_aRaise.whileTrue(Commands.startEnd(
+      () -> s_arm.getPivot().pivotMotor.set(1),
+      () -> s_arm.getPivot().pivotMotor.set(0),
+      s_arm
+    ));
+
+    oi_aLower.whileTrue(Commands.startEnd(
+      () -> s_arm.getPivot().pivotMotor.set(-1),
+      () -> s_arm.getPivot().pivotMotor.set(0),
+      s_arm
+    ));
 
     oi_gCompressorToggle.toggleOnTrue(Commands.startEnd(
       s_grabber::turnCompressorOn,
@@ -84,8 +95,17 @@ public class RobotContainer {
       s_grabber
     ));
 
-    oi_gSucc.whileTrue(new G_Succ(s_grabber));
-    oi_gSpit.whileTrue(new G_Spit(s_grabber));
+    oi_gSucc.whileTrue(Commands.startEnd(
+      s_grabber::startIntake,
+      s_grabber::stopIntake,
+      s_grabber
+    ));
+
+    oi_gSpit.whileTrue(Commands.startEnd(
+      s_grabber::startSpit,
+      s_grabber::stopIntake,
+      s_grabber
+    ));
   }
 
   /**
