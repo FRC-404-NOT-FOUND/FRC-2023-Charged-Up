@@ -100,14 +100,15 @@ public class Drivetrain extends SubsystemBase {
     super.setDefaultCommand(defaultCommand);
   }
 
-  //The IDEAL version of mecanum Drive. Does not inplement wheelSpeed Offsets.
+  // The IDEAL version of mecanum Drive. Does not inplement wheelSpeed Offsets.
+  // Automatically sets wheels within this method, doesn't return anything.
   // Positive Directions:
   // XSpeed = forward, YSpeed = Left, zRotation = CCW
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
   }
 
-  //Returns the WheelSpeeds (From -1 to 1.)
+  //Returns the wheelSpeeds (From -1 to 1.) from the parameters.
   public MecanumDrive.WheelSpeeds driveCartesianIK(double xSpeed, double ySpeed, double zRotation) {
     MecanumDrive.WheelSpeeds wheelSpeeds = MecanumDrive.driveCartesianIK(xSpeed, ySpeed, zRotation);
     
@@ -115,14 +116,6 @@ public class Drivetrain extends SubsystemBase {
     wheelSpeeds.frontRight *= Constants.FRONT_RIGHT_MOTOR_SPEED_OFFSET;
     wheelSpeeds.rearLeft *= Constants.BACK_LEFT_MOTOR_SPEED_OFFSET;
     wheelSpeeds.rearRight *= Constants.BACK_RIGHT_MOTOR_SPEED_OFFSET;
-
-    // MecanumDriveWheelSpeeds kinematicWheelSpeeds = new MecanumDriveWheelSpeeds(
-    //   wheelSpeeds.frontLeft, 
-    //   wheelSpeeds.frontRight, 
-    //   wheelSpeeds.rearLeft, 
-    //   wheelSpeeds.rearRight);
-
-    setWheelSpeeds(wheelSpeeds);
 
     return wheelSpeeds;
   }
