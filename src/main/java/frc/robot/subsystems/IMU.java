@@ -37,13 +37,13 @@ public class IMU extends SubsystemBase {
     
     if(arduinoConnected && !isReady){
       //NOTE: Must make this null in order for Simulations to work.
-      imu_gyro = new IMU_Gyroscope(arduinoTeensy);
       if (arduinoTeensy.getBytesReceived() > 0) {
         String data = arduinoTeensy.readString();
         System.out.println(data);
 
         if(data.contains("READY")){
           System.out.println("IMU IS READY!");
+          imu_gyro = new IMU_Gyroscope(arduinoTeensy);
           isReady = true;
           calibrateArduino();
         }
