@@ -36,7 +36,7 @@ public class DriveAlongPath extends PPMecanumControllerCommand {
                                                 //Rotation PID controller, using 0 for all uses feedforwards, TO BE TUNED in Constants
       new PIDController(Constants.DRIVETRAIN_ROTATE_KP, Constants.DRIVETRAIN_ROTATE_KI, Constants.DRIVETRAIN_ROTATE_KD),
       Constants.MAX_AUTONOMOUS_WHEEL_SPEED,     //Max Wheel Speed
-      output -> { drivetrain.setWheelSpeeds(output); }, 
+      output -> { drivetrain.setKinematicWheelSpeeds(output); }, 
       drivetrain                                //Requirements
       );
   }

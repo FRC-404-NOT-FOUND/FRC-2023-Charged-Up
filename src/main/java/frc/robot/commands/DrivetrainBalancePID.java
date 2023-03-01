@@ -7,16 +7,19 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.drive.MecanumDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.IMU;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class DrivetrainBalancePID extends ProfiledPIDCommand {
   //ROBOT MUST BE FACING FORWARD, ARM TOWARDS THE BALANCE
-  public DrivetrainBalancePID(Drivetrain drivetrain) {
+  //Only takes the pitch, and gets the 
+  public DrivetrainBalancePID(Drivetrain drivetrain, IMU imu) {
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
@@ -27,17 +30,18 @@ public class DrivetrainBalancePID extends ProfiledPIDCommand {
             // The motion profile constraints
             new TrapezoidProfile.Constraints(Constants.MAX_AUTONOMOUS_WHEEL_SPEED, Constants.MAX_AUTONOMOUS_WHEEL_ACCEL)),
         // This should return the measurement
-        () -> drivetrain.getCurrentPose().getY(), //This might need to be changed to getX, or something equivalent to this using pitch from the gyro.
+        () -> imu.getGyroPitch(),
         // This should return the goal (can also be a constant)
-        //THIS IS THE TARGET.
+        // Tl;dr THIS IS THE TARGET, and the pitch should be zero (or close to it.).
         () -> new TrapezoidProfile.State(),
         // This uses the output
         (output, setpoint) -> {
           // Use the output (and setpoint, if desired) here
-          drivetrain.setWheelSpeeds(new MecanumDriveWheelSpeeds(output, output, output, output));
+          drivetrain.setWheelSpeeds(new WheelSpeeds(output, output, output, output));
         });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
+    addRequirements(drivetrain);
   }
 
   // Returns true when the command should end.

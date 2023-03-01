@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.drive.MecanumDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
@@ -34,17 +35,14 @@ public class MecanumDriveWithMotorOffsets extends CommandBase {
     double vertical = verticalFunction.getAsDouble();
     double pivot = pivotFunction.getAsDouble();
 
-    MecanumDriveWheelSpeeds wheelSpeeds = drivetrain.driveCartesianIK(-vertical / 2, horizontal / 2, pivot / 2);
-    wheelSpeeds.frontLeftMetersPerSecond *= Constants.FRONT_LEFT_MOTOR_SPEED_OFFSET;
-    wheelSpeeds.frontRightMetersPerSecond *= Constants.FRONT_RIGHT_MOTOR_SPEED_OFFSET;
-    wheelSpeeds.rearLeftMetersPerSecond *= Constants.BACK_LEFT_MOTOR_SPEED_OFFSET;
-    wheelSpeeds.rearRightMetersPerSecond *= Constants.BACK_RIGHT_MOTOR_SPEED_OFFSET;
+    //Motor Offsets are embedded inside of driveCartesianIK
+    WheelSpeeds wheelSpeeds = drivetrain.driveCartesianIK(-vertical / 2, horizontal / 2, pivot / 2);
 
     if (Math.abs(horizontal) >= Constants.GAMEPAD_DEADZONE || Math.abs(vertical) >= Constants.GAMEPAD_DEADZONE
         || Math.abs(pivot) >= Constants.GAMEPAD_DEADZONE) {
       drivetrain.setWheelSpeeds(wheelSpeeds);
     } else {
-      drivetrain.setWheelSpeeds(new MecanumDriveWheelSpeeds(0, 0, 0, 0));
+      drivetrain.setWheelSpeeds(new WheelSpeeds(0, 0, 0, 0));
     }
   }
 

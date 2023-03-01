@@ -9,6 +9,7 @@ import com.ctre.phoenixpro.hardware.CANcoder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
@@ -43,6 +44,8 @@ public class Drivetrain extends SubsystemBase {
   );
 
   private MecanumDriveOdometry odometry;
+  Rotation2d currentRot;
+  //Current pose = Odometry
 
   private MecanumDrive mDrive;
 
@@ -70,9 +73,26 @@ public class Drivetrain extends SubsystemBase {
   }
 
   @Override
+  // Here, we should combine
+  // The IDEAL data from Odometry, 
+  // The MEASURED data from Vision and gyro, 
+  // In the future, we should also use some kind of filter/average within this to get an accurate result.
   public void periodic() {
-    // This method will be called once per scheduler run
-    updateOdometry(getGyroAngle(), getWheelPositions());
+    //Update rotation first.
+    //THEN update pose through odometry
+    
+    if (Limelight.isValidTarget()) {
+      Rotation2d gyroRot = getGyroAngle();
+      Rotation2d visionRot = getVisionRotation();
+
+      //currentRot = ...
+
+      resetOdometry(currentRot, getWheelPositions(), getVisionPose());
+      
+    } 
+    else{
+      updateOdometry(getGyroAngle(), getWheelPositions());
+    }      
   }
 
   @Override
@@ -80,39 +100,44 @@ public class Drivetrain extends SubsystemBase {
     super.setDefaultCommand(defaultCommand);
   }
 
+  //The IDEAL version of mecanum Drive. Does not inplement wheelSpeed Offsets.
   // Positive Directions:
   // XSpeed = forward, YSpeed = Left, zRotation = CCW
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
   }
 
-  public MecanumDriveWheelSpeeds driveCartesianIK(double xSpeed, double ySpeed, double zRotation) {
+  //Returns the WheelSpeeds (From -1 to 1.)
+  public MecanumDrive.WheelSpeeds driveCartesianIK(double xSpeed, double ySpeed, double zRotation) {
     MecanumDrive.WheelSpeeds wheelSpeeds = MecanumDrive.driveCartesianIK(xSpeed, ySpeed, zRotation);
-    return new MecanumDriveWheelSpeeds(wheelSpeeds.frontLeft, wheelSpeeds.frontRight, wheelSpeeds.rearLeft, wheelSpeeds.rearRight);
+    
+    wheelSpeeds.frontLeft *= Constants.FRONT_LEFT_MOTOR_SPEED_OFFSET;
+    wheelSpeeds.frontRight *= Constants.FRONT_RIGHT_MOTOR_SPEED_OFFSET;
+    wheelSpeeds.rearLeft *= Constants.BACK_LEFT_MOTOR_SPEED_OFFSET;
+    wheelSpeeds.rearRight *= Constants.BACK_RIGHT_MOTOR_SPEED_OFFSET;
+
+    // MecanumDriveWheelSpeeds kinematicWheelSpeeds = new MecanumDriveWheelSpeeds(
+    //   wheelSpeeds.frontLeft, 
+    //   wheelSpeeds.frontRight, 
+    //   wheelSpeeds.rearLeft, 
+    //   wheelSpeeds.rearRight);
+
+    setWheelSpeeds(wheelSpeeds);
+
+    return wheelSpeeds;
   }
   
   public MecanumDriveKinematics getKinematics(){
     return kinematics;
   }
   
-  // This should be the main pose. Here, we should combine
-  // The IDEAL data from Odometry, 
-  // The MEASURED data from Vision and gyro, 
-  // In the future, we should also use some kind of filter/average within this to get an accurate result.
+  // This should be the main pose. 
   public Pose2d getCurrentPose(){
-    if (Limelight.isValidTarget()) {
-      return getVisionPose();
-    } else {
-      return getOdometryPose();
-    }
+    return odometry.getPoseMeters();
   }
   //Same deal as getCurrentPose.
   public Rotation2d getCurrentRotation(){
-    if (Limelight.isValidTarget()) {
-      return getVisionRotation();
-    } else {
-      return getGyroAngle();
-    }
+    return currentRot;
   }
 
   ////////////////////////////////////////////////
@@ -156,11 +181,6 @@ public class Drivetrain extends SubsystemBase {
   ///// ODOMETRY (Purely Encoder/Gyro Based) /////
   ////////////////////////////////////////////////
 
-  //Gets the current position in meters.
-  public Pose2d getOdometryPose(){
-    return odometry.getPoseMeters();
-  }
-
   //Updates the current odometry, and returns the newest pose.
   public Pose2d updateOdometry(Rotation2d angle, MecanumDriveWheelPositions wheelPositions){
     return odometry.update(angle, wheelPositions);
@@ -196,15 +216,26 @@ public class Drivetrain extends SubsystemBase {
   /////               Setters                /////
   ////////////////////////////////////////////////
 
-//Sets individual wheel speeds to the mecanum drive.
-  public void setWheelSpeeds(MecanumDriveWheelSpeeds wheelSpeeds){
-    //ChassisSpeeds cartesian = kinematics.toChassisSpeeds(wheelSpeeds);
-    //mDrive.driveCartesian(cartesian.vxMetersPerSecond, cartesian.vyMetersPerSecond, cartesian.omegaRadiansPerSecond);
+  //From (-1 -> 1), Sets the POWER of each motor.
+  public void setWheelSpeeds(MecanumDrive.WheelSpeeds wheelSpeeds){
+    frontLeftMotor.set(wheelSpeeds.frontLeft);
+    frontRightMotor.set(wheelSpeeds.frontRight);
+    backLeftMotor.set(wheelSpeeds.rearLeft);
+    backRightMotor.set(wheelSpeeds.rearRight);
+  }
 
-    frontLeftMotor.set(wheelSpeeds.frontLeftMetersPerSecond);
-    frontRightMotor.set(wheelSpeeds.frontRightMetersPerSecond);
-    backLeftMotor.set(wheelSpeeds.rearLeftMetersPerSecond);
-    backRightMotor.set(wheelSpeeds.rearRightMetersPerSecond);
+//NEEDS TO BE FINALIZED.
+//Should be done using velocity PID. Cannot be done without it.
+//Sets individual wheel speeds to the mecanum drive.
+  public void setKinematicWheelSpeeds(MecanumDriveWheelSpeeds kinematicWheelSpeeds){
+    MecanumDrive.WheelSpeeds wheelSpeeds = new MecanumDrive.WheelSpeeds();
+    // Linear Velocity = AngularVelocity * Radius
+    wheelSpeeds.frontLeft = (kinematicWheelSpeeds.frontLeftMetersPerSecond / Constants.DRIVETRAIN_WHEEL_RADIUS);
+    wheelSpeeds.frontRight = (kinematicWheelSpeeds.frontRightMetersPerSecond / Constants.DRIVETRAIN_WHEEL_RADIUS);
+    wheelSpeeds.rearLeft = (kinematicWheelSpeeds.rearLeftMetersPerSecond / Constants.DRIVETRAIN_WHEEL_RADIUS);
+    wheelSpeeds.rearRight = (kinematicWheelSpeeds.rearRightMetersPerSecond / Constants.DRIVETRAIN_WHEEL_RADIUS);
+
+    //setWheelSpeeds(wheelSpeeds);
   }
   
   public void setInvertfrontLeftMotor(boolean isInverted) {
