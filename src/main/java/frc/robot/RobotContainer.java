@@ -11,6 +11,10 @@ import frc.robot.commands.MecanumDrive;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.subArm.A_Extension;
+import frc.robot.subsystems.subArm.A_Pivot;
+import frc.robot.subsystems.subGrabber.G_Hopper;
+import frc.robot.subsystems.subGrabber.G_Intake;
 
 
 /**
@@ -23,7 +27,13 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain s_drivetrain = new Drivetrain();
   private final Arm s_arm = new Arm();
+    //private final A_Extension sA_Extension = new A_Extension();
+    //private final A_Pivot sA_Pivot = new A_Pivot();
   private final Grabber s_grabber = new Grabber();
+    //private final G_Hopper sG_Hopper = new G_Hopper();
+    //private final G_Intake sG_Intake = new G_Intake();
+
+  
 
   //OI and Buttons
   private final Trigger oi_aExtend = new Trigger(() -> OI.gamepad.getRightBumper());
@@ -62,25 +72,25 @@ public class RobotContainer {
     oi_aExtend.whileTrue(Commands.startEnd(
       () -> s_arm.getExtension().setMotorWheel(0.2),
       () -> s_arm.getExtension().setMotorWheel(0),
-      s_arm
+      s_arm.getExtension()
     ));
 
     oi_aRetract.whileTrue(Commands.startEnd(
       () -> s_arm.getExtension().setMotorWheel(-0.2),
       () -> s_arm.getExtension().setMotorWheel(0),
-      s_arm
+      s_arm.getExtension()
     ));
 
     oi_aRaise.whileTrue(Commands.startEnd(
       () -> s_arm.getPivot().pivotMotor.set(1),
       () -> s_arm.getPivot().pivotMotor.set(0),
-      s_arm
+      s_arm.getPivot()
     ));
 
     oi_aLower.whileTrue(Commands.startEnd(
       () -> s_arm.getPivot().pivotMotor.set(-1),
       () -> s_arm.getPivot().pivotMotor.set(0),
-      s_arm
+      s_arm.getPivot()
     ));
 
     oi_gCompressorToggle.toggleOnTrue(Commands.startEnd(
@@ -92,19 +102,19 @@ public class RobotContainer {
     oi_gPneumaticsToggle.toggleOnTrue(Commands.startEnd(
       s_grabber::pneumaticsClose,
       s_grabber::pneumaticsOpen,
-      s_grabber
+      s_grabber.getHopper()
     ));
 
     oi_gSucc.whileTrue(Commands.startEnd(
       s_grabber::startIntake,
       s_grabber::stopIntake,
-      s_grabber
+      s_grabber.getIntake()
     ));
 
     oi_gSpit.whileTrue(Commands.startEnd(
       s_grabber::startSpit,
       s_grabber::stopIntake,
-      s_grabber
+      s_grabber.getIntake()
     ));
   }
 

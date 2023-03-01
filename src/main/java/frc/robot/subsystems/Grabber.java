@@ -58,6 +58,14 @@ public class Grabber extends SubsystemBase {
     return !isPneumaticsClosed;
   }
 
+  public G_Hopper getHopper(){
+    return hopper;
+  }
+
+  public G_Intake getIntake(){
+    return intake;
+  }
+
   public void startIntake() {
     intake.start();
   }
