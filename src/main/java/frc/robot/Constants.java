@@ -36,10 +36,10 @@ public final class Constants {
     public static final double BACK_RIGHT_MOTOR_SPEED_OFFSET = 0.60;
 
     //Kinematics (THESE WILL NEED TO BE DEFINED)
-    public static Translation2d FRONT_LEFT_WHEEL_TO_CENTER = new Translation2d(-1, 1);
-    public static Translation2d FRONT_RIGHT_WHEEL_TO_CENTER = new Translation2d(1, 1);;
-    public static Translation2d BACK_LEFT_WHEEL_TO_CENTER = new Translation2d(-1, -1);;
-    public static Translation2d BACK_RIGHT_WHEEL_TO_CENTER= new Translation2d(1, -1);;
+    public static Translation2d FRONT_LEFT_WHEEL_TO_CENTER = new Translation2d(0.259, 0.262);
+    public static Translation2d FRONT_RIGHT_WHEEL_TO_CENTER = new Translation2d(0.259, -0.262);;
+    public static Translation2d BACK_LEFT_WHEEL_TO_CENTER = new Translation2d(-0.259, 0.262);;
+    public static Translation2d BACK_RIGHT_WHEEL_TO_CENTER= new Translation2d(-0.259, -0.262);;
 
     //IMU
     public static final int SERIAL_BAUD_RATE = 9600;
@@ -74,6 +74,8 @@ public final class Constants {
     public static final int PIVOT_MOTOR_INDEX = 1;
     public static final int PIVOT_SLOW_PID_SLOT = 0;
     public static final int PIVOT_QUICK_PID_SLOT = 1;
+    public static final int PIVOT_MIN_POSITION = 100;
+    public static final int PIVOT_MAX_POSITION = 350;
 
 //Positions
     public static final int FIRST_POSITION_ANGLE = 0;

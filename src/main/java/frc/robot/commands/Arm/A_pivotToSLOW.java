@@ -16,7 +16,7 @@ public class A_pivotToSLOW extends CommandBase {
   
   public A_pivotToSLOW(double a, Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm);
+    addRequirements(arm.getPivot());
 
     s_arm = arm;
     angle = a;

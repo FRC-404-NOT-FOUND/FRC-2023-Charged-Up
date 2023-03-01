@@ -18,7 +18,7 @@ public class A_extendTo extends CommandBase {
   private double position;
 
   public A_extendTo(double p, Arm a) {
-    addRequirements(a);
+    addRequirements(a.getExtension());
     // Use addRequirements() here to declare subsystem dependencies.
     arm = a;
     position = p;

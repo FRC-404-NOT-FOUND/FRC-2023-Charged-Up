@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.MecanumDrive;
+import frc.robot.commands.Arm.A_extendTo;
+import frc.robot.commands.Arm.A_pivotToSLOW;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -42,7 +44,11 @@ public class RobotContainer {
   private final Trigger oi_aLower = new Trigger(() -> OI.gamepad.getBButton());
 
   //Dpad down InputExample. (Up == 0, Goes CW around by units of degrees.)
-  //private final Trigger oi_AgoToDefault = new Trigger(() -> OI.gamepad.getPOV() == 180 ? true : false);
+  private final Trigger oi_aExtendToMax = new Trigger(() -> OI.gamepad.getPOV() == 0 ? true : false);
+  private final Trigger oi_aExtendToMin = new Trigger(() -> OI.gamepad.getPOV() == 180 ? true : false);
+
+  private final Trigger oi_aPivotToMax = new Trigger(() -> OI.gamepad.getPOV() == 90 ? true : false);
+  private final Trigger oi_aPivotToMin = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
 
   private final Trigger oi_gCompressorToggle = new Trigger(() -> OI.gamepad.getStartButton());
   private final Trigger oi_gPneumaticsToggle = new Trigger(() -> OI.gamepad.getXButton());
@@ -81,6 +87,16 @@ public class RobotContainer {
       s_arm.getExtension()
     ));
 
+    oi_aExtendToMax.whileTrue(new A_extendTo(
+      Constants.EXTENSION_WHEEL_MAX_POSITION, 
+      s_arm
+    ));
+
+    oi_aExtendToMin.whileTrue(new A_extendTo(
+      Constants.EXTENSION_WHEEL_MIN_POSITION, 
+      s_arm
+    ));
+
     oi_aRaise.whileTrue(Commands.startEnd(
       () -> s_arm.getPivot().pivotMotor.set(1),
       () -> s_arm.getPivot().pivotMotor.set(0),
@@ -91,6 +107,16 @@ public class RobotContainer {
       () -> s_arm.getPivot().pivotMotor.set(-1),
       () -> s_arm.getPivot().pivotMotor.set(0),
       s_arm.getPivot()
+    ));
+
+    oi_aPivotToMax.whileTrue(new A_pivotToSLOW(
+      Constants.PIVOT_MAX_POSITION, 
+      s_arm
+    ));
+
+    oi_aPivotToMin.whileTrue(new A_pivotToSLOW(
+      Constants.PIVOT_MIN_POSITION, 
+      s_arm
     ));
 
     oi_gCompressorToggle.toggleOnTrue(Commands.startEnd(
