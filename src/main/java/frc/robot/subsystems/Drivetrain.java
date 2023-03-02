@@ -4,8 +4,12 @@
 
 package frc.robot.subsystems;
 
+import java.sql.Time;
+
 import com.ctre.phoenixpro.hardware.CANcoder;
 
+import edu.wpi.first.math.*;
+import edu.wpi.first.math.estimator.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -46,9 +50,40 @@ public class Drivetrain extends SubsystemBase {
   Rotation2d currentRot = new Rotation2d(0);
   //Current pose = Odometry
 
+  /*
+  // This plant holds a state-space model of our drivetrain. This system has the following properties:
+  //
+  // States: [x, y, theta], in meters/degrees.
+  // Inputs (what we can "put in"): [voltage], in volts.
+  // Outputs (what we can measure): [x, y, theta] in meters.
+  // private final LinearSystem<N2, N2, N2> m_mecanumLinearSystemPlant = LinearSystemId.createDrivetrainVelocitySystem(
+  //   DCMotor.getCIM(4), 
+  //   Constants.ROBOT_MASS_KG, 
+  //   Constants.DRIVETRAIN_WHEEL_RADIUS, 
+  //   Constants.FRONT_LEFT_WHEEL_TO_CENTER.getY(), 
+  //   0, 
+  //   0
+  // );
+
+  // //<State (of robot), Inputs (to plant), Outputs (From sensors)>
+  // //For more information check: 
+  // //    https://docs.wpilib.org/en/stable/docs/software/advanced-controls/state-space/state-space-observers.html
+  // private final KalmanFilter<N2, N2, N2> m_kalmanFilter =
+  //     new KalmanFilter<N2, N2, N2>(
+  //       Nat.N2(), //State: [X, Y, Heading]
+  //       Nat.N2(), //Output (From Limelight): [X, Y, Heading]
+  //       m_mecanumLinearSystemPlant,
+  //       null, 
+  //       null, 
+  //       0.02
+  //   );
+  */
+
   private MecanumDrive mDrive;
 
   private IMU imu;
+
+  private MecanumDrivePoseEstimator poseEstimator;
 
   public Drivetrain() {
     frontLeftMotor.setInverted(false);
@@ -62,13 +97,16 @@ public class Drivetrain extends SubsystemBase {
 
     Pose2d initialPose = new Pose2d(0, 0, getGyroAngle());
 
+    //Get starting pose from driverstation, where it is selected.
     if (Limelight.isValidTarget()) {
       initialPose = getVisionPose();
     } else {
       initialPose = new Pose2d(); // Possibly replace with possible values for start positions based on the map
     }
 
-    odometry = new MecanumDriveOdometry(kinematics, getGyroAngle(), getWheelPositions(), initialPose);
+    //odometry = new MecanumDriveOdometry(kinematics, getGyroAngle(), getWheelPositions(), initialPose);
+
+    poseEstimator = new MecanumDrivePoseEstimator(kinematics, getGyroAngle(), getWheelPositions(), initialPose);
   }
 
   @Override
@@ -79,19 +117,12 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     //Update rotation first.
     //THEN update pose through odometry
+
+    poseEstimator.update(getGyroAngle(), getWheelPositions());
     
-    if (Limelight.isValidTarget()) {
-      Rotation2d gyroRot = getGyroAngle();
-      Rotation2d visionRot = getVisionRotation();
-
-      //currentRot = ...
-
-      resetOdometry(currentRot, getWheelPositions(), getVisionPose());
-      
+    if (Limelight.isValidTarget() || Limelight.getPrimaryAprilTag() <= 0) {
+      poseEstimator.addVisionMeasurement(getVisionPose(), Constants.timer.get());
     } 
-    else{
-      updateOdometry(getGyroAngle(), getWheelPositions());
-    }      
   }
 
   @Override
@@ -120,11 +151,7 @@ public class Drivetrain extends SubsystemBase {
   
   // This should be the main pose. 
   public Pose2d getCurrentPose(){
-    return odometry.getPoseMeters();
-  }
-  //Same deal as getCurrentPose.
-  public Rotation2d getCurrentRotation(){
-    return currentRot;
+    return poseEstimator.getEstimatedPosition();
   }
 
   ////////////////////////////////////////////////
@@ -169,14 +196,14 @@ public class Drivetrain extends SubsystemBase {
   ////////////////////////////////////////////////
 
   //Updates the current odometry, and returns the newest pose.
-  public Pose2d updateOdometry(Rotation2d angle, MecanumDriveWheelPositions wheelPositions){
-    return odometry.update(angle, wheelPositions);
-  }
+  // public Pose2d updateOdometry(Rotation2d angle, MecanumDriveWheelPositions wheelPositions){
+  //   return odometry.update(angle, wheelPositions);
+  // }
 
-  //Resets the odometry to the selected values.
-  public void resetOdometry(Rotation2d angle, MecanumDriveWheelPositions wheelPositions, Pose2d pose){
-    odometry.resetPosition(angle, wheelPositions, pose);
-  }
+  // //Resets the odometry to the selected values.
+  // public void resetOdometry(Rotation2d angle, MecanumDriveWheelPositions wheelPositions, Pose2d pose){
+  //   odometry.resetPosition(angle, wheelPositions, pose);
+  // }
 
   ////////////////////////////////////////////////
   /////               Vision                 /////

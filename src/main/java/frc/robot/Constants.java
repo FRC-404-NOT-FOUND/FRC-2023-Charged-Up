@@ -4,11 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 public final class Constants {
+    public static Timer timer = new Timer();
 
 //Drivetrain
     //PWM
@@ -22,6 +25,9 @@ public final class Constants {
     public static final int FRONT_RIGHT_ENCODER_INDEX = 0;
     public static final int BACK_LEFT_ENCODER_INDEX = 0;
     public static final int BACK_RIGHT_ENCODER_INDEX = 0;
+
+    //Mass of the Robot
+    public static final double ROBOT_MASS_KG = 110;
 
     //radius in meters
     public static final double DRIVETRAIN_WHEEL_RADIUS = 0.1016; //4 inches
