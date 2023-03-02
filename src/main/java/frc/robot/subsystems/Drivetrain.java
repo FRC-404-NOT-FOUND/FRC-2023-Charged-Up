@@ -119,6 +119,11 @@ public class Drivetrain extends SubsystemBase {
     //THEN update pose through odometry
 
     poseEstimator.update(getGyroAngle(), getWheelPositions());
+
+    System.out.println("Front left encoder position: " + frontLeftEncoder.getPosition().getValue());
+    System.out.println("Front right encoder position: " + frontRightEncoder.getPosition().getValue());
+    System.out.println("Back left encoder: " + backLeftEncoder.getPosition().getValue());
+    System.out.println("Back right encoder: " + backRightEncoder.getPosition().getValue());
     
     if (Limelight.isValidTarget() || Limelight.getPrimaryAprilTag() <= 0) {
       poseEstimator.addVisionMeasurement(getVisionPose(), Constants.timer.get());

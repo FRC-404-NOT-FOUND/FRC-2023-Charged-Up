@@ -21,10 +21,10 @@ public final class Constants {
     public static final int BACK_RIGHT_MOTOR_INDEX = 0;
 
     //CAN
-    public static final int FRONT_LEFT_ENCODER_INDEX = 0;
-    public static final int FRONT_RIGHT_ENCODER_INDEX = 0;
-    public static final int BACK_LEFT_ENCODER_INDEX = 0;
-    public static final int BACK_RIGHT_ENCODER_INDEX = 0;
+    public static final int FRONT_LEFT_ENCODER_INDEX = 31;
+    public static final int FRONT_RIGHT_ENCODER_INDEX = 32;
+    public static final int BACK_LEFT_ENCODER_INDEX = 33;
+    public static final int BACK_RIGHT_ENCODER_INDEX = 34;
 
     //Mass of the Robot
     public static final double ROBOT_MASS_KG = 110;
