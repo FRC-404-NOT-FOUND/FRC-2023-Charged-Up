@@ -8,15 +8,14 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.MecanumDrive;
+import frc.robot.commands.MecanumDriveWithMotorOffsets;
+import frc.robot.commands.TryReconnectArduino;
 import frc.robot.commands.Arm.A_extendTo;
 import frc.robot.commands.Arm.A_pivotToSLOW;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
-import frc.robot.subsystems.subArm.A_Extension;
-import frc.robot.subsystems.subArm.A_Pivot;
-import frc.robot.subsystems.subGrabber.G_Hopper;
-import frc.robot.subsystems.subGrabber.G_Intake;
+import frc.robot.subsystems.IMU;
 
 
 /**
@@ -34,6 +33,8 @@ public class RobotContainer {
   private final Grabber s_grabber = new Grabber();
     //private final G_Hopper sG_Hopper = new G_Hopper();
     //private final G_Intake sG_Intake = new G_Intake();
+  
+  private final IMU imu;
 
   
 
@@ -54,6 +55,8 @@ public class RobotContainer {
   private final Trigger oi_gPneumaticsToggle = new Trigger(() -> OI.gamepad.getXButton());
   private final Trigger oi_gSucc = new Trigger(() -> OI.gamepad.getRightTriggerAxis() > 0.1 ? true : false);
   private final Trigger oi_gSpit = new Trigger(() -> OI.gamepad.getLeftTriggerAxis() > 0.1 ? true : false);
+
+  private final Trigger oi_iArduinoReconnect = new Trigger(() -> OI.gamepad.getBackButtonPressed());
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -63,6 +66,8 @@ public class RobotContainer {
       () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
       () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X)
     ));
+
+    imu = IMU.create();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -87,12 +92,12 @@ public class RobotContainer {
       s_arm.getExtension()
     ));
 
-    oi_aExtendToMax.whileTrue(new A_extendTo(
+    oi_aExtendToMax.onTrue(new A_extendTo(
       Constants.EXTENSION_WHEEL_MAX_POSITION, 
       s_arm
     ));
 
-    oi_aExtendToMin.whileTrue(new A_extendTo(
+    oi_aExtendToMin.onTrue(new A_extendTo(
       Constants.EXTENSION_WHEEL_MIN_POSITION, 
       s_arm
     ));
@@ -119,7 +124,7 @@ public class RobotContainer {
       s_arm
     ));
 
-    oi_gCompressorToggle.toggleOnTrue(Commands.startEnd(
+    oi_gCompressorToggle.toggleOnFalse(Commands.startEnd(
       s_grabber::turnCompressorOn,
       s_grabber::turnCompressorOff,
       s_grabber
@@ -141,6 +146,10 @@ public class RobotContainer {
       s_grabber::startSpit,
       s_grabber::stopIntake,
       s_grabber.getIntake()
+    ));
+
+    oi_iArduinoReconnect.whileTrue(new TryReconnectArduino(
+      imu
     ));
   }
 

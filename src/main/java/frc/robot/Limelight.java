@@ -57,10 +57,15 @@ MUST USE getDoubleArray(new double[6]) TO BE USEFUL
     }
     //BotPose in Field Space. Helpful for Filtering + averaging
     public static double[] getBotPose(){
-        if(isValidTarget())
-            return getTableEntry("botpose").getDoubleArray(new double[6]);
-        else
-            return null;
+        if(isValidTarget()) {
+            double[] pose = getTableEntry("botpose").getDoubleArray(new double[6]);
+            if (pose.length < 6) {
+                pose = new double[]{0,0,0,0,0,0};
+            }
+
+            return pose;
+        } else
+            return new double[]{0,0,0,0,0,0};
     }
 
     // Pipeline map:

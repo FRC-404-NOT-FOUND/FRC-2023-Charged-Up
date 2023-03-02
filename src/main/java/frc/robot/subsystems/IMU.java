@@ -35,20 +35,12 @@ public class IMU extends SubsystemBase {
   public void periodic() {
     //System.out.println("Gyro ready: " + isGyroReady());
     
-    if(arduinoConnected && !isReady){
-      //NOTE: Must make this null in order for Simulations to work.
-      imu_gyro = new IMU_Gyroscope(arduinoTeensy);
-      if (arduinoTeensy.getBytesReceived() > 0) {
-        String data = arduinoTeensy.readString();
-        System.out.println(data);
-
-        if(data.contains("READY")){
-          System.out.println("IMU IS READY!");
-          isReady = true;
-          calibrateArduino();
-        }
-      }
+    if (arduinoConnected && !isReady) {
+      readyArduino();
+    } else if (!arduinoConnected) {
+      connectArduino();
     }
+
     /*
     if(isGyroReady()){
       System.out.println("Heading: " + getGyroYaw());
@@ -57,6 +49,25 @@ public class IMU extends SubsystemBase {
       System.out.println("AccelZ: " + getAccelZ());
     }
     */
+  }
+
+  public void readyArduino() {
+    if(arduinoConnected && !isReady){
+      //NOTE: Must make this null in order for Simulations to work.
+      String cache = "";
+      if (arduinoTeensy.getBytesReceived() > 0) {
+        String data = arduinoTeensy.readString();
+        System.out.println(data);
+        cache.concat(data.trim());
+
+        if(cache.contains("READY")){
+          System.out.println("IMU IS READY!");
+          imu_gyro = new IMU_Gyroscope(arduinoTeensy);
+          isReady = true;
+          calibrateArduino();
+        }
+      }
+    }
   }
 
   public void connectDevices() {

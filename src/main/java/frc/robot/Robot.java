@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
     imu.connectDevices();
     imu.connectArduino();
     m_robotContainer = new RobotContainer();
+    System.out.println("Robot Inited");
   }
 
   /**

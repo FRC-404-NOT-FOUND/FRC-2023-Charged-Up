@@ -9,7 +9,6 @@ import com.ctre.phoenixpro.hardware.CANcoder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
@@ -44,7 +43,7 @@ public class Drivetrain extends SubsystemBase {
   );
 
   private MecanumDriveOdometry odometry;
-  Rotation2d currentRot;
+  Rotation2d currentRot = new Rotation2d(0);
   //Current pose = Odometry
 
   private MecanumDrive mDrive;
@@ -61,7 +60,7 @@ public class Drivetrain extends SubsystemBase {
 
     imu = IMU.create();
 
-    Pose2d initialPose;
+    Pose2d initialPose = new Pose2d(0, 0, getGyroAngle());
 
     if (Limelight.isValidTarget()) {
       initialPose = getVisionPose();
@@ -69,7 +68,7 @@ public class Drivetrain extends SubsystemBase {
       initialPose = new Pose2d(); // Possibly replace with possible values for start positions based on the map
     }
 
-    odometry = new MecanumDriveOdometry(kinematics, getCurrentRotation(), getWheelPositions(), initialPose);
+    odometry = new MecanumDriveOdometry(kinematics, getGyroAngle(), getWheelPositions(), initialPose);
   }
 
   @Override
@@ -111,11 +110,6 @@ public class Drivetrain extends SubsystemBase {
   //Returns the wheelSpeeds (From -1 to 1.) from the parameters.
   public MecanumDrive.WheelSpeeds driveCartesianIK(double xSpeed, double ySpeed, double zRotation) {
     MecanumDrive.WheelSpeeds wheelSpeeds = MecanumDrive.driveCartesianIK(xSpeed, ySpeed, zRotation);
-    
-    wheelSpeeds.frontLeft *= Constants.FRONT_LEFT_MOTOR_SPEED_OFFSET;
-    wheelSpeeds.frontRight *= Constants.FRONT_RIGHT_MOTOR_SPEED_OFFSET;
-    wheelSpeeds.rearLeft *= Constants.BACK_LEFT_MOTOR_SPEED_OFFSET;
-    wheelSpeeds.rearRight *= Constants.BACK_RIGHT_MOTOR_SPEED_OFFSET;
 
     return wheelSpeeds;
   }

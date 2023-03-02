@@ -26,6 +26,7 @@ public class A_extendTo extends CommandBase {
 
   @Override
   public void initialize(){
+    System.out.println("Extendo or Retracto...");
   }
 
   @Override
