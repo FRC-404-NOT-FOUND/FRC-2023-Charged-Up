@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
-public class A_pivotToQUICK extends CommandBase {
+public class A_pivotTo extends CommandBase {
   Arm s_arm;
   double angle;
   
-  public A_pivotToQUICK(double a, Arm arm) {
+  public A_pivotTo(double a, Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm);
+    addRequirements(arm.getPivot());
 
     s_arm = arm;
     angle = a;
@@ -29,7 +29,7 @@ public class A_pivotToQUICK extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_arm.getPivot().getPIDController().setReference(angle, CANSparkMax.ControlType.kPosition, Constants.PIVOT_QUICK_PID_SLOT);
+    s_arm.getPivot().getPIDController().setReference(angle, CANSparkMax.ControlType.kPosition, Constants.PIVOT_SLOW_PID_SLOT);
     //WE NEED A WAY TO DETERMINE FOR SURE WHEN IT ARRIVES AT THE ANGLE, IT STOPS RUNNING AND FINISHES THE COMMAND.
   }
 

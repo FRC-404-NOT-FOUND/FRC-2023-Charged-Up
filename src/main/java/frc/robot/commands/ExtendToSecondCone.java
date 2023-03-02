@@ -6,16 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Arm.A_extendTo;
-import frc.robot.commands.Arm.A_pivotToSLOW;
+import frc.robot.commands.Arm.A_pivotTo;
 import frc.robot.subsystems.Arm;
 import frc.robot.Constants;
 
-public class ExtendToSecondPosition extends SequentialCommandGroup {
-  public ExtendToSecondPosition(Arm arm) {
+public class ExtendToSecondCone extends SequentialCommandGroup {
+  public ExtendToSecondCone(Arm arm) {
     addCommands(
     // Replace with angle and length of cube
-      new A_pivotToSLOW(Constants.SECOND_POSITION_ANGLE, arm), 
-      new A_extendTo(Constants.SECOND_POSITION_EXTENSION, arm)
+      new A_pivotTo(Constants.SECOND_CONE_ANGLE, arm), 
+      new A_extendTo(Constants.SECOND_CONE_EXTENSION, arm)
     ); 
   }
 }

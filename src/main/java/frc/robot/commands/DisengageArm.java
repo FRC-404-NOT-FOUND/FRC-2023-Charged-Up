@@ -6,8 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.Arm.A_extendTo;
-import frc.robot.commands.Arm.A_pivotToSLOW;
+import frc.robot.commands.Arm.A_pivotTo;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Grabber;
 
@@ -29,9 +30,9 @@ public class DisengageArm extends SequentialCommandGroup {
     s_grabber = grabber;
     
     addCommands(
-      new A_extendTo(0, s_arm),
       Commands.run(s_grabber::pneumaticsOpen, s_grabber),
-      new A_pivotToSLOW(0, s_arm)
+      new A_extendTo(Constants.DEFAULT_EXTENSION, s_arm),
+      new A_pivotTo(Constants.DEFAULT_ANGLE, s_arm)
     );
   }
 }

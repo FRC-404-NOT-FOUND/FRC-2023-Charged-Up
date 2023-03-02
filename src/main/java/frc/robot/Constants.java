@@ -84,10 +84,16 @@ public final class Constants {
     public static final int PIVOT_MAX_POSITION = 500;
 
 //Positions
-    public static final int FIRST_POSITION_ANGLE = 0;
-    public static final int FIRST_POSITION_EXTENSION = 0;
-    public static final int SECOND_POSITION_ANGLE = 0;
-    public static final int SECOND_POSITION_EXTENSION = 0;
+    public static final int FIRST_CONE_ANGLE = 320;
+    public static final int FIRST_CONE_EXTENSION = 42;
+    public static final int SECOND_CONE_ANGLE = 405;
+    public static final int SECOND_CONE_EXTENSION = 200;
+    public static final int FIRST_CUBE_ANGLE = 255;
+    public static final int FIRST_CUBE_EXTENSION = 25;
+    public static final int SECOND_CUBE_ANGLE = 355;
+    public static final int SECOND_CUBE_EXTENSION = 160;
+    public static final int DEFAULT_ANGLE = 100;
+    public static final int DEFAULT_EXTENSION = 50;
 
 
     //OI

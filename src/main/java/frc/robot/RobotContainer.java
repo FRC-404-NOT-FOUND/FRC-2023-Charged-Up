@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.commands.TryReconnectArduino;
 import frc.robot.commands.Arm.A_extendTo;
-import frc.robot.commands.Arm.A_pivotToSLOW;
+import frc.robot.commands.Arm.A_pivotTo;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -113,12 +113,12 @@ public class RobotContainer {
       s_arm.getPivot()
     ));
 
-    oi_aPivotToMax.whileTrue(new A_pivotToSLOW(
+    oi_aPivotToMax.whileTrue(new A_pivotTo(
       Constants.PIVOT_MAX_POSITION, 
       s_arm
     ));
 
-    oi_aPivotToMin.whileTrue(new A_pivotToSLOW(
+    oi_aPivotToMin.whileTrue(new A_pivotTo(
       Constants.PIVOT_MIN_POSITION, 
       s_arm
     ));

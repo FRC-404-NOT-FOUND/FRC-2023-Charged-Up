@@ -5,7 +5,9 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.Arm.A_extendTo;
+import frc.robot.commands.Arm.A_pivotTo;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Grabber;
 
@@ -28,7 +30,8 @@ public class EngageArm extends SequentialCommandGroup {
     
     addCommands(
       Commands.run(s_grabber::pneumaticsOpen, s_grabber),
-      new ExtendArmToDefault(arm)
+      new A_pivotTo(Constants.DEFAULT_ANGLE, arm),
+      new A_extendTo(Constants.DEFAULT_EXTENSION, arm)
     );
   }
 }
