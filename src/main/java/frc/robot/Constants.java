@@ -68,14 +68,14 @@ public final class Constants {
 //Arm_Extension
     public static final int EXTENSION_WHEEL_MOTOR_INDEX = 11;
     public static final int EXTENSION_WHEEL_MAX_POSITION = 220;
-    public static final int EXTENSION_WHEEL_MIN_POSITION = 1;
+    public static final int EXTENSION_WHEEL_MIN_POSITION = 0;
 
 //Arm_Pivot
     public static final int PIVOT_MOTOR_INDEX = 1;
     public static final int PIVOT_SLOW_PID_SLOT = 0;
     public static final int PIVOT_QUICK_PID_SLOT = 1;
     public static final int PIVOT_MIN_POSITION = 100;
-    public static final int PIVOT_MAX_POSITION = 350;
+    public static final int PIVOT_MAX_POSITION = 500;
 
 //Positions
     public static final int FIRST_POSITION_ANGLE = 0;

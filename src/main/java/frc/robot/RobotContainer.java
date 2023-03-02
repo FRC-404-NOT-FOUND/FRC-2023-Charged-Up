@@ -41,8 +41,8 @@ public class RobotContainer {
   //OI and Buttons
   private final Trigger oi_aExtend = new Trigger(() -> OI.gamepad.getRightBumper());
   private final Trigger oi_aRetract = new Trigger(() -> OI.gamepad.getLeftBumper());
-  private final Trigger oi_aRaise = new Trigger(() -> OI.gamepad.getAButton());
-  private final Trigger oi_aLower = new Trigger(() -> OI.gamepad.getBButton());
+  private final Trigger oi_aRaise = new Trigger(() -> OI.gamepad.getRightTriggerAxis() > 0.1 ? true : false);
+  private final Trigger oi_aLower = new Trigger(() -> OI.gamepad.getLeftTriggerAxis() > 0.1 ? true : false);
 
   //Dpad down InputExample. (Up == 0, Goes CW around by units of degrees.)
   private final Trigger oi_aExtendToMax = new Trigger(() -> OI.gamepad.getPOV() == 0 ? true : false);
@@ -53,8 +53,8 @@ public class RobotContainer {
 
   private final Trigger oi_gCompressorToggle = new Trigger(() -> OI.gamepad.getStartButton());
   private final Trigger oi_gPneumaticsToggle = new Trigger(() -> OI.gamepad.getXButton());
-  private final Trigger oi_gSucc = new Trigger(() -> OI.gamepad.getRightTriggerAxis() > 0.1 ? true : false);
-  private final Trigger oi_gSpit = new Trigger(() -> OI.gamepad.getLeftTriggerAxis() > 0.1 ? true : false);
+  private final Trigger oi_gSucc = new Trigger(() -> OI.gamepad.getAButton());
+  private final Trigger oi_gSpit = new Trigger(() -> OI.gamepad.getBButton());
 
   private final Trigger oi_iArduinoReconnect = new Trigger(() -> OI.gamepad.getBackButtonPressed());
   
@@ -81,13 +81,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     oi_aExtend.whileTrue(Commands.startEnd(
-      () -> s_arm.getExtension().setMotorWheel(0.2),
+      () -> s_arm.getExtension().setMotorWheel(0.5),
       () -> s_arm.getExtension().setMotorWheel(0),
       s_arm.getExtension()
     ));
 
     oi_aRetract.whileTrue(Commands.startEnd(
-      () -> s_arm.getExtension().setMotorWheel(-0.2),
+      () -> s_arm.getExtension().setMotorWheel(-0.5),
       () -> s_arm.getExtension().setMotorWheel(0),
       s_arm.getExtension()
     ));
@@ -103,13 +103,13 @@ public class RobotContainer {
     ));
 
     oi_aRaise.whileTrue(Commands.startEnd(
-      () -> s_arm.getPivot().pivotMotor.set(1),
+      () -> s_arm.getPivot().pivotMotor.set(OI.gamepad.getRightTriggerAxis()),
       () -> s_arm.getPivot().pivotMotor.set(0),
       s_arm.getPivot()
     ));
 
     oi_aLower.whileTrue(Commands.startEnd(
-      () -> s_arm.getPivot().pivotMotor.set(-1),
+      () -> s_arm.getPivot().pivotMotor.set(-OI.gamepad.getLeftTriggerAxis()),
       () -> s_arm.getPivot().pivotMotor.set(0),
       s_arm.getPivot()
     ));
