@@ -43,10 +43,10 @@ public class RobotContainer {
   private final Trigger oi_aLower = new Trigger(() -> OI.gamepad.getLeftTriggerAxis() > 0.1 ? true : false);
 
   //Dpad down InputExample. (Up == 0, Goes CW around by units of degrees.)
-  private final Trigger oi_coneLeftPlace = new Trigger(() -> OI.gamepad.getPOV() == 180 ? true : false);
+  private final Trigger oi_coneLeftPlace = new Trigger(() -> OI.gamepad.getPOV() == 90 ? true : false);
   private final Trigger oi_cubePlace = new Trigger(() -> OI.gamepad.getYButton());
-  private final Trigger oi_coneRightPlace = new Trigger(() -> OI.gamepad.getPOV() == 0 ? true : false);
-  private final Trigger oi_defaultPosition = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
+  private final Trigger oi_coneRightPlace = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
+  private final Trigger oi_defaultPosition = new Trigger(() -> OI.gamepad.getPOV() == 180 ? true : false);
 
   private final Trigger oi_gCompressorToggle = new Trigger(() -> OI.gamepad.getStartButton());
   private final Trigger oi_gPneumaticsToggle = new Trigger(() -> OI.gamepad.getXButton());

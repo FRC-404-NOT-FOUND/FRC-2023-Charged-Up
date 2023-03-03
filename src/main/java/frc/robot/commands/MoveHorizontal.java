@@ -5,60 +5,47 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.Constants;
 import frc.robot.Limelight;
 import frc.robot.subsystems.Drivetrain;
 
-public class MoveToAprilTag extends CommandBase {
-  private final Drivetrain drivetrain;
-  private final ParallelCommandGroup pid;
+public class MoveHorizontal extends CommandBase {
+  Drivetrain drivetrain;
+  double speed;
+  boolean shouldEnd = false;
 
-  /** Creates a new MoveToAprilTag. */
-  public MoveToAprilTag(Drivetrain d) {
+  /** Creates a new MoveHorizontal. */
+  public MoveHorizontal(Drivetrain d, double s) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(d);
-    
+
     drivetrain = d;
-
-    pid = new ParallelCommandGroup(
-      new MoveToAprilTagX(), 
-      new MoveToAprilTagY(), 
-      new RotateToAprilTag()
-    );
-
+    speed = s;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Attempting Approach");
-
-    Limelight.setAprilTag(0);
-    pid.initialize();
+    Limelight.setRetroflective();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pid.execute();
-
-    drivetrain.driveCartesian(-Constants.aprilTagMoveY, Constants.aprilTagMoveX, Constants.aprilTagRotate);
+    drivetrain.driveCartesian(0, speed, 0);
+    if (Limelight.isValidTarget()) {
+      shouldEnd = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    pid.end(interrupted);
-    Constants.aprilTagMoveX = 0;
-    Constants.aprilTagMoveY = 0;
-    Constants.aprilTagRotate = 0;
     drivetrain.driveCartesian(0, 0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pid.isFinished();
+    return shouldEnd;
   }
 }
