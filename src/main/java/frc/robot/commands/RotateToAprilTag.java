@@ -12,32 +12,27 @@ import frc.robot.Limelight;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-
-//X = Forward
-public class MoveToAprilTagX extends PIDCommand {
-  
-
-  public MoveToAprilTagX() {
+public class RotateToAprilTag extends PIDCommand {
+  public RotateToAprilTag() {
     super(
-        // The controller that the command will use
-        new PIDController(
-            Constants.DRIVETRAIN_TRANSFORM_KPx, 
-            Constants.DRIVETRAIN_TRANSFORM_KIx, 
-            Constants.DRIVETRAIN_TRANSFORM_KDx
+      // The controller that the command will use
+      new PIDController(
+          Constants.DRIVETRAIN_ROTATE_KP, 
+          Constants.DRIVETRAIN_ROTATE_KI, 
+          Constants.DRIVETRAIN_ROTATE_KD
         ),
-        // This should return the measurement
-        () -> Limelight.getTableEntry("targetpose_robotspace").getDoubleArray(new double[6])[1],
-        // This should return the setpoint (can also be a constant)
-        () -> -0.51,
-        // This uses the output
-        output -> {
-          Constants.aprilTagMoveX = output;
-        });
+      // This should return the measurement
+      () -> Limelight.getTableEntry("tx").getDouble(0.0),
+      // This should return the setpoint (can also be a constant)
+      () -> 0.0,
+      // This uses the output
+      output -> {
+        Constants.aprilTagRotate = output;
+      });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
-    
-    getController().enableContinuousInput(0, 100);
-    getController().setTolerance(0.2);
+    getController().enableContinuousInput(-29.8, 29.8);
+    getController().setTolerance(0.1);
   }
 
   // Returns true when the command should end.

@@ -12,7 +12,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class MecanumDriveWithMotorOffsets extends CommandBase {
-  private final Drivetrain drivetrain;
+  Drivetrain drivetrain;
   DoubleSupplier horizontalFunction;
   DoubleSupplier verticalFunction;
   DoubleSupplier pivotFunction;

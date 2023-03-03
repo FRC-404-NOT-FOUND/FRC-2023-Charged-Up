@@ -11,7 +11,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class MecanumDrive extends CommandBase {
-  private final Drivetrain drivetrain;
+  Drivetrain drivetrain;
   DoubleSupplier horizontalFunction;
   DoubleSupplier verticalFunction;
   DoubleSupplier pivotFunction;
@@ -22,7 +22,7 @@ public class MecanumDrive extends CommandBase {
     verticalFunction = v;
     pivotFunction = p;
 
-    addRequirements(drivetrain);
+    addRequirements(d);
   }
   @Override
   public void initialize() {}

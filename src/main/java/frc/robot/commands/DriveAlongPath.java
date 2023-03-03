@@ -31,8 +31,8 @@ public class DriveAlongPath extends PPMecanumControllerCommand {
       () -> drivetrain.getCurrentPose(),        //Pose Supplier (GETS THE CURRENT POSE EVERY TIME)
       drivetrain.getKinematics(),               //Kinematics of robot
                                                 //X and Y PID COntrollers, using 0 for all uses feedforwards, TO BE TUNED in Constants
-      new PIDController(Constants.DRIVETRAIN_TRANSFORM_KP, Constants.DRIVETRAIN_TRANSFORM_KI, Constants.DRIVETRAIN_TRANSFORM_KD),
-      new PIDController(Constants.DRIVETRAIN_TRANSFORM_KP, Constants.DRIVETRAIN_TRANSFORM_KI, Constants.DRIVETRAIN_TRANSFORM_KD), 
+      new PIDController(Constants.DRIVETRAIN_TRANSFORM_KPx, Constants.DRIVETRAIN_TRANSFORM_KIx, Constants.DRIVETRAIN_TRANSFORM_KDx),
+      new PIDController(Constants.DRIVETRAIN_TRANSFORM_KPy, Constants.DRIVETRAIN_TRANSFORM_KIy, Constants.DRIVETRAIN_TRANSFORM_KDy), 
                                                 //Rotation PID controller, using 0 for all uses feedforwards, TO BE TUNED in Constants
       new PIDController(Constants.DRIVETRAIN_ROTATE_KP, Constants.DRIVETRAIN_ROTATE_KI, Constants.DRIVETRAIN_ROTATE_KD),
       Constants.MAX_AUTONOMOUS_WHEEL_SPEED,     //Max Wheel Speed

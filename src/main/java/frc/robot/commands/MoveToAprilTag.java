@@ -6,13 +6,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class MoveToAprilTag extends CommandBase {
   private final Drivetrain drivetrain;
-  private final PIDCommand apx;
-  private final PIDCommand apy;
+  private final ParallelCommandGroup pid;
 
   /** Creates a new MoveToAprilTag. */
   public MoveToAprilTag(Drivetrain d) {
@@ -20,30 +20,37 @@ public class MoveToAprilTag extends CommandBase {
     addRequirements(d);
     
     drivetrain = d;
-    apx = new MoveToAprilTagX();
-    apy = new MoveToAprilTagY();
+
+    pid = new ParallelCommandGroup(
+      new MoveToAprilTagX(), 
+      new MoveToAprilTagY(), 
+      new RotateToAprilTag()
+    );
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     System.out.println("Attempting Approach");
+
+    pid.initialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    apx.schedule();
-    apy.schedule();
+    pid.execute();
 
-    drivetrain.driveCartesian(Constants.aprilTagMoveHorizontal, Constants.aprilTagMoveVertical, 0);
+    drivetrain.driveCartesian(Constants.aprilTagMoveX, Constants.aprilTagMoveY, Constants.aprilTagRotate);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Constants.aprilTagMoveHorizontal = 0;
-    Constants.aprilTagMoveVertical = 0;
+    Constants.aprilTagMoveX = 0;
+    Constants.aprilTagMoveY = 0;
+    Constants.aprilTagRotate = 0;
     drivetrain.driveCartesian(0, 0, 0);
   }
 

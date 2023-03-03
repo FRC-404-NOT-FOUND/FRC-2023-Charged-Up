@@ -12,24 +12,29 @@ import frc.robot.Limelight;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+//Y = Side to Side movement.
 public class MoveToAprilTagY extends PIDCommand {
-  /** Creates a new MoveToAprilTagY. */
   public MoveToAprilTagY() {
     super(
       // The controller that the command will use
-      new PIDController(Constants.APRIL_TAG_P, Constants.APRIL_TAG_I, Constants.APRIL_TAG_D),
+      new PIDController(
+          Constants.DRIVETRAIN_TRANSFORM_KPy, 
+          Constants.DRIVETRAIN_TRANSFORM_KIy, 
+          Constants.DRIVETRAIN_TRANSFORM_KDy
+        ),
       // This should return the measurement
-      () -> Limelight.getTableEntry("botpose_targetspace").getDoubleArray(new double[]{0,0,0,0,0,0})[1],
+      () -> Limelight.getTableEntry("targetpose_robotspace").getDoubleArray(new double[6])[0],
       // This should return the setpoint (can also be a constant)
-      () -> -0.51,
+      () -> 0.0,
       // This uses the output
       output -> {
-        Constants.aprilTagMoveVertical = output;
+        Constants.aprilTagMoveY = output;
       });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
+
     getController().enableContinuousInput(-100, 100);
-    getController().setTolerance(0.1);
+    getController().setTolerance(0.2);
   }
 
   // Returns true when the command should end.

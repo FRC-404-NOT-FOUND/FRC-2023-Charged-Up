@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 public final class Constants {
-    public static Timer timer = new Timer();
-    public static double aprilTagMoveHorizontal = 0;
-    public static double aprilTagMoveVertical = 0;
+    public static double aprilTagMoveX = 0;
+    public static double aprilTagMoveY = 0;
+    public static double aprilTagRotate;
 
 //Drivetrain
     //PWM
@@ -28,14 +28,51 @@ public final class Constants {
     public static final int BACK_LEFT_ENCODER_INDEX = 33;
     public static final int BACK_RIGHT_ENCODER_INDEX = 34;
 
-    //Mass of the Robot
-    public static final double ROBOT_MASS_KG = 110;
+    //Motor Velocity PID (Proportional, Integral, Derivative)
+    public static final double FRONT_LEFT_MOTOR_KP = 0.0;
+    public static final double FRONT_LEFT_MOTOR_KI = 0.0;
+    public static final double FRONT_LEFT_MOTOR_KD = 0.0;
+    public static final double FRONT_RIGHT_MOTOR_KP = 0.0;
+    public static final double FRONT_RIGHT_MOTOR_KI = 0.0;
+    public static final double FRONT_RIGHT_MOTOR_KD = 0.0;
+    public static final double BACK_LEFT_MOTOR_KP = 0.0;
+    public static final double BACK_LEFT_MOTOR_KI = 0.0;
+    public static final double BACK_LEFT_MOTOR_KD = 0.0;
+    public static final double BACK_RIGHT_MOTOR_KP = 0.0;
+    public static final double BACK_RIGHT_MOTOR_KI = 0.0;
+    public static final double BACK_RIGHT_MOTOR_KD = 0.0;
+    
+    //Motor Velocity Feedforward (Static Friction, Velocity-keepup)
+    //More Info:
+    //  https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-feedforward.html#the-permanent-magnet-dc-motor-feedforward-equation
+    public static final double FRONT_LEFT_MOTOR_KS = 0.0;
+    public static final double FRONT_LEFT_MOTOR_KV = 0.0;
+    public static final double FRONT_RIGHT_MOTOR_KS = 0.0;
+    public static final double FRONT_RIGHT_MOTOR_KV = 0.0;
+    public static final double BACK_LEFT_MOTOR_KS = 0.0;
+    public static final double BACK_LEFT_MOTOR_KV = 0.0;
+    public static final double BACK_RIGHT_MOTOR_KS = 0.0;
+    public static final double BACK_RIGHT_MOTOR_KV = 0.0;
+
+    //General Drivetrain PID (from Cartesian movement)
+    public static final double DRIVETRAIN_TRANSFORM_KPx = 0.0;
+    public static final double DRIVETRAIN_TRANSFORM_KIx = 0.0;
+    public static final double DRIVETRAIN_TRANSFORM_KDx = 0.0;
+    public static final double DRIVETRAIN_TRANSFORM_KPy = 0.0; //This may have to be negative to make it go towards the horizontal "line"
+    public static final double DRIVETRAIN_TRANSFORM_KIy = 0.0;
+    public static final double DRIVETRAIN_TRANSFORM_KDy = 0.0;
+    public static final double DRIVETRAIN_ROTATE_KP = 0.0;
+    public static final double DRIVETRAIN_ROTATE_KI = 0.0;
+    public static final double DRIVETRAIN_ROTATE_KD = 0.0;
+    public static final double MAX_AUTONOMOUS_WHEEL_SPEED = 0.0; //In Meters per Second
+    public static final double MAX_AUTONOMOUS_WHEEL_ACCEL = 0.0;
 
     //radius in meters
     public static final double DRIVETRAIN_WHEEL_RADIUS = 0.1016; //4 inches
     
     //Find the radius of the wheel, multiply by 2*pi*r
     public static final double ROTATIONS_TO_METERS = 2 * Math.PI * Constants.DRIVETRAIN_WHEEL_RADIUS;
+    public static final double DEGREES_TO_METERS = (1/360) * ROTATIONS_TO_METERS;
 
     //Motor Speed Offsets
     public static final double FRONT_LEFT_MOTOR_SPEED_OFFSET = 0.60;
@@ -51,21 +88,6 @@ public final class Constants {
 
     //IMU
     public static final int SERIAL_BAUD_RATE = 9600;
-
-    //Misc.
-    public static final double DRIVETRAIN_TRANSFORM_KP = 0.0;
-    public static final double DRIVETRAIN_TRANSFORM_KI = 0.0;
-    public static final double DRIVETRAIN_TRANSFORM_KD = 0.0;
-    public static final double DRIVETRAIN_ROTATE_KP = 0.0;
-    public static final double DRIVETRAIN_ROTATE_KI = 0.0;
-    public static final double DRIVETRAIN_ROTATE_KD = 0.0;
-    public static final double MAX_AUTONOMOUS_WHEEL_SPEED = 0.0; //In Meters per Second
-    public static final double MAX_AUTONOMOUS_WHEEL_ACCEL = 0.0;
-
-    //AprilTag PID
-    public static final double APRIL_TAG_P = 1;
-    public static final double APRIL_TAG_I = 0.0;
-    public static final double APRIL_TAG_D = 0.00;
 
     //Analog Gyro/Accel
     public static final Port ADXRS450_GYRO_PORT = SPI.Port.kOnboardCS0;

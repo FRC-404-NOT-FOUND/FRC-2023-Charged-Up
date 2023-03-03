@@ -23,9 +23,9 @@ public class DrivetrainBalancePID extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            Constants.DRIVETRAIN_TRANSFORM_KP,
-            Constants.DRIVETRAIN_TRANSFORM_KI,
-            Constants.DRIVETRAIN_TRANSFORM_KD,
+            Constants.DRIVETRAIN_TRANSFORM_KPx,
+            Constants.DRIVETRAIN_TRANSFORM_KIx,
+            Constants.DRIVETRAIN_TRANSFORM_KDx,
             // The motion profile constraints
             new TrapezoidProfile.Constraints(Constants.MAX_AUTONOMOUS_WHEEL_SPEED, Constants.MAX_AUTONOMOUS_WHEEL_ACCEL)),
         // This should return the measurement
