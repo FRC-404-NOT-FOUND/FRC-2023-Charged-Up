@@ -122,7 +122,7 @@ public class Drivetrain extends SubsystemBase {
 
     poseEstimator.update(getGyroAngle(), getKinematicWheelPositions());
 
-    if (Limelight.isValidTarget() || Limelight.getPrimaryAprilTag() <= 0) {
+    if (Limelight.isValidTarget() && Limelight.getPrimaryAprilTag() > 0) {
       poseEstimator.addVisionMeasurement(getVisionPose(), Timer.getFPGATimestamp());
     } 
 

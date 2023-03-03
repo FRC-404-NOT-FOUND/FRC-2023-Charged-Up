@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
@@ -42,12 +41,13 @@ public class MoveToAprilTag extends CommandBase {
   public void execute() {
     pid.execute();
 
-    drivetrain.driveCartesian(Constants.aprilTagMoveX, Constants.aprilTagMoveY, Constants.aprilTagRotate);
+    drivetrain.driveCartesian(-Constants.aprilTagMoveY, Constants.aprilTagMoveX, Constants.aprilTagRotate);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    pid.end(interrupted);
     Constants.aprilTagMoveX = 0;
     Constants.aprilTagMoveY = 0;
     Constants.aprilTagRotate = 0;
@@ -57,6 +57,6 @@ public class MoveToAprilTag extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return pid.isFinished();
   }
 }
