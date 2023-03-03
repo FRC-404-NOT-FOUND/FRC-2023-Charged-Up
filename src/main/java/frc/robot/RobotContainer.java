@@ -8,9 +8,8 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.MecanumDrive;
+import frc.robot.commands.MoveToAprilTag;
 import frc.robot.commands.TryReconnectArduino;
-import frc.robot.commands.Arm.A_extendTo;
-import frc.robot.commands.Arm.A_pivotTo;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -44,11 +43,10 @@ public class RobotContainer {
   private final Trigger oi_aLower = new Trigger(() -> OI.gamepad.getLeftTriggerAxis() > 0.1 ? true : false);
 
   //Dpad down InputExample. (Up == 0, Goes CW around by units of degrees.)
-  private final Trigger oi_aExtendToMax = new Trigger(() -> OI.gamepad.getPOV() == 0 ? true : false);
-  private final Trigger oi_aExtendToMin = new Trigger(() -> OI.gamepad.getPOV() == 180 ? true : false);
-
-  private final Trigger oi_aPivotToMax = new Trigger(() -> OI.gamepad.getPOV() == 90 ? true : false);
-  private final Trigger oi_aPivotToMin = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
+  private final Trigger oi_coneLeftPlace = new Trigger(() -> OI.gamepad.getPOV() == 180 ? true : false);
+  private final Trigger oi_cubePlace = new Trigger(() -> OI.gamepad.getYButton());
+  private final Trigger oi_coneRightPlace = new Trigger(() -> OI.gamepad.getPOV() == 0 ? true : false);
+  private final Trigger oi_defaultPosition = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
 
   private final Trigger oi_gCompressorToggle = new Trigger(() -> OI.gamepad.getStartButton());
   private final Trigger oi_gPneumaticsToggle = new Trigger(() -> OI.gamepad.getXButton());
@@ -79,6 +77,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    oi_cubePlace.onTrue(new MoveToAprilTag(s_drivetrain));
+
     oi_aExtend.whileTrue(Commands.startEnd(
       () -> s_arm.getExtension().setMotorWheel(0.5),
       () -> s_arm.getExtension().setMotorWheel(0),
@@ -91,16 +91,6 @@ public class RobotContainer {
       s_arm.getExtension()
     ));
 
-    oi_aExtendToMax.onTrue(new A_extendTo(
-      Constants.EXTENSION_WHEEL_MAX_POSITION, 
-      s_arm
-    ));
-
-    oi_aExtendToMin.onTrue(new A_extendTo(
-      Constants.EXTENSION_WHEEL_MIN_POSITION, 
-      s_arm
-    ));
-
     oi_aRaise.whileTrue(Commands.startEnd(
       () -> s_arm.getPivot().pivotMotor.set(OI.gamepad.getRightTriggerAxis()),
       () -> s_arm.getPivot().pivotMotor.set(0),
@@ -111,16 +101,6 @@ public class RobotContainer {
       () -> s_arm.getPivot().pivotMotor.set(-OI.gamepad.getLeftTriggerAxis()),
       () -> s_arm.getPivot().pivotMotor.set(0),
       s_arm.getPivot()
-    ));
-
-    oi_aPivotToMax.whileTrue(new A_pivotTo(
-      Constants.PIVOT_MAX_POSITION, 
-      s_arm
-    ));
-
-    oi_aPivotToMin.whileTrue(new A_pivotTo(
-      Constants.PIVOT_MIN_POSITION, 
-      s_arm
     ));
 
     oi_gCompressorToggle.toggleOnFalse(Commands.startEnd(

@@ -12,12 +12,14 @@ import edu.wpi.first.wpilibj.SPI.Port;
 
 public final class Constants {
     public static Timer timer = new Timer();
+    public static double aprilTagMoveHorizontal = 0;
+    public static double aprilTagMoveVertical = 0;
 
 //Drivetrain
     //PWM
     public static final int FRONT_LEFT_MOTOR_INDEX = 8;
     public static final int FRONT_RIGHT_MOTOR_INDEX = 1;
-    public static final int BACK_LEFT_MOTOR_INDEX = 9;
+    public static final int BACK_LEFT_MOTOR_INDEX = 6;
     public static final int BACK_RIGHT_MOTOR_INDEX = 0;
 
     //CAN
@@ -60,30 +62,35 @@ public final class Constants {
     public static final double MAX_AUTONOMOUS_WHEEL_SPEED = 0.0; //In Meters per Second
     public static final double MAX_AUTONOMOUS_WHEEL_ACCEL = 0.0;
 
+    //AprilTag PID
+    public static final double APRIL_TAG_P = 1;
+    public static final double APRIL_TAG_I = 0.0;
+    public static final double APRIL_TAG_D = 0.00;
+
     //Analog Gyro/Accel
     public static final Port ADXRS450_GYRO_PORT = SPI.Port.kOnboardCS0;
 
-//Grabber_Intake
+    //Grabber_Intake
     public static final int INTAKE_LEFT_MOTOR_INDEX = 21;
     public static final int INTAKE_RIGHT_MOTOR_INDEX = 22;
     
-//Grabber_Hopper (the pneumatics)
+    //Grabber_Hopper (the pneumatics)
     public static final int HOPPER_PNEUMATIC_FWD_PORT = 0;
     public static final int HOPPER_PNEUMATIC_REV_PORT = 1;
 
-//Arm_Extension
+    //Arm_Extension
     public static final int EXTENSION_WHEEL_MOTOR_INDEX = 11;
     public static final int EXTENSION_WHEEL_MAX_POSITION = 220;
     public static final int EXTENSION_WHEEL_MIN_POSITION = 0;
 
-//Arm_Pivot
+    //Arm_Pivot
     public static final int PIVOT_MOTOR_INDEX = 1;
     public static final int PIVOT_SLOW_PID_SLOT = 0;
     public static final int PIVOT_QUICK_PID_SLOT = 1;
     public static final int PIVOT_MIN_POSITION = 100;
     public static final int PIVOT_MAX_POSITION = 500;
 
-//Positions
+    //Positions
     public static final int FIRST_CONE_ANGLE = 320;
     public static final int FIRST_CONE_EXTENSION = 42;
     public static final int SECOND_CONE_ANGLE = 405;

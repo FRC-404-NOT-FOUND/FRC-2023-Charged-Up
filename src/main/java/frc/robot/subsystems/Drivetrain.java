@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.sql.Time;
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenixpro.hardware.CANcoder;
 
 import edu.wpi.first.math.*;
@@ -32,10 +33,10 @@ public class Drivetrain extends SubsystemBase {
   private VictorSP backRightMotor = new VictorSP(Constants.BACK_RIGHT_MOTOR_INDEX);
 
   //Encoders
-  private CANcoder frontLeftEncoder = new CANcoder(Constants.FRONT_LEFT_ENCODER_INDEX);
-  private CANcoder frontRightEncoder = new CANcoder(Constants.FRONT_RIGHT_ENCODER_INDEX);
-  private CANcoder backLeftEncoder = new CANcoder(Constants.BACK_LEFT_ENCODER_INDEX);
-  private CANcoder backRightEncoder = new CANcoder(Constants.BACK_RIGHT_ENCODER_INDEX);
+  private CANCoder frontLeftEncoder = new CANCoder(Constants.FRONT_LEFT_ENCODER_INDEX);
+  private CANCoder frontRightEncoder = new CANCoder(Constants.FRONT_RIGHT_ENCODER_INDEX);
+  private CANCoder backLeftEncoder = new CANCoder(Constants.BACK_LEFT_ENCODER_INDEX);
+  private CANCoder backRightEncoder = new CANCoder(Constants.BACK_RIGHT_ENCODER_INDEX);
 
   //https://github.wpilib.org/allwpilib/docs/beta/java/edu/wpi/first/math/kinematics/MecanumDriveKinematics.html
   //Input relative distance for each wheel from middle of robot, IN METERS!
@@ -120,10 +121,10 @@ public class Drivetrain extends SubsystemBase {
 
     poseEstimator.update(getGyroAngle(), getWheelPositions());
 
-    System.out.println("Front left encoder position: " + frontLeftEncoder.getPosition().getValue());
-    System.out.println("Front right encoder position: " + frontRightEncoder.getPosition().getValue());
-    System.out.println("Back left encoder: " + backLeftEncoder.getPosition().getValue());
-    System.out.println("Back right encoder: " + backRightEncoder.getPosition().getValue());
+    //System.out.println("Front left encoder position: " + frontLeftEncoder.getPosition().getValue());
+    //System.out.println("Front right encoder position: " + frontRightEncoder.getPosition().getValue());
+    //System.out.println("Back left encoder: " + backLeftEncoder.getPosition().getValue());
+    //System.out.println("Back right encoder: " + backRightEncoder.getPosition().getValue());
     
     if (Limelight.isValidTarget() || Limelight.getPrimaryAprilTag() <= 0) {
       poseEstimator.addVisionMeasurement(getVisionPose(), Constants.timer.get());
@@ -168,20 +169,20 @@ public class Drivetrain extends SubsystemBase {
   //These are in rotations (i.e. "Distance Driven"), will have to convert to meters (Using a constant value)
   public MecanumDriveWheelPositions getWheelPositions(){
     return new MecanumDriveWheelPositions(
-      frontLeftEncoder.getPosition().getValue() * Constants.ROTATIONS_TO_METERS, 
-      frontRightEncoder.getPosition().getValue() * Constants.ROTATIONS_TO_METERS, 
-      backLeftEncoder.getPosition().getValue() * Constants.ROTATIONS_TO_METERS, 
-      backRightEncoder.getPosition().getValue() * Constants.ROTATIONS_TO_METERS
+      frontLeftEncoder.getPosition() * Constants.ROTATIONS_TO_METERS, 
+      frontLeftEncoder.getPosition() * Constants.ROTATIONS_TO_METERS, 
+      frontLeftEncoder.getPosition() * Constants.ROTATIONS_TO_METERS, 
+      frontLeftEncoder.getPosition() * Constants.ROTATIONS_TO_METERS
     );
   }
 
   //These are in rotations a second, will have to convert to meters per second. (Using a constant value)
   public MecanumDriveWheelSpeeds getWheelSpeeds(){
     return new MecanumDriveWheelSpeeds(
-      frontLeftEncoder.getVelocity().getValue() * Constants.ROTATIONS_TO_METERS, 
-      frontRightEncoder.getVelocity().getValue() * Constants.ROTATIONS_TO_METERS, 
-      backLeftEncoder.getVelocity().getValue() * Constants.ROTATIONS_TO_METERS, 
-      backRightEncoder.getVelocity().getValue() * Constants.ROTATIONS_TO_METERS
+      frontLeftEncoder.getVelocity() * Constants.ROTATIONS_TO_METERS, 
+      frontRightEncoder.getVelocity() * Constants.ROTATIONS_TO_METERS, 
+      backLeftEncoder.getVelocity() * Constants.ROTATIONS_TO_METERS, 
+      backRightEncoder.getVelocity() * Constants.ROTATIONS_TO_METERS
     );
   }
   
