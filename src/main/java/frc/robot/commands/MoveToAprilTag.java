@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Limelight;
-import frc.robot.OI;
 import frc.robot.subsystems.Drivetrain;
 
 public class MoveToAprilTag extends CommandBase {
@@ -50,7 +49,6 @@ public class MoveToAprilTag extends CommandBase {
     }
     else{
       end(false);
-    }
     }
   }
 
