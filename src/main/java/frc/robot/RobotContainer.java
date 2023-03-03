@@ -13,7 +13,6 @@ import frc.robot.commands.Arm.A_RaisePowerEdition;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
-import frc.robot.subsystems.IMU;
 
 
 /**
@@ -31,8 +30,6 @@ public class RobotContainer {
   private final Grabber s_grabber = new Grabber();
     //private final G_Hopper sG_Hopper = new G_Hopper();
     //private final G_Intake sG_Intake = new G_Intake();
-  
-  private final IMU imu;
 
   
 
@@ -63,8 +60,6 @@ public class RobotContainer {
       () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
       () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X)
     ));
-
-    imu = IMU.create();
 
     // Configure the button bindings
     configureButtonBindings();

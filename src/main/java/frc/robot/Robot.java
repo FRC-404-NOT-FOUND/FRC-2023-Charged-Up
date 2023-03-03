@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AutonomousCommandSimple;
@@ -26,6 +28,7 @@ public class Robot extends TimedRobot {
     imu.connectDevices();
     //imu.connectArduino();
     m_robotContainer = new RobotContainer();
+    PathPlannerServer.startServer(8888);
     System.out.println("Robot Inited");
   }
 

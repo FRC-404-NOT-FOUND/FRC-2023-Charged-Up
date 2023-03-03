@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -17,6 +20,8 @@ public class AutonomousCommandSimple extends SequentialCommandGroup {
   public AutonomousCommandSimple(Drivetrain drivetrain, Arm arm, Grabber grabber) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands();
+    addCommands(
+      new DriveAlongPath(PathPlanner.loadPath("Autonomous Plan", new PathConstraints(3, 2)), drivetrain, isFinished())
+    );
   }
 }
