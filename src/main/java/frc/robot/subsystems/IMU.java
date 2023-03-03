@@ -31,15 +31,18 @@ public class IMU extends SubsystemBase {
     return instance;
   }
 
+  public IMU(){}
+
   @Override
   public void periodic() {
     //System.out.println("Gyro ready: " + isGyroReady());
     
-    if (arduinoConnected && !isReady) {
-      readyArduino();
-    } else if (!arduinoConnected) {
-      connectArduino();
-    }
+    //TODO: Make this work after comp this weekend.
+    // if (arduinoConnected && !isReady) {
+    //   readyArduino();
+    // } else if (!arduinoConnected) {
+    //   connectArduino();
+    // }
 
     /*
     if(isGyroReady()){

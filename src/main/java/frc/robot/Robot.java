@@ -20,9 +20,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
+    //TODO: FIDDLE WITH ARDUINO AFTER COMP THIS WEEKEND
     imu = IMU.create();
     imu.connectDevices();
-    imu.connectArduino();
+    //imu.connectArduino();
     m_robotContainer = new RobotContainer();
     System.out.println("Robot Inited");
   }
