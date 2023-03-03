@@ -27,7 +27,7 @@ public class RotateToAprilTag extends PIDCommand {
       () -> 0.0,
       // This uses the output
       output -> {
-        Constants.aprilTagRotate = output;
+        Constants.aprilTagRotate = -output;
       });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.

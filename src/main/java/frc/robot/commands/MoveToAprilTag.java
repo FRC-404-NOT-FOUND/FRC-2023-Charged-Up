@@ -43,7 +43,7 @@ public class MoveToAprilTag extends CommandBase {
   public void execute() {
     pid.execute();
 
-    drivetrain.driveCartesian(-Constants.aprilTagMoveY, Constants.aprilTagMoveX, Constants.aprilTagRotate);
+    drivetrain.driveCartesian(Constants.aprilTagMoveX, -Constants.aprilTagMoveY, Constants.aprilTagRotate);
   }
 
   // Called once the command ends or is interrupted.

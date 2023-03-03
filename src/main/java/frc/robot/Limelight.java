@@ -39,6 +39,8 @@ MUST USE getDouble(0.0) TO BE USEFUL IN CODE
     tid 	                ID of the primary in-view AprilTag 
 MUST USE getDoubleArray(new double[6]) TO BE USEFUL
 */
+    public static LimelightHelpers.LimelightResults llResults;
+
     public static NetworkTableEntry getTableEntry(String key){
         return limelightTable.get().getEntry(key);
     }

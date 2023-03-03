@@ -26,9 +26,9 @@ public class MoveToAprilTagX extends PIDCommand {
             Constants.DRIVETRAIN_TRANSFORM_KDx
         ),
         // This should return the measurement
-        () -> Limelight.getTableEntry("targetpose_robotspace").getDoubleArray(new double[6])[1],
+        () -> Limelight.getTableEntry("botpose_targetspace").getDoubleArray(new double[6])[2],
         // This should return the setpoint (can also be a constant)
-        () -> -0.51,
+        () -> 0.83,
         // This uses the output
         output -> {
           Constants.aprilTagMoveX = output;

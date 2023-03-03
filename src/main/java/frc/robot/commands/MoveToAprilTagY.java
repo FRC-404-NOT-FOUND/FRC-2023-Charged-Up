@@ -23,7 +23,7 @@ public class MoveToAprilTagY extends PIDCommand {
           Constants.DRIVETRAIN_TRANSFORM_KDy
         ),
       // This should return the measurement
-      () -> Limelight.getTableEntry("targetpose_robotspace").getDoubleArray(new double[6])[0],
+      () -> Limelight.getTableEntry("botpose_targetspace").getDoubleArray(new double[6])[0],
       // This should return the setpoint (can also be a constant)
       () -> 0.0,
       // This uses the output
@@ -34,7 +34,7 @@ public class MoveToAprilTagY extends PIDCommand {
     // Configure additional PID options by calling `getController` here.
 
     getController().enableContinuousInput(-100, 100);
-    getController().setTolerance(0.2);
+    getController().setTolerance(0.001);
   }
 
   // Returns true when the command should end.
