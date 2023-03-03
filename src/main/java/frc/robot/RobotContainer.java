@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.MecanumDrive;
-import frc.robot.commands.MoveToAprilTag;
-import frc.robot.commands.TryReconnectArduino;
+import frc.robot.commands.Arm.A_LowerPowerEdition;
+import frc.robot.commands.Arm.A_RaisePowerEdition;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -77,65 +77,37 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    oi_cubePlace.onTrue(new MoveToAprilTag(s_drivetrain));
-    oi_cubePlace.onFalse(new MecanumDrive(
-      s_drivetrain, 
-      () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
-      () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
-      () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X)
-    ));
+    // oi_cubePlace.onTrue(new MoveToAprilTag(s_drivetrain));
+    // oi_cubePlace.onFalse(new MecanumDrive(
+    //   s_drivetrain, 
+    //   () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
+    //   () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
+    //   () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X)
+    // ));
+
+    // oi_iArduinoReconnect.whileTrue(new TryReconnectArduino(
+    //   imu
+    // ));
 
     oi_aExtend.whileTrue(Commands.startEnd(
       () -> s_arm.getExtension().setMotorWheel(0.5),
       () -> s_arm.getExtension().setMotorWheel(0),
       s_arm.getExtension()
     ));
-
     oi_aRetract.whileTrue(Commands.startEnd(
       () -> s_arm.getExtension().setMotorWheel(-0.5),
       () -> s_arm.getExtension().setMotorWheel(0),
       s_arm.getExtension()
     ));
 
-    oi_aRaise.whileTrue(Commands.startEnd(
-      () -> s_arm.getPivot().pivotMotor.set(OI.gamepad.getRightTriggerAxis()),
-      () -> s_arm.getPivot().pivotMotor.set(0),
-      s_arm.getPivot()
-    ));
+    oi_aRaise.whileTrue(new A_RaisePowerEdition(() -> OI.gamepad.getRightTriggerAxis(), s_arm));
+    oi_aLower.whileTrue(new A_LowerPowerEdition(() -> OI.gamepad.getLeftTriggerAxis(), s_arm));
 
-    oi_aLower.whileTrue(Commands.startEnd(
-      () -> s_arm.getPivot().pivotMotor.set(-OI.gamepad.getLeftTriggerAxis()),
-      () -> s_arm.getPivot().pivotMotor.set(0),
-      s_arm.getPivot()
-    ));
+    oi_gCompressorToggle.toggleOnFalse(Commands.startEnd(s_grabber::turnCompressorOn, s_grabber::turnCompressorOff, s_grabber));
+    oi_gPneumaticsToggle.toggleOnTrue(Commands.startEnd(s_grabber::pneumaticsClose, s_grabber::pneumaticsOpen,s_grabber.getHopper()));
 
-    oi_gCompressorToggle.toggleOnFalse(Commands.startEnd(
-      s_grabber::turnCompressorOn,
-      s_grabber::turnCompressorOff,
-      s_grabber
-    ));
-
-    oi_gPneumaticsToggle.toggleOnTrue(Commands.startEnd(
-      s_grabber::pneumaticsClose,
-      s_grabber::pneumaticsOpen,
-      s_grabber.getHopper()
-    ));
-
-    oi_gSucc.whileTrue(Commands.startEnd(
-      s_grabber::startIntake,
-      s_grabber::stopIntake,
-      s_grabber.getIntake()
-    ));
-
-    oi_gSpit.whileTrue(Commands.startEnd(
-      s_grabber::startSpit,
-      s_grabber::stopIntake,
-      s_grabber.getIntake()
-    ));
-
-    // oi_iArduinoReconnect.whileTrue(new TryReconnectArduino(
-    //   imu
-    // ));
+    oi_gSucc.whileTrue(Commands.startEnd(s_grabber::startIntake, s_grabber::stopIntake, s_grabber.getIntake()));
+    oi_gSpit.whileTrue(Commands.startEnd(s_grabber::startSpit, s_grabber::stopIntake, s_grabber.getIntake()));
   }
 
   /**

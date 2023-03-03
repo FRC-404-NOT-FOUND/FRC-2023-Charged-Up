@@ -29,13 +29,13 @@ public class MecanumDrive extends CommandBase {
 
   @Override
   public void execute() {
-    double horizontal = horizontalFunction.getAsDouble();
-    double vertical = verticalFunction.getAsDouble();
-    double pivot = pivotFunction.getAsDouble();
+    double horizontal = Math.pow(horizontalFunction.getAsDouble(), 2);
+    double vertical = Math.pow(verticalFunction.getAsDouble(), 2);
+    double pivot = Math.pow(pivotFunction.getAsDouble(), 2);
 
     if (Math.abs(horizontal) >= Constants.GAMEPAD_DEADZONE || Math.abs(vertical) >= Constants.GAMEPAD_DEADZONE
         || Math.abs(pivot) >= Constants.GAMEPAD_DEADZONE) {
-      drivetrain.driveCartesian(-vertical / 2, horizontal / 2, pivot / 2);
+      drivetrain.driveCartesian(-vertical, horizontal, pivot);
     } else {
       drivetrain.driveCartesian(0, 0, 0);
     }
