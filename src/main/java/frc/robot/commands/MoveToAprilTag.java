@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Limelight;
+import frc.robot.OI;
 import frc.robot.subsystems.Drivetrain;
 
 public class MoveToAprilTag extends CommandBase {
@@ -27,6 +28,8 @@ public class MoveToAprilTag extends CommandBase {
       new RotateToAprilTag()
     );
 
+    pid.addRequirements(d);
+
   }
 
   // Called when the command is initially scheduled.
@@ -41,9 +44,14 @@ public class MoveToAprilTag extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pid.execute();
-
-    drivetrain.driveCartesian(Constants.aprilTagMoveX, -Constants.aprilTagMoveY, Constants.aprilTagRotate);
+    if(Limelight.isValidTarget()){
+      pid.execute();
+      drivetrain.driveCartesian(Constants.aprilTagMoveX, Constants.aprilTagMoveY, Constants.aprilTagRotate);
+    }
+    else{
+      end(false);
+    }
+    }
   }
 
   // Called once the command ends or is interrupted.

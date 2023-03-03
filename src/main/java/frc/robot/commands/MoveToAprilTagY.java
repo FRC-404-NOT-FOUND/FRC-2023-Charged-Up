@@ -33,8 +33,8 @@ public class MoveToAprilTagY extends PIDCommand {
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
 
-    getController().enableContinuousInput(-100, 100);
-    getController().setTolerance(0.001);
+    getController().enableContinuousInput(-10, 10);
+    getController().setTolerance(0.1);
   }
 
   // Returns true when the command should end.

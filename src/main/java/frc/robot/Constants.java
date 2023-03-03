@@ -56,10 +56,10 @@ public final class Constants {
     public static final double DRIVETRAIN_TRANSFORM_KPx = 0; //0.2;
     public static final double DRIVETRAIN_TRANSFORM_KIx = 0.0;
     public static final double DRIVETRAIN_TRANSFORM_KDx = 0.0;
-    public static final double DRIVETRAIN_TRANSFORM_KPy = 2; //This may have to be negative to make it go towards the horizontal "line"
+    public static final double DRIVETRAIN_TRANSFORM_KPy = 0.595; //This may have to be negative to make it go towards the horizontal "line"
     public static final double DRIVETRAIN_TRANSFORM_KIy = 0.0;
     public static final double DRIVETRAIN_TRANSFORM_KDy = 0.0;
-    public static final double DRIVETRAIN_ROTATE_KP = 0.025;
+    public static final double DRIVETRAIN_ROTATE_KP = 0.2;
     public static final double DRIVETRAIN_ROTATE_KI = 0.0;
     public static final double DRIVETRAIN_ROTATE_KD = 0.0;
     public static final double MAX_AUTONOMOUS_WHEEL_SPEED = 0.0; //In Meters per Second

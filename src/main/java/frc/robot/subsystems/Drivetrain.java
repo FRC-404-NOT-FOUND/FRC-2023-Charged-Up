@@ -23,8 +23,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Limelight;
-import frc.robot.LimelightHelpers;
-import frc.robot.LimelightHelpers.LimelightResults;
 
 public class Drivetrain extends SubsystemBase {
   //Motors
@@ -142,9 +140,7 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Robot Pose Y", getCurrentPose().getY());
     SmartDashboard.putNumber("Robot Pose Rotation", getCurrentPose().getRotation().getDegrees());
 
-    SmartDashboard.putNumber("Botpose TargetSpace X", LimelightHelpers.getBotPose_TargetSpace("")[2]);
-    SmartDashboard.putNumber("Botpose TargetSpace Y", LimelightHelpers.getBotPose_TargetSpace("")[0]);
-    SmartDashboard.putNumber("Botpose TargetSpace Z Rotation",LimelightHelpers.getBotPose_TargetSpace("")[5]);
+    SmartDashboard.putNumberArray("Botpose TargetSpace", Limelight.getTableEntry("botpose_targetspace").getDoubleArray(new double[6]));
 
     //System.out.println("Front left encoder position: " + frontLeftEncoder.getPosition());
     //System.out.println("Front right encoder position: " + frontRightEncoder.getPosition());

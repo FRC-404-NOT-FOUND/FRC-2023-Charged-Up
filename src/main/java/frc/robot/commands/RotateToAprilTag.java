@@ -32,7 +32,7 @@ public class RotateToAprilTag extends PIDCommand {
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
     getController().enableContinuousInput(-29.8, 29.8);
-    getController().setTolerance(0.1);
+    getController().setTolerance(0.05);
   }
 
   // Returns true when the command should end.
