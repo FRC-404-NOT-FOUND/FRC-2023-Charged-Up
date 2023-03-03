@@ -53,7 +53,7 @@ public class RobotContainer {
   private final Trigger oi_gSucc = new Trigger(() -> OI.gamepad.getAButton());
   private final Trigger oi_gSpit = new Trigger(() -> OI.gamepad.getBButton());
 
-  private final Trigger oi_iArduinoReconnect = new Trigger(() -> OI.gamepad.getBackButtonPressed());
+ // private final Trigger oi_iArduinoReconnect = new Trigger(() -> OI.gamepad.getBackButtonPressed());
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -127,9 +127,9 @@ public class RobotContainer {
       s_grabber.getIntake()
     ));
 
-    oi_iArduinoReconnect.whileTrue(new TryReconnectArduino(
-      imu
-    ));
+    // oi_iArduinoReconnect.whileTrue(new TryReconnectArduino(
+    //   imu
+    // ));
   }
 
   /**
