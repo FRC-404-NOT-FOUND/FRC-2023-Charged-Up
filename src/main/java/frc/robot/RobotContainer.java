@@ -4,15 +4,16 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Autonomous.AutonomousCommandSimple;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.commands.Arm.A_LowerPowerEdition;
 import frc.robot.commands.Arm.A_RaisePowerEdition;
+import frc.robot.commands.Autonomous.AutonomousCommandSimple;
 import frc.robot.commands.Autonomous.ExtendToDefault;
 import frc.robot.commands.Autonomous.ExtendToFirstCone;
 import frc.robot.commands.Autonomous.ExtendToFirstCube;

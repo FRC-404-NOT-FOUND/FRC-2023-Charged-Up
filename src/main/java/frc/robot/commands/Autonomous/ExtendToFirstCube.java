@@ -5,10 +5,10 @@
 package frc.robot.commands.Autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.Arm.A_extendTo;
 import frc.robot.commands.Arm.A_pivotTo;
 import frc.robot.subsystems.Arm;
-import frc.robot.Constants;
 
 //Assume that we are coming from the Default Position.
 public class ExtendToFirstCube extends SequentialCommandGroup {

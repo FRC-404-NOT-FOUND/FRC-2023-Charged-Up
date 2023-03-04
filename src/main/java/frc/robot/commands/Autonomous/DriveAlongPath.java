@@ -8,9 +8,8 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
-import frc.robot.subsystems.Drivetrain;
-
 import frc.robot.Constants;
+import frc.robot.subsystems.Drivetrain;
 
 public class DriveAlongPath extends PPMecanumControllerCommand {
   //WPILIB version of MecanumControllerCommand
