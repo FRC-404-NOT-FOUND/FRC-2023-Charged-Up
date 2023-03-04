@@ -4,7 +4,7 @@ import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.AutonomousCommandSimple;
+import frc.robot.commands.Autonomous.AutonomousCommandSimple;
 import frc.robot.subsystems.IMU;
 
 public class Robot extends TimedRobot {

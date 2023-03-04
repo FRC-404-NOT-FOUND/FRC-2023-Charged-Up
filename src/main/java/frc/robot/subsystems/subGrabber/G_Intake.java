@@ -24,8 +24,8 @@ public class G_Intake extends SubsystemBase {
   }
 
   public void start() {
-    motorLeft.set(0.2);
-    motorRight.set(0.2);
+    motorLeft.set(0.4);
+    motorRight.set(0.4);
   }
 
   public void stop() {
@@ -34,7 +34,7 @@ public class G_Intake extends SubsystemBase {
   }
 
   public void spit() {
-    motorLeft.set(-0.2);
-    motorRight.set(-0.2);
+    motorLeft.set(-0.1);
+    motorRight.set(-0.1);
   }
 }

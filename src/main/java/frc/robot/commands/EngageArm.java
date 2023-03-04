@@ -30,6 +30,7 @@ public class EngageArm extends SequentialCommandGroup {
     
     addCommands(
       Commands.run(s_grabber::pneumaticsOpen, s_grabber),
+      Commands.run(s_grabber::startSpit, s_grabber),
       new A_pivotTo(Constants.DEFAULT_ANGLE, arm),
       new A_extendTo(Constants.DEFAULT_EXTENSION, arm)
     );

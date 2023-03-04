@@ -6,10 +6,16 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.commands.Arm.A_LowerPowerEdition;
 import frc.robot.commands.Arm.A_RaisePowerEdition;
+import frc.robot.commands.Autonomous.ExtendToDefault;
+import frc.robot.commands.Autonomous.ExtendToFirstCone;
+import frc.robot.commands.Autonomous.ExtendToFirstCube;
+import frc.robot.commands.Autonomous.ExtendToSecondCone;
+import frc.robot.commands.Autonomous.ExtendToSecondCube;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -31,7 +37,12 @@ public class RobotContainer {
     //private final G_Hopper sG_Hopper = new G_Hopper();
     //private final G_Intake sG_Intake = new G_Intake();
 
-  
+  private final MecanumDrive mecanumDrive = new MecanumDrive(
+    s_drivetrain, 
+    () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
+    () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
+    () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X)
+  );
 
   //OI and Buttons
   private final Trigger oi_aExtend = new Trigger(() -> OI.gamepad.getRightBumper());
@@ -40,10 +51,12 @@ public class RobotContainer {
   private final Trigger oi_aLower = new Trigger(() -> OI.gamepad.getLeftTriggerAxis() > 0.1 ? true : false);
 
   //Dpad down InputExample. (Up == 0, Goes CW around by units of degrees.)
-  private final Trigger oi_coneLeftPlace = new Trigger(() -> OI.gamepad.getPOV() == 90 ? true : false);
-  private final Trigger oi_cubePlace = new Trigger(() -> OI.gamepad.getYButton());
-  private final Trigger oi_coneRightPlace = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
-  private final Trigger oi_defaultPosition = new Trigger(() -> OI.gamepad.getPOV() == 180 ? true : false);
+  private final Trigger oi_defaultPosition = new Trigger(() -> OI.gamepad.getYButton());
+  private final Trigger oi_cube1Place = new Trigger(() -> OI.gamepad.getPOV() == 180 ? true : false);
+  private final Trigger oi_cube2Place = new Trigger(() -> OI.gamepad.getPOV() == 90 ? true : false);
+  private final Trigger oi_cone1Place = new Trigger(() -> OI.gamepad.getPOV() == 0 ? true : false);
+  private final Trigger oi_cone2Place = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
+  
 
   private final Trigger oi_gCompressorToggle = new Trigger(() -> OI.gamepad.getStartButton());
   private final Trigger oi_gPneumaticsToggle = new Trigger(() -> OI.gamepad.getXButton());
@@ -54,12 +67,7 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    s_drivetrain.setDefaultCommand(new MecanumDrive(
-      s_drivetrain, 
-      () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
-      () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
-      () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X)
-    ));
+    s_drivetrain.setDefaultCommand(mecanumDrive);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -103,6 +111,12 @@ public class RobotContainer {
 
     oi_gSucc.whileTrue(Commands.startEnd(s_grabber::startIntake, s_grabber::stopIntake, s_grabber.getIntake()));
     oi_gSpit.whileTrue(Commands.startEnd(s_grabber::startSpit, s_grabber::stopIntake, s_grabber.getIntake()));
+
+    oi_defaultPosition.onTrue(new ExtendToDefault(s_arm, s_grabber));
+    oi_cone1Place.onTrue(new ExtendToFirstCone(s_arm).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    oi_cone2Place.onTrue(new ExtendToSecondCone(s_arm).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    oi_cube1Place.onTrue(new ExtendToFirstCube(s_arm).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    oi_cube2Place.onTrue(new ExtendToSecondCube(s_arm).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
   }
 
   /**
