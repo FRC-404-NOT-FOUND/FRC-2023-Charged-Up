@@ -5,9 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Autonomous.AutonomousCommandSimple;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.commands.Arm.A_LowerPowerEdition;
 import frc.robot.commands.Arm.A_RaisePowerEdition;
@@ -124,9 +126,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    *
+   * */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return new AutonomousCommandSimple(s_drivetrain, s_arm, s_grabber);
   }
-*/
 }

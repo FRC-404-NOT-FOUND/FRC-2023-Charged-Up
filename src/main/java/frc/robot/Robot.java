@@ -3,8 +3,8 @@ package frc.robot;
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.Autonomous.AutonomousCommandSimple;
 import frc.robot.subsystems.IMU;
 
 public class Robot extends TimedRobot {
@@ -12,7 +12,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   private IMU imu;
-  private AutonomousCommandSimple m_AutonomousCommandSimple;
+  private Command m_autonomousCommand;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -58,30 +58,29 @@ public class Robot extends TimedRobot {
   /**  This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
-    if (m_AutonomousCommandSimple != null && imu.isIMUReady()) {
-      m_AutonomousCommandSimple.schedule();
+    if (m_autonomousCommand != null && imu.isIMUReady()) {
+      m_autonomousCommand.schedule();
     }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    
+    CommandScheduler.getInstance().run();
   }
   
   
   @Override
   public void teleopInit() {
-    /* This makes sure that the autonomous stops running when
+    // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    */
   }
 
   /** This function is called periodically during operator control. */
