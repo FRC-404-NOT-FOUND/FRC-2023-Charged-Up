@@ -24,7 +24,7 @@ public class ExtendToDefault extends SequentialCommandGroup {
   //Opens Pnumatics (If they aren't already)
   //Swings arm back to 0 Degrees (SLOWLY)
   public ExtendToDefault(Arm arm, Grabber grabber) {
-    addRequirements(arm, grabber);
+    addRequirements(arm.getExtension(), arm.getPivot(), grabber);
 
     s_arm = arm;
     s_grabber = grabber;

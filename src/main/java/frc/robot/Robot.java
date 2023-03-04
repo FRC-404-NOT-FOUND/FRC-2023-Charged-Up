@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.IMU;
@@ -89,6 +90,9 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
   }
 
+  public double voltage = 0.0;
+  public int motorSelect = 1;
+
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
@@ -96,5 +100,40 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    if(OI.gamepad.getAButtonPressed()){
+      voltage += 0.01;
+    }
+    else if(OI.gamepad.getBButtonPressed()){
+      voltage -= 0.01;
+    }
+    else if(OI.gamepad.getXButtonPressed()){
+      motorSelect++;
+    }
+    else if(OI.gamepad.getYButtonPressed()){
+      motorSelect--;
+    }
+
+    SmartDashboard.putNumber("Voltage", voltage);
+    SmartDashboard.putNumber("Motor Select", motorSelect);
+
+    switch(motorSelect){
+      case 1: 
+        m_robotContainer.getDrivetrain().setWheelVoltages(voltage, 0, 0, 0);
+        break;
+      case 2:
+        m_robotContainer.getDrivetrain().setWheelVoltages(0, voltage, 0, 0);
+        break;
+      case 3:
+        m_robotContainer.getDrivetrain().setWheelVoltages(0, 0, voltage, 0);
+        break;
+      case 4:
+        m_robotContainer.getDrivetrain().setWheelVoltages(0, 0, 0, voltage);
+        break;
+      default:
+        motorSelect = 1;
+        break;
+    }
+    
+  }
 }
