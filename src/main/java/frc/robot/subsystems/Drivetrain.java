@@ -120,7 +120,10 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    poseEstimator.update(getGyroAngle(), getKinematicWheelPositions());
+    var kinPos = getKinematicWheelPositions();
+    var angle = getGyroAngle();
+
+    poseEstimator.update(angle, kinPos);
 
     if (Limelight.isValidTarget() && Limelight.getPrimaryAprilTag() > 0) {
       poseEstimator.addVisionMeasurement(getVisionPose(), Timer.getFPGATimestamp());
@@ -131,21 +134,23 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Back Left Encoder position", backLeftEncoder.getPosition());
     SmartDashboard.putNumber("Back Right Encoder position", backRightEncoder.getPosition());
 
+    SmartDashboard.putNumber("Front Left Encoder Meters", kinPos.frontLeftMeters);
+    SmartDashboard.putNumber("Front Right Encoder Meters", kinPos.frontRightMeters);
+    SmartDashboard.putNumber("Back Left Encoder Meters", kinPos.rearLeftMeters);
+    SmartDashboard.putNumber("Back Right Encoder Meters", kinPos.rearRightMeters);
+
     SmartDashboard.putNumber("Front Left Encoder Velocity", frontLeftEncoder.getVelocity());
     SmartDashboard.putNumber("Front Right Encoder Velocity", frontRightEncoder.getVelocity());
     SmartDashboard.putNumber("Back Left Encoder Velocity", backLeftEncoder.getVelocity());
     SmartDashboard.putNumber("Back Right Encoder Velocity", backRightEncoder.getVelocity());
+
+    SmartDashboard.putNumber("Gyro Angle", angle.getDegrees());
 
     SmartDashboard.putNumber("Robot Pose X", getCurrentPose().getX());
     SmartDashboard.putNumber("Robot Pose Y", getCurrentPose().getY());
     SmartDashboard.putNumber("Robot Pose Rotation", getCurrentPose().getRotation().getDegrees());
 
     SmartDashboard.putNumberArray("Botpose TargetSpace", Limelight.getTableEntry("botpose_targetspace").getDoubleArray(new double[6]));
-
-    //System.out.println("Front left encoder position: " + frontLeftEncoder.getPosition());
-    //System.out.println("Front right encoder position: " + frontRightEncoder.getPosition());
-    //System.out.println("Back left encoder: " + backLeftEncoder.getPosition());
-    //System.out.println("Back right encoder: " + backRightEncoder.getPosition());
   }
 
   @Override
