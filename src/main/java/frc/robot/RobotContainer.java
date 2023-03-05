@@ -19,6 +19,7 @@ import frc.robot.commands.Autonomous.ExtendToFirstCone;
 import frc.robot.commands.Autonomous.ExtendToFirstCube;
 import frc.robot.commands.Autonomous.ExtendToSecondCone;
 import frc.robot.commands.Autonomous.ExtendToSecondCube;
+import frc.robot.commands.Autonomous.FunnyAutonomous;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -57,8 +58,8 @@ public class RobotContainer {
   private final Trigger oi_defaultPosition = new Trigger(() -> OI.gamepad.getYButton());
   private final Trigger oi_cube1Place = new Trigger(() -> OI.gamepad.getPOV() == 180 ? true : false);
   private final Trigger oi_cube2Place = new Trigger(() -> OI.gamepad.getPOV() == 90 ? true : false);
-  private final Trigger oi_cone1Place = new Trigger(() -> OI.gamepad.getPOV() == 0 ? true : false);
-  private final Trigger oi_cone2Place = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
+  private final Trigger oi_cone1Place = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
+  private final Trigger oi_cone2Place = new Trigger(() -> OI.gamepad.getPOV() == 0 ? true : false);
   
 
   private final Trigger oi_gCompressorToggle = new Trigger(() -> OI.gamepad.getStartButton());
@@ -107,7 +108,9 @@ public class RobotContainer {
     ));
 
     oi_aRaise.whileTrue(new A_RaisePowerEdition(() -> OI.gamepad.getRightTriggerAxis(), s_arm));
+    oi_aRaise.whileFalse(new A_RaisePowerEdition(() -> 0.0, s_arm));
     oi_aLower.whileTrue(new A_LowerPowerEdition(() -> OI.gamepad.getLeftTriggerAxis(), s_arm));
+    oi_aLower.whileFalse(new A_LowerPowerEdition(() -> 0.0, s_arm));
 
     oi_gCompressorToggle.toggleOnFalse(Commands.startEnd(s_grabber::turnCompressorOn, s_grabber::turnCompressorOff, s_grabber));
     oi_gPneumaticsToggle.toggleOnTrue(Commands.startEnd(s_grabber::pneumaticsClose, s_grabber::pneumaticsOpen,s_grabber.getHopper()));
@@ -130,7 +133,7 @@ public class RobotContainer {
    * */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new AutonomousCommandSimple(s_drivetrain, s_arm, s_grabber);
+    return new FunnyAutonomous(s_drivetrain);
   }
 
   public Drivetrain getDrivetrain(){

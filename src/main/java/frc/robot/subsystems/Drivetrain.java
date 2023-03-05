@@ -218,6 +218,11 @@ public class Drivetrain extends SubsystemBase {
 
   //These are in Meters/Second.
   public MecanumDriveWheelSpeeds getKinematicWheelSpeeds(){
+    System.out.println(frontLeftEncoder.getVelocity() * Constants.DEGREES_TO_METERS);
+    System.out.println(frontRightEncoder.getVelocity() * Constants.DEGREES_TO_METERS);
+    System.out.println(backLeftEncoder.getVelocity() * Constants.DEGREES_TO_METERS);
+    System.out.println(backRightEncoder.getVelocity() * Constants.DEGREES_TO_METERS);
+
     return new MecanumDriveWheelSpeeds(
       frontLeftEncoder.getVelocity() * Constants.DEGREES_TO_METERS, 
       frontRightEncoder.getVelocity() * Constants.DEGREES_TO_METERS, 

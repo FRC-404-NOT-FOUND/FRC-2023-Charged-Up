@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -12,11 +13,11 @@ import frc.robot.subsystems.Drivetrain;
 
 public class MecanumDrive extends CommandBase {
   Drivetrain drivetrain;
-  DoubleSupplier horizontalFunction;
-  DoubleSupplier verticalFunction;
-  DoubleSupplier pivotFunction;
+  Supplier<Double> horizontalFunction;
+  Supplier<Double> verticalFunction;
+  Supplier<Double> pivotFunction;
 
-  public MecanumDrive(Drivetrain d, DoubleSupplier h, DoubleSupplier v, DoubleSupplier p) {
+  public MecanumDrive(Drivetrain d, Supplier<Double> h, Supplier<Double> v, Supplier<Double> p) {
     drivetrain = d;
     horizontalFunction = h;
     verticalFunction = v;
@@ -29,16 +30,19 @@ public class MecanumDrive extends CommandBase {
 
   @Override
   public void execute() {
-    double horizontal = Math.pow(horizontalFunction.getAsDouble(), 2);
-    double vertical = Math.pow(verticalFunction.getAsDouble(), 2);
-    double pivot = Math.pow(pivotFunction.getAsDouble(), 2);
+    // System.out.println("Horiz:" + horizontalFunction.get());
+    // System.out.println("Vert:" + verticalFunction.get());
+    // System.out.println("Pivot:" + pivotFunction.get());
 
-    if (Math.abs(horizontal) >= Constants.GAMEPAD_DEADZONE || Math.abs(vertical) >= Constants.GAMEPAD_DEADZONE
-        || Math.abs(pivot) >= Constants.GAMEPAD_DEADZONE) {
-      drivetrain.driveCartesian(-vertical, horizontal, pivot);
-    } else {
-      drivetrain.driveCartesian(0, 0, 0);
-    }
+    double horizontalSign = horizontalFunction.get()/Math.abs(horizontalFunction.get());
+    double verticalSign = verticalFunction.get() / Math.abs(verticalFunction.get());
+    double pivotSign = pivotFunction.get() / Math.abs(pivotFunction.get());
+
+    double horizontal = Math.pow(horizontalFunction.get(), 2);
+    double vertical = Math.pow(verticalFunction.get(), 2);
+    double pivot = Math.pow(pivotFunction.get(), 2);
+
+    drivetrain.driveCartesian(-(vertical * verticalSign), horizontal * horizontalSign, pivot * pivotSign);
   }
 
   @Override

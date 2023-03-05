@@ -16,9 +16,10 @@ public class A_extendTo extends CommandBase {
   /** Creates a new A_extendTo. */
   private Arm arm;
   private double position;
+  private boolean done = false;
 
   public A_extendTo(double p, Arm a) {
-    addRequirements(a.getExtension());
+    //addRequirements(a.getExtension());
     // Use addRequirements() here to declare subsystem dependencies.
     arm = a;
     position = p;
@@ -31,12 +32,20 @@ public class A_extendTo extends CommandBase {
 
   @Override
   public void execute() {
-    arm.getExtension().getPIDController().setReference(position, CANSparkMax.ControlType.kPosition);
+    if(arm.getExtension().getEncoderPosition() >= position - 5
+    && arm.getExtension().getEncoderPosition() <= position + 5){
+      arm.getExtension().motorWheel.stopMotor();
+      done = true;
+    }
+    else{
+      if(arm.getPivot().getEncoderPosition() >= 250)
+        arm.getExtension().getPIDController().setReference(position, CANSparkMax.ControlType.kPosition);
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return done;
   }
 }

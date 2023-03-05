@@ -6,9 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 public final class Constants {
+    public static Timer timer = new Timer();
     public static double aprilTagMoveX = 0;
     public static double aprilTagMoveY = 0;
     public static double aprilTagRotate;
@@ -69,8 +71,8 @@ public final class Constants {
     public static final double DRIVETRAIN_WHEEL_RADIUS = 0.1016; //4 inches
     
     //Find the radius of the wheel, multiply by 2*pi*r
-    public static final double ROTATIONS_TO_METERS = 2 * Math.PI * Constants.DRIVETRAIN_WHEEL_RADIUS;
-    public static final double DEGREES_TO_METERS = (1/360) * ROTATIONS_TO_METERS;
+    public static final double ROTATIONS_TO_METERS = 2.0 * Math.PI * Constants.DRIVETRAIN_WHEEL_RADIUS;
+    public static final double DEGREES_TO_METERS = (1.0/360.0) * ROTATIONS_TO_METERS;
 
     //Motor Speed Offsets
     public static final double FRONT_LEFT_MOTOR_SPEED_OFFSET = 0.60;
@@ -111,15 +113,15 @@ public final class Constants {
     public static final int PIVOT_MAX_POSITION = 500;
 
     //Positions
-    public static final int FIRST_CONE_ANGLE = 320;
+    public static final int FIRST_CONE_ANGLE = 420;
     public static final int FIRST_CONE_EXTENSION = 42;
-    public static final int SECOND_CONE_ANGLE = 405;
+    public static final int SECOND_CONE_ANGLE = 505;
     public static final int SECOND_CONE_EXTENSION = 200;
-    public static final int FIRST_CUBE_ANGLE = 255;
+    public static final int FIRST_CUBE_ANGLE = 355;
     public static final int FIRST_CUBE_EXTENSION = 25;
-    public static final int SECOND_CUBE_ANGLE = 355;
+    public static final int SECOND_CUBE_ANGLE = 455;
     public static final int SECOND_CUBE_EXTENSION = 160;
-    public static final int DEFAULT_ANGLE = 100;
+    public static final int DEFAULT_ANGLE = 150;
     public static final int DEFAULT_EXTENSION = 50;
 
 

@@ -13,10 +13,11 @@ import frc.robot.subsystems.Arm;
 public class A_pivotTo extends CommandBase {
   Arm s_arm;
   double angle;
+  boolean done = false;
   
   public A_pivotTo(double a, Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm.getPivot());
+    //addRequirements(arm.getPivot());
 
     s_arm = arm;
     angle = a;
@@ -29,8 +30,15 @@ public class A_pivotTo extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_arm.getPivot().getPIDController().setReference(angle, CANSparkMax.ControlType.kPosition, Constants.PIVOT_SLOW_PID_SLOT);
     //WE NEED A WAY TO DETERMINE FOR SURE WHEN IT ARRIVES AT THE ANGLE, IT STOPS RUNNING AND FINISHES THE COMMAND.
+    if(s_arm.getPivot().getEncoderPosition() <= angle + 10
+    && s_arm.getPivot().getEncoderPosition() >= angle - 10){
+      s_arm.getPivot().pivotMotor.stopMotor();
+      done = true;
+    }
+    else{
+      s_arm.getPivot().getPIDController().setReference(angle, CANSparkMax.ControlType.kPosition, Constants.PIVOT_SLOW_PID_SLOT);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +48,6 @@ public class A_pivotTo extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return done;
   }
 }

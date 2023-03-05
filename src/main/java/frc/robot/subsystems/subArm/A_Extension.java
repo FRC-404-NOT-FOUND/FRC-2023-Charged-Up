@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class A_Extension extends SubsystemBase {
-  private final CANSparkMax motorWheel = new CANSparkMax(Constants.EXTENSION_WHEEL_MOTOR_INDEX, MotorType.kBrushless);
+  public final CANSparkMax motorWheel = new CANSparkMax(Constants.EXTENSION_WHEEL_MOTOR_INDEX, MotorType.kBrushless);
   private RelativeEncoder encoder = motorWheel.getEncoder();
   private SparkMaxPIDController pid = motorWheel.getPIDController();
   /** Creates a new A_Extension. */
