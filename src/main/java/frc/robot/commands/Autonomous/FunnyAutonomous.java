@@ -31,7 +31,7 @@ public class FunnyAutonomous extends CommandBase {
     } else if (Constants.timer.get() < 2.0){
       drivetrain.driveCartesian(0.0, 0.0, 0.0);
     } else if (Constants.timer.get() < 4.0){
-      drivetrain.driveCartesian(1, 0.0, 0.0);
+      drivetrain.driveCartesian(0.5, 0.0, 0.0);
     } else {
       drivetrain.driveCartesian(0.0, 0.0, 0.0);
     }

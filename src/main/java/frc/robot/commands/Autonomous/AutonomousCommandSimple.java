@@ -22,8 +22,7 @@ public class AutonomousCommandSimple extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      //new DriveAlongPath(PathPlanner.loadPath("Autonomous Plan", new PathConstraints(3, 2)), drivetrain, isFinished())
-      Commands.run(() -> drivetrain.driveCartesian(0.3, 0, 0))
+      new DriveAlongPath(PathPlanner.loadPath("Autonomous Plan", new PathConstraints(3, 2)), drivetrain, isFinished())
     );
   }
 }

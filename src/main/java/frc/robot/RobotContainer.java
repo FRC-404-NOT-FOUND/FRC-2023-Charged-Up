@@ -133,10 +133,14 @@ public class RobotContainer {
    * */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new FunnyAutonomous(s_drivetrain);
+    return new AutonomousCommandSimple(s_drivetrain, s_arm, s_grabber);
   }
 
   public Drivetrain getDrivetrain(){
     return s_drivetrain;
+  }
+
+  public Grabber getGrabber(){
+    return s_grabber;
   }
 }

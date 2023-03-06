@@ -1,0 +1,102 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="Gyro Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="264" y="163"/>
+	</widget>
+	<widget field="Back Right Encoder Meters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="5" y="260"/>
+	</widget>
+	<widget field="Back Left Encoder Meters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="13" y="241"/>
+	</widget>
+	<widget field="Front Right Encoder Meters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="3" y="221"/>
+	</widget>
+	<widget field="Front Left Encoder Meters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="9" y="203"/>
+	</widget>
+	<widget field="Botpose TargetSpace Z Rotation" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="427" y="139"/>
+	</widget>
+	<widget field="Botpose TargetSpace Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="216" y="139"/>
+	</widget>
+	<widget field="Botpose TargetSpace X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1" y="141"/>
+		<height>19</height>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="669" y="-3"/>
+		<width>873</width>
+		<height>533</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
+	<widget field="Robot Pose Rotation" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="427" y="108"/>
+	</widget>
+	<widget field="Robot Pose Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="244" y="110"/>
+	</widget>
+	<widget field="Robot Pose X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="60" y="109"/>
+	</widget>
+	<widget field="Back Right Encoder Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="237" y="59"/>
+	</widget>
+	<widget field="Back Left Encoder Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="237" y="41"/>
+	</widget>
+	<widget field="Front Right Encoder Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="235" y="20"/>
+	</widget>
+	<widget field="Front Left Encoder Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="237" y="0"/>
+	</widget>
+	<widget field="Back Right Encoder position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="11" y="42"/>
+	</widget>
+	<widget field="Back Left Encoder position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="20" y="62"/>
+		<height>19</height>
+	</widget>
+	<widget field="Front Right Encoder position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="8" y="20"/>
+		<height>19</height>
+	</widget>
+	<widget field="Front Left Encoder position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="14" y="1"/>
+		<height>19</height>
+	</widget>
+	<widget field="limelight_Interface" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="488" y="1"/>
+	</widget>
+	<widget field="limelight_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="465" y="41"/>
+		<height>47</height>
+	</widget>
+	<widget field="limelight_Stream" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="494" y="21"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Right Position"/>
+	<hidden field="SysIdGearing"/>
+	<hidden field="Left Voltage"/>
+	<hidden field="SysIdWrongMech"/>
+	<hidden field="SysIdOverflow"/>
+	<hidden field="SysIdTestType"/>
+	<hidden field="Right Velocity"/>
+	<hidden field="SysIdVoltageCommand"/>
+	<hidden field="SysIdTelemetry"/>
+	<hidden field="Gyro Rate"/>
+	<hidden field="SysIdConversionFactor"/>
+	<hidden field="Left Velocity"/>
+	<hidden field="SysIdCPR"/>
+	<hidden field="Right Voltage"/>
+	<hidden field="Gyro Reading"/>
+	<hidden field="SysIdRotate"/>
+	<hidden field="SysIdAckNumber"/>
+	<hidden field="Left Position"/>
+	<hidden field="SysIdTest"/>
+</xml>

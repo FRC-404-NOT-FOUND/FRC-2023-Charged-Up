@@ -29,36 +29,24 @@ public final class Constants {
     public static final int BACK_RIGHT_ENCODER_INDEX = 34;
 
     //Motor Velocity PID (Proportional, Integral, Derivative)
-    public static final double FRONT_LEFT_MOTOR_KP = 0.0;
-    public static final double FRONT_LEFT_MOTOR_KI = 0.0;
-    public static final double FRONT_LEFT_MOTOR_KD = 0.0;
-    public static final double FRONT_RIGHT_MOTOR_KP = 0.0;
-    public static final double FRONT_RIGHT_MOTOR_KI = 0.0;
-    public static final double FRONT_RIGHT_MOTOR_KD = 0.0;
-    public static final double BACK_LEFT_MOTOR_KP = 0.0;
-    public static final double BACK_LEFT_MOTOR_KI = 0.0;
-    public static final double BACK_LEFT_MOTOR_KD = 0.0;
-    public static final double BACK_RIGHT_MOTOR_KP = 0.0;
-    public static final double BACK_RIGHT_MOTOR_KI = 0.0;
-    public static final double BACK_RIGHT_MOTOR_KD = 0.0;
+    public static final double FRONT_LEFT_MOTOR_KP = 2.85;
+    public static final double FRONT_LEFT_MOTOR_KD = 0.5;
+    public static final double FRONT_RIGHT_MOTOR_KP = 2.85;
+    public static final double FRONT_RIGHT_MOTOR_KD = 0.5;
+    public static final double BACK_LEFT_MOTOR_KP = 2.85;
+    public static final double BACK_LEFT_MOTOR_KD = 0.5;
+    public static final double BACK_RIGHT_MOTOR_KP = 2.85;
+    public static final double BACK_RIGHT_MOTOR_KD = 0.5;
     
     //Motor Velocity Feedforward (Static Friction, Velocity-keepup)
     //More Info:
     //  https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-feedforward.html#the-permanent-magnet-dc-motor-feedforward-equation
-    public static final double FRONT_LEFT_MOTOR_KS = 0.0;
-    public static final double FRONT_LEFT_MOTOR_KV = 0.0;
-    public static final double FRONT_RIGHT_MOTOR_KS = 0.0;
-    public static final double FRONT_RIGHT_MOTOR_KV = 0.0;
-    public static final double BACK_LEFT_MOTOR_KS = 0.0;
-    public static final double BACK_LEFT_MOTOR_KV = 0.0;
-    public static final double BACK_RIGHT_MOTOR_KS = 0.0;
-    public static final double BACK_RIGHT_MOTOR_KV = 0.0;
 
     //General Drivetrain PID (from Cartesian movement)
-    public static final double DRIVETRAIN_TRANSFORM_KPx = 0; //0.2;
+    public static final double DRIVETRAIN_TRANSFORM_KPx = 0.05;
     public static final double DRIVETRAIN_TRANSFORM_KIx = 0.0;
     public static final double DRIVETRAIN_TRANSFORM_KDx = 0.0;
-    public static final double DRIVETRAIN_TRANSFORM_KPy = 0.595; //This may have to be negative to make it go towards the horizontal "line"
+    public static final double DRIVETRAIN_TRANSFORM_KPy = 0.1; //This may have to be negative to make it go towards the horizontal "line"
     public static final double DRIVETRAIN_TRANSFORM_KIy = 0.0;
     public static final double DRIVETRAIN_TRANSFORM_KDy = 0.0;
     public static final double DRIVETRAIN_ROTATE_KP = 0.2;

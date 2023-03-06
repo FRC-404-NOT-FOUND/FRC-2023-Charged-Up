@@ -46,15 +46,10 @@ public class Drivetrain extends SubsystemBase {
     Constants.BACK_RIGHT_WHEEL_TO_CENTER
   );
 
-  private PIDController frontLeftMotorPID = new PIDController(Constants.FRONT_LEFT_MOTOR_KP, Constants.FRONT_LEFT_MOTOR_KI, Constants.FRONT_LEFT_MOTOR_KD);
-  private PIDController frontRightMotorPID = new PIDController(Constants.FRONT_RIGHT_MOTOR_KP, Constants.FRONT_RIGHT_MOTOR_KI, Constants.FRONT_RIGHT_MOTOR_KD);
-  private PIDController backLeftMotorPID = new PIDController(Constants.BACK_LEFT_MOTOR_KP, Constants.BACK_LEFT_MOTOR_KI, Constants.BACK_LEFT_MOTOR_KD);
-  private PIDController backRightMotorPID = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, Constants.BACK_RIGHT_MOTOR_KI, Constants.BACK_RIGHT_MOTOR_KD);
-
-  private SimpleMotorFeedforward frontLeftMotorFeedForward = new SimpleMotorFeedforward(Constants.FRONT_LEFT_MOTOR_KS, Constants.FRONT_LEFT_MOTOR_KV);
-  private SimpleMotorFeedforward frontRightMotorFeedForward = new SimpleMotorFeedforward(Constants.FRONT_RIGHT_MOTOR_KS, Constants.FRONT_RIGHT_MOTOR_KV);
-  private SimpleMotorFeedforward backLeftMotorFeedForward = new SimpleMotorFeedforward(Constants.BACK_LEFT_MOTOR_KS, Constants.BACK_LEFT_MOTOR_KV);
-  private SimpleMotorFeedforward backRightMotorFeedForward = new SimpleMotorFeedforward(Constants.BACK_RIGHT_MOTOR_KS, Constants.BACK_RIGHT_MOTOR_KV);
+  private PIDController frontLeftMotorPID = new PIDController(Constants.FRONT_LEFT_MOTOR_KP, 0.0, Constants.FRONT_LEFT_MOTOR_KD);
+  private PIDController frontRightMotorPID = new PIDController(Constants.FRONT_RIGHT_MOTOR_KP, 0.0, Constants.FRONT_RIGHT_MOTOR_KD);
+  private PIDController backLeftMotorPID = new PIDController(Constants.BACK_LEFT_MOTOR_KP, 0.0, Constants.BACK_LEFT_MOTOR_KD);
+  private PIDController backRightMotorPID = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, 0.0, Constants.BACK_RIGHT_MOTOR_KD);
 
 
   /*
@@ -288,18 +283,14 @@ public class Drivetrain extends SubsystemBase {
     double[] wheelSpeeds = new double[4];
     MecanumDriveWheelSpeeds currentWheelSpeeds = getKinematicWheelSpeeds();
 
-    wheelSpeeds[0] = 
-      frontLeftMotorFeedForward.calculate(kinematicWheelSpeeds.frontLeftMetersPerSecond)
-      + frontLeftMotorPID.calculate(currentWheelSpeeds.frontLeftMetersPerSecond, kinematicWheelSpeeds.frontLeftMetersPerSecond);
+    wheelSpeeds[0] =
+      frontLeftMotorPID.calculate(currentWheelSpeeds.frontLeftMetersPerSecond, kinematicWheelSpeeds.frontLeftMetersPerSecond);
     wheelSpeeds[1] = 
-      frontRightMotorFeedForward.calculate(kinematicWheelSpeeds.frontRightMetersPerSecond)
-      + frontRightMotorPID.calculate(currentWheelSpeeds.frontRightMetersPerSecond, kinematicWheelSpeeds.frontRightMetersPerSecond);
-    wheelSpeeds[2] = 
-      backLeftMotorFeedForward.calculate(kinematicWheelSpeeds.rearLeftMetersPerSecond)
-      + backLeftMotorPID.calculate(currentWheelSpeeds.rearLeftMetersPerSecond, kinematicWheelSpeeds.rearLeftMetersPerSecond);
-    wheelSpeeds[3] = 
-      backRightMotorFeedForward.calculate(kinematicWheelSpeeds.rearRightMetersPerSecond)
-      + backRightMotorPID.calculate(currentWheelSpeeds.rearRightMetersPerSecond, kinematicWheelSpeeds.rearRightMetersPerSecond);
+      frontRightMotorPID.calculate(currentWheelSpeeds.frontRightMetersPerSecond, kinematicWheelSpeeds.frontRightMetersPerSecond);
+    wheelSpeeds[2] =
+      backLeftMotorPID.calculate(currentWheelSpeeds.rearLeftMetersPerSecond, kinematicWheelSpeeds.rearLeftMetersPerSecond);
+    wheelSpeeds[3] =
+      backRightMotorPID.calculate(currentWheelSpeeds.rearRightMetersPerSecond, kinematicWheelSpeeds.rearRightMetersPerSecond);
 
     setWheelVoltages(wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
   }

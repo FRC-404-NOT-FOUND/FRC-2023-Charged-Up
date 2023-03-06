@@ -2,10 +2,16 @@ package frc.robot;
 
 import com.pathplanner.lib.server.PathPlannerServer;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.subsystems.IMU;
 
 public class Robot extends TimedRobot {
@@ -89,50 +95,91 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
   }
 
-  public double voltage = 0.0;
-  public int motorSelect = 1;
+public ShuffleboardTab tab = Shuffleboard.getTab("PID_DrivetrainTest");
+  
+public PIDController pid = new PIDController(0, 0, 0);
+
+public PIDController pid_FL = new PIDController(Constants.FRONT_LEFT_MOTOR_KP, 0, Constants.FRONT_LEFT_MOTOR_KD);
+public PIDController pid_FR = new PIDController(Constants.FRONT_RIGHT_MOTOR_KP, 0, Constants.FRONT_RIGHT_MOTOR_KD);
+public PIDController pid_BL = new PIDController(Constants.BACK_LEFT_MOTOR_KP, 0, Constants.BACK_LEFT_MOTOR_KD);
+public PIDController pid_BR = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, 0, Constants.BACK_RIGHT_MOTOR_KD);
+
+  public GenericEntry Velocity = tab.add("SetpointVelocity", 0)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+  public GenericEntry Motor = tab.add("Selected Motor", 0)
+    .withWidget(BuiltInWidgets.kTextView)
+    .getEntry();
+
+public GenericEntry kP = tab.add("kP", 0)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+public GenericEntry kI = tab.add("kI", 0)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+public GenericEntry kD = tab.add("kD", 0)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    m_robotContainer.getGrabber().getHopper().getCompressor().disable();
+    
   }
 
   @Override
   public void testPeriodic() {
-    if(OI.gamepad.getAButtonPressed()){
-      voltage += 0.01;
-    }
-    else if(OI.gamepad.getBButtonPressed()){
-      voltage -= 0.01;
-    }
-    else if(OI.gamepad.getXButtonPressed()){
-      motorSelect++;
-    }
-    else if(OI.gamepad.getYButtonPressed()){
-      motorSelect--;
-    }
+    var kinVel = m_robotContainer.getDrivetrain().getKinematicWheelSpeeds();
+    SmartDashboard.putNumber("Front Left Encoder Meters/Second", kinVel.frontLeftMetersPerSecond);
+    SmartDashboard.putNumber("Front Right Encoder Meters/Second", kinVel.frontRightMetersPerSecond);
+    SmartDashboard.putNumber("Back Left Encoder Meters/Second", kinVel.rearLeftMetersPerSecond);
+    SmartDashboard.putNumber("Back Right Encoder Meters/Second", kinVel.rearRightMetersPerSecond);
 
-    SmartDashboard.putNumber("Voltage", voltage);
-    SmartDashboard.putNumber("Motor Select", motorSelect);
+    pid.setPID(kP.getDouble(0.0), kI.getDouble(0.0), kD.getDouble(0.0));
 
-    switch(motorSelect){
-      case 1: 
-        m_robotContainer.getDrivetrain().setWheelVoltages(voltage, 0, 0, 0);
+    switch((int) Motor.getInteger(0)){
+      case(0):
+        m_robotContainer.getDrivetrain()
+          .setWheelVoltages(pid.calculate(Velocity.getDouble(0.0)), 0.0, 0.0, 0.0);
         break;
-      case 2:
-        m_robotContainer.getDrivetrain().setWheelVoltages(0, voltage, 0, 0);
+      case(1):
+        m_robotContainer.getDrivetrain()
+            .setWheelVoltages(0.0, pid.calculate(Velocity.getDouble(0.0)), 0.0, 0.0);
         break;
-      case 3:
-        m_robotContainer.getDrivetrain().setWheelVoltages(0, 0, voltage, 0);
+      case(2):
+        m_robotContainer.getDrivetrain()
+            .setWheelVoltages(0.0, 0.0, pid.calculate(Velocity.getDouble(0.0)), 0.0);
         break;
-      case 4:
-        m_robotContainer.getDrivetrain().setWheelVoltages(0, 0, 0, voltage);
+      case(3):
+       m_robotContainer.getDrivetrain()
+            .setWheelVoltages(0.0, 0.0, 0.0, pid.calculate(Velocity.getDouble(0.0)));
         break;
+      case(4):
+        m_robotContainer.getDrivetrain()
+          .setWheelVoltages(
+            pid.calculate(Velocity.getDouble(0.0)), 
+            pid.calculate(Velocity.getDouble(0.0)), 
+            pid.calculate(Velocity.getDouble(0.0)), 
+            pid.calculate(Velocity.getDouble(0.0))
+        );
+        break;
+      case(5):
+        m_robotContainer.getDrivetrain()
+          .setWheelVoltages(
+            pid_FL.calculate(Velocity.getDouble(0.0)), 
+            pid_FR.calculate(Velocity.getDouble(0.0)),  
+            pid_BL.calculate(Velocity.getDouble(0.0)), 
+            pid_BR.calculate(Velocity.getDouble(0.0))
+        );
+        break;
+
       default:
-        motorSelect = 1;
         break;
+      
+      
     }
-    
+
   }
 }
