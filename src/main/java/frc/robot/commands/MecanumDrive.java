@@ -30,25 +30,23 @@ public class MecanumDrive extends CommandBase {
 
   @Override
   public void execute() {
-    // System.out.println("Horiz:" + horizontalFunction.get());
-    // System.out.println("Vert:" + verticalFunction.get());
-    // System.out.println("Pivot:" + pivotFunction.get());
+    double h = horizontalFunction.get();
+    double v = verticalFunction.get();
+    double z = pivotFunction.get();
 
-    double horizontal = horizontalFunction.get();
-    double vertical = verticalFunction.get();
-    double pivot = pivotFunction.get();
+    System.out.println("Horiz:" + h);
+    System.out.println("Vert:" + v);
+    System.out.println("Pivot:" + z);
 
-    drivetrain.driveCartesian(-vertical, horizontal, pivot);
-
-    // double horizontalSign = horizontalFunction.get()/Math.abs(horizontalFunction.get());
-    // double verticalSign = verticalFunction.get() / Math.abs(verticalFunction.get());
+    double horizontalSign = h / Math.abs(h);
+    double verticalSign = v / Math.abs(v);
     // double pivotSign = pivotFunction.get() / Math.abs(pivotFunction.get());
 
-    // double horizontal = Math.pow(horizontalFunction.get(), 2);
-    // double vertical = Math.pow(verticalFunction.get(), 2);
-    // double pivot = Math.pow(pivotFunction.get(), 2);
+    double horizontal = h * h;
+    double vertical = v * v;
+    double pivot = pivotFunction.get();
 
-    // drivetrain.driveCartesian(-(vertical * verticalSign), horizontal * horizontalSign, pivot * pivotSign);
+    drivetrain.driveCartesian(-(vertical * verticalSign), horizontal * horizontalSign, pivot);
     // drivetrain.driveCartesian(vertical, horizontal, pivot);
   }
 

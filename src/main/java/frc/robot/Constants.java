@@ -29,14 +29,18 @@ public final class Constants {
     public static final int BACK_RIGHT_ENCODER_INDEX = 34;
 
     //Motor Velocity PID (Proportional, Integral, Derivative)
-    public static final double FRONT_LEFT_MOTOR_KP = 2.85;
-    public static final double FRONT_LEFT_MOTOR_KD = 0.5;
-    public static final double FRONT_RIGHT_MOTOR_KP = 2.85;
-    public static final double FRONT_RIGHT_MOTOR_KD = 0.5;
-    public static final double BACK_LEFT_MOTOR_KP = 2.85;
-    public static final double BACK_LEFT_MOTOR_KD = 0.5;
-    public static final double BACK_RIGHT_MOTOR_KP = 2.85;
-    public static final double BACK_RIGHT_MOTOR_KD = 0.5;
+    public static final double FRONT_LEFT_MOTOR_KP = 2.8;
+    public static final double FRONT_LEFT_MOTOR_KI = 0.0001;
+    public static final double FRONT_LEFT_MOTOR_KD = 0.001;
+    public static final double FRONT_RIGHT_MOTOR_KP = 2.79;
+    public static final double FRONT_RIGHT_MOTOR_KI = 0.0001;
+    public static final double FRONT_RIGHT_MOTOR_KD = 0.1;
+    public static final double BACK_LEFT_MOTOR_KP = 2.73;
+    public static final double BACK_LEFT_MOTOR_KI = 0.0001;
+    public static final double BACK_LEFT_MOTOR_KD = 0.1;
+    public static final double BACK_RIGHT_MOTOR_KP = 2.76;
+    public static final double BACK_RIGHT_MOTOR_KI = 0.0001;
+    public static final double BACK_RIGHT_MOTOR_KD = 0.01;
     
     //Motor Velocity Feedforward (Static Friction, Velocity-keepup)
     //More Info:

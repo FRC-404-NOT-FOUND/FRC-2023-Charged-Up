@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -159,6 +158,9 @@ public class Drivetrain extends SubsystemBase {
   // XSpeed = forward, YSpeed = Left, zRotation = CCW
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
+    // var speeds = driveCartesianIK(xSpeed, ySpeed, zRotation);
+    // var mecSpeeds = new MecanumDriveWheelSpeeds(speeds.frontLeft, speeds.frontRight, speeds.rearLeft, speeds.rearRight);
+    // setKinematicWheelSpeeds(mecSpeeds);
   }
 
   //Returns the wheelSpeeds (From -1 to 1.) from the parameters.
@@ -213,11 +215,6 @@ public class Drivetrain extends SubsystemBase {
 
   //These are in Meters/Second.
   public MecanumDriveWheelSpeeds getKinematicWheelSpeeds(){
-    System.out.println(frontLeftEncoder.getVelocity() * Constants.DEGREES_TO_METERS);
-    System.out.println(frontRightEncoder.getVelocity() * Constants.DEGREES_TO_METERS);
-    System.out.println(backLeftEncoder.getVelocity() * Constants.DEGREES_TO_METERS);
-    System.out.println(backRightEncoder.getVelocity() * Constants.DEGREES_TO_METERS);
-
     return new MecanumDriveWheelSpeeds(
       frontLeftEncoder.getVelocity() * Constants.DEGREES_TO_METERS, 
       frontRightEncoder.getVelocity() * Constants.DEGREES_TO_METERS, 
