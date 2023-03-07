@@ -142,36 +142,36 @@ public GenericEntry kD = tab.add("kD", 0)
     switch((int) Motor.getInteger(0)){
       case(0):
         m_robotContainer.getDrivetrain()
-          .setWheelVoltages(pid.calculate(Velocity.getDouble(0.0)), 0.0, 0.0, 0.0);
+          .setWheelVoltages(pid.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)), 0.0, 0.0, 0.0);
         break;
       case(1):
         m_robotContainer.getDrivetrain()
-            .setWheelVoltages(0.0, pid.calculate(Velocity.getDouble(0.0)), 0.0, 0.0);
+            .setWheelVoltages(0.0, pid.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)), 0.0, 0.0);
         break;
       case(2):
         m_robotContainer.getDrivetrain()
-            .setWheelVoltages(0.0, 0.0, pid.calculate(Velocity.getDouble(0.0)), 0.0);
+            .setWheelVoltages(0.0, 0.0, pid.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)), 0.0);
         break;
       case(3):
        m_robotContainer.getDrivetrain()
-            .setWheelVoltages(0.0, 0.0, 0.0, pid.calculate(Velocity.getDouble(0.0)));
+            .setWheelVoltages(0.0, 0.0, 0.0, pid.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0)));
         break;
       case(4):
         m_robotContainer.getDrivetrain()
           .setWheelVoltages(
-            pid.calculate(Velocity.getDouble(0.0)), 
-            pid.calculate(Velocity.getDouble(0.0)), 
-            pid.calculate(Velocity.getDouble(0.0)), 
-            pid.calculate(Velocity.getDouble(0.0))
+            pid.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)), 
+            pid.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)), 
+            pid.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)), 
+            pid.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0))
         );
         break;
       case(5):
         m_robotContainer.getDrivetrain()
           .setWheelVoltages(
-            pid_FL.calculate(Velocity.getDouble(0.0)), 
-            pid_FR.calculate(Velocity.getDouble(0.0)),  
-            pid_BL.calculate(Velocity.getDouble(0.0)), 
-            pid_BR.calculate(Velocity.getDouble(0.0))
+            pid_FL.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)), 
+            pid_FR.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)),  
+            pid_BL.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)), 
+            pid_BR.calculate(m_robotContainer.getDrivetrain().getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0))
         );
         break;
 
