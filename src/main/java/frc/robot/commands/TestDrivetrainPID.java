@@ -46,58 +46,53 @@ public class TestDrivetrainPID extends CommandBase {
   public TestDrivetrainPID(Drivetrain d) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(d);
-
     drivetrain = d;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("Test PID Init");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var kinVel = drivetrain.getKinematicWheelSpeeds();
-    SmartDashboard.putNumber("Front Left Encoder Meters/Second", kinVel.frontLeftMetersPerSecond);
-    SmartDashboard.putNumber("Front Right Encoder Meters/Second", kinVel.frontRightMetersPerSecond);
-    SmartDashboard.putNumber("Back Left Encoder Meters/Second", kinVel.rearLeftMetersPerSecond);
-    SmartDashboard.putNumber("Back Right Encoder Meters/Second", kinVel.rearRightMetersPerSecond);
-
     pid.setPID(kP.getDouble(0.0), kI.getDouble(0.0), kD.getDouble(0.0));
-
     switch((int) Motor.getInteger(0)){
       case(0):
         drivetrain
-          .setWheelVoltages(pid.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)), 0.0, 0.0, 0.0);
+          .setWheelVoltages(pid.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)*2), 0.0, 0.0, 0.0);
         break;
       case(1):
         drivetrain
-            .setWheelVoltages(0.0, pid.calculate(Velocity.getDouble(0.0)), 0.0, 0.0);
+            .setWheelVoltages(0.0, pid.calculate(drivetrain.getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)*2), 0.0, 0.0);
         break;
       case(2):
         drivetrain
-            .setWheelVoltages(0.0, 0.0, pid.calculate(Velocity.getDouble(0.0)), 0.0);
+            .setWheelVoltages(0.0, 0.0, pid.calculate(drivetrain.getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)*2), 0.0);
         break;
       case(3):
        drivetrain
-            .setWheelVoltages(0.0, 0.0, 0.0, pid.calculate(Velocity.getDouble(0.0)));
+            .setWheelVoltages(0.0, 0.0, 0.0, pid.calculate(drivetrain.getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0)*2));
         break;
       case(4):
         drivetrain
           .setWheelVoltages(
-            pid.calculate(Velocity.getDouble(0.0)), 
-            pid.calculate(Velocity.getDouble(0.0)), 
-            pid.calculate(Velocity.getDouble(0.0)), 
-            pid.calculate(Velocity.getDouble(0.0))
+            pid.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
+            pid.calculate(drivetrain.getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
+            pid.calculate(drivetrain.getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
+            pid.calculate(drivetrain.getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0)*2.0)
         );
         break;
       case(5):
+        System.out.println(Velocity.getDouble(0));
         drivetrain
           .setWheelVoltages(
-            pid_FL.calculate(Velocity.getDouble(0.0)), 
-            pid_FR.calculate(Velocity.getDouble(0.0)),  
-            pid_BL.calculate(Velocity.getDouble(0.0)), 
-            pid_BR.calculate(Velocity.getDouble(0.0))
+            pid_FL.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
+            pid_FR.calculate(drivetrain.getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
+            pid_BL.calculate(drivetrain.getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
+            pid_BR.calculate(drivetrain.getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0)*2.0)
         );
         break;
 
@@ -108,7 +103,9 @@ public class TestDrivetrainPID extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("Wuh-oh.");
+  }
 
   // Returns true when the command should end.
   @Override

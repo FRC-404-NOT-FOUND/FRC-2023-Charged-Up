@@ -15,6 +15,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private IMU imu;
   private Command m_autonomousCommand;
+  private Command testCommand;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot {
     imu.connectDevices();
     //imu.connectArduino();
     m_robotContainer = new RobotContainer();
+    testCommand = new TestDrivetrainPID(m_robotContainer.getDrivetrain());
     PathPlannerServer.startServer(8888);
     System.out.println("Robot Inited");
   }
@@ -94,12 +96,23 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    CommandScheduler.getInstance().enable();
+    System.out.println("Test Init!");
     m_robotContainer.getGrabber().getHopper().getCompressor().disable();
-    new TestDrivetrainPID(m_robotContainer.getDrivetrain());
+    if (testCommand != null) {
+      System.out.println("Schduling Test Command");
+      testCommand.schedule();
+    }
+    
   }
 
   @Override
   public void testPeriodic() {
+    var kinVel = m_robotContainer.getDrivetrain().getKinematicWheelSpeeds();
+    SmartDashboard.putNumber("Front Left Encoder Meters/Second", kinVel.frontLeftMetersPerSecond);
+    SmartDashboard.putNumber("Front Right Encoder Meters/Second", kinVel.frontRightMetersPerSecond);
+    SmartDashboard.putNumber("Back Left Encoder Meters/Second", kinVel.rearLeftMetersPerSecond);
+    SmartDashboard.putNumber("Back Right Encoder Meters/Second", kinVel.rearRightMetersPerSecond);
     CommandScheduler.getInstance().run();
   }
 }
