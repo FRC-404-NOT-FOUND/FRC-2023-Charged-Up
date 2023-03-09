@@ -47,17 +47,17 @@ public final class Constants {
     //  https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-feedforward.html#the-permanent-magnet-dc-motor-feedforward-equation
 
     //General Drivetrain PID (from Cartesian movement)
-    public static final double DRIVETRAIN_TRANSFORM_KPx = 0.05;
+    public static final double DRIVETRAIN_TRANSFORM_KPx = 0.01;
     public static final double DRIVETRAIN_TRANSFORM_KIx = 0.0;
     public static final double DRIVETRAIN_TRANSFORM_KDx = 0.0;
-    public static final double DRIVETRAIN_TRANSFORM_KPy = 0.1; //This may have to be negative to make it go towards the horizontal "line"
+    public static final double DRIVETRAIN_TRANSFORM_KPy = 0.03; //This may have to be negative to make it go towards the horizontal "line"
     public static final double DRIVETRAIN_TRANSFORM_KIy = 0.0;
     public static final double DRIVETRAIN_TRANSFORM_KDy = 0.0;
-    public static final double DRIVETRAIN_ROTATE_KP = 0.2;
+    public static final double DRIVETRAIN_ROTATE_KP = 0.0;
     public static final double DRIVETRAIN_ROTATE_KI = 0.0;
     public static final double DRIVETRAIN_ROTATE_KD = 0.0;
-    public static final double MAX_AUTONOMOUS_WHEEL_SPEED = 0.0; //In Meters per Second
-    public static final double MAX_AUTONOMOUS_WHEEL_ACCEL = 0.0;
+    public static final double MAX_AUTONOMOUS_WHEEL_SPEED = 2.0; //In Meters per Second
+    public static final double MAX_AUTONOMOUS_WHEEL_ACCEL = 1.0;
 
     //radius in meters
     public static final double DRIVETRAIN_WHEEL_RADIUS = 0.1016; //4 inches
