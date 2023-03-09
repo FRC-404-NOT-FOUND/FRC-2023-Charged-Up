@@ -4,7 +4,14 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
+import com.revrobotics.CANSparkMax.ControlType;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.subArm.A_Extension;
 import frc.robot.subsystems.subArm.A_Pivot;
 
@@ -43,5 +50,65 @@ public class Arm extends SubsystemBase {
   }
   public double getPivotEncoderVelocity(){
     return pivot.getEncoderVelocity();
+  }
+
+  public Command extendContinuousCommand() {
+    return Commands.startEnd(
+      () -> getExtension().setMotorWheel(0.5),
+      () -> getExtension().setMotorWheel(0),
+      getExtension()
+    );
+  }
+
+  public Command retractContinuousCommand() {
+    return Commands.startEnd(
+      () -> getExtension().setMotorWheel(-0.5),
+      () -> getExtension().setMotorWheel(0),
+      getExtension()
+    );
+  }
+
+  public Command raiseContinuousCommand(DoubleSupplier d) {
+    return Commands.startEnd(
+      () -> getPivot().pivotMotor.set(d.getAsDouble()),
+      () -> getPivot().pivotMotor.set(0),
+      getPivot()
+    );
+  }
+
+  public Command lowerContinuousCommand(DoubleSupplier d) {
+    return Commands.startEnd(
+      () -> getPivot().pivotMotor.set(-d.getAsDouble()),
+      () -> getPivot().pivotMotor.set(0),
+      getPivot()
+    );
+  }
+
+  public Command extendArmTo(double d) {
+    return Commands.startEnd(
+      () -> getExtension().getPIDController().setReference(d, ControlType.kPosition),
+      () -> getExtension().motorWheel.stopMotor(),
+      getExtension()
+    );
+  }
+
+  public Command pivotArmTo(double d) {
+    return Commands.startEnd(
+      () -> getPivot().getPIDController().setReference(d, ControlType.kPosition),
+      () -> getPivot().pivotMotor.stopMotor(),
+      getPivot()
+    );
+  }
+
+  public Command moveArmTo(double angle, double ext) {
+    return Commands.sequence(pivotArmTo(angle), extendArmTo(ext));
+  }
+
+  public Command moveToDefault() {
+    return Commands.sequence(extendArmTo(Constants.DEFAULT_EXTENSION), pivotArmTo(Constants.DEFAULT_ANGLE));
+  }
+
+  public Command engage() {
+    return Commands.sequence(pivotArmTo(Constants.DEFAULT_ANGLE), extendArmTo(Constants.DEFAULT_EXTENSION));
   }
 }

@@ -8,18 +8,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.MecanumDrive;
-import frc.robot.commands.Arm.A_LowerPowerEdition;
-import frc.robot.commands.Arm.A_RaisePowerEdition;
-import frc.robot.commands.Autonomous.AutonomousCommandSimple;
-import frc.robot.commands.Autonomous.ExtendToDefault;
-import frc.robot.commands.Autonomous.ExtendToFirstCone;
-import frc.robot.commands.Autonomous.ExtendToFirstCube;
-import frc.robot.commands.Autonomous.ExtendToSecondCone;
-import frc.robot.commands.Autonomous.ExtendToSecondCube;
-import frc.robot.commands.Autonomous.FunnyAutonomous;
+import frc.robot.commands.autonomous.AutonomousCommandSimple;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -96,33 +87,23 @@ public class RobotContainer {
     //   imu
     // ));
 
-    oi_aExtend.whileTrue(Commands.startEnd(
-      () -> s_arm.getExtension().setMotorWheel(0.5),
-      () -> s_arm.getExtension().setMotorWheel(0),
-      s_arm.getExtension()
-    ));
-    oi_aRetract.whileTrue(Commands.startEnd(
-      () -> s_arm.getExtension().setMotorWheel(-0.5),
-      () -> s_arm.getExtension().setMotorWheel(0),
-      s_arm.getExtension()
-    ));
+    oi_aExtend.whileTrue(s_arm.extendContinuousCommand());
+    oi_aRetract.whileTrue(s_arm.retractContinuousCommand());
 
-    oi_aRaise.whileTrue(new A_RaisePowerEdition(() -> OI.gamepad.getRightTriggerAxis(), s_arm));
-    oi_aRaise.whileFalse(new A_RaisePowerEdition(() -> 0.0, s_arm));
-    oi_aLower.whileTrue(new A_LowerPowerEdition(() -> OI.gamepad.getLeftTriggerAxis(), s_arm));
-    oi_aLower.whileFalse(new A_LowerPowerEdition(() -> 0.0, s_arm));
+    oi_aRaise.whileTrue(s_arm.raiseContinuousCommand(() -> OI.gamepad.getRightTriggerAxis()));
+    oi_aLower.whileTrue(s_arm.lowerContinuousCommand(() -> OI.gamepad.getLeftTriggerAxis()));
 
-    oi_gCompressorToggle.toggleOnFalse(Commands.startEnd(s_grabber::turnCompressorOn, s_grabber::turnCompressorOff, s_grabber));
-    oi_gPneumaticsToggle.toggleOnTrue(Commands.startEnd(s_grabber::pneumaticsClose, s_grabber::pneumaticsOpen,s_grabber.getHopper()));
+    oi_gCompressorToggle.toggleOnFalse(s_grabber.toggleCompressorCommand());
+    oi_gPneumaticsToggle.toggleOnTrue(s_grabber.toggleGrabberCommand());
 
-    oi_gSucc.whileTrue(Commands.startEnd(s_grabber::startIntake, s_grabber::stopIntake, s_grabber.getIntake()));
-    oi_gSpit.whileTrue(Commands.startEnd(s_grabber::startSpit, s_grabber::stopIntake, s_grabber.getIntake()));
+    oi_gSucc.whileTrue(s_grabber.intakeCommand());
+    oi_gSpit.whileTrue(s_grabber.spitCommand());
 
-    oi_defaultPosition.onTrue(new ExtendToDefault(s_arm, s_grabber));
-    oi_cone1Place.onTrue(new ExtendToFirstCone(s_arm).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-    oi_cone2Place.onTrue(new ExtendToSecondCone(s_arm).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-    oi_cube1Place.onTrue(new ExtendToFirstCube(s_arm).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-    oi_cube2Place.onTrue(new ExtendToSecondCube(s_arm).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    oi_defaultPosition.onTrue(s_arm.moveToDefault());
+    oi_cone1Place.onTrue(s_arm.moveArmTo(Constants.FIRST_CONE_ANGLE, Constants.FIRST_CONE_EXTENSION).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    oi_cone2Place.onTrue(s_arm.moveArmTo(Constants.SECOND_CONE_ANGLE, Constants.SECOND_CONE_EXTENSION).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    oi_cube1Place.onTrue(s_arm.moveArmTo(Constants.FIRST_CUBE_ANGLE, Constants.FIRST_CUBE_EXTENSION).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    oi_cube2Place.onTrue(s_arm.moveArmTo(Constants.SECOND_CUBE_ANGLE, Constants.SECOND_CUBE_EXTENSION).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
   }
 
   /**

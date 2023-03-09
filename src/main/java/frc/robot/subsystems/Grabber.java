@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.subGrabber.G_Hopper;
 import frc.robot.subsystems.subGrabber.G_Intake;
@@ -76,5 +78,21 @@ public class Grabber extends SubsystemBase {
 
   public void startSpit() {
     intake.spit();
+  }
+
+  public Command intakeCommand() {
+    return Commands.startEnd(this::startIntake, this::stopIntake, getIntake());
+  }
+
+  public Command spitCommand() {
+    return Commands.startEnd(this::startSpit, this::stopIntake, getIntake());
+  }
+
+  public Command toggleCompressorCommand() {
+    return Commands.startEnd(this::turnCompressorOn, this::turnCompressorOff);
+  }
+
+  public Command toggleGrabberCommand() {
+    return Commands.startEnd(this::pneumaticsClose, this::pneumaticsOpen, getHopper());
   }
 }

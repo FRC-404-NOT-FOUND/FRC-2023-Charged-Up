@@ -5,8 +5,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,11 +18,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.drive.MecanumDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Limelight;
@@ -45,10 +52,10 @@ public class Drivetrain extends SubsystemBase {
     Constants.BACK_RIGHT_WHEEL_TO_CENTER
   );
 
-  private PIDController frontLeftMotorPID = new PIDController(Constants.FRONT_LEFT_MOTOR_KP, 0.0, Constants.FRONT_LEFT_MOTOR_KD);
-  private PIDController frontRightMotorPID = new PIDController(Constants.FRONT_RIGHT_MOTOR_KP, 0.0, Constants.FRONT_RIGHT_MOTOR_KD);
-  private PIDController backLeftMotorPID = new PIDController(Constants.BACK_LEFT_MOTOR_KP, 0.0, Constants.BACK_LEFT_MOTOR_KD);
-  private PIDController backRightMotorPID = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, 0.0, Constants.BACK_RIGHT_MOTOR_KD);
+  private PIDController frontLeftMotorPID = new PIDController(Constants.FRONT_LEFT_MOTOR_KP, Constants.FRONT_LEFT_MOTOR_KI, Constants.FRONT_LEFT_MOTOR_KD);
+  private PIDController frontRightMotorPID = new PIDController(Constants.FRONT_RIGHT_MOTOR_KP, Constants.FRONT_RIGHT_MOTOR_KI, Constants.FRONT_RIGHT_MOTOR_KD);
+  private PIDController backLeftMotorPID = new PIDController(Constants.BACK_LEFT_MOTOR_KP, Constants.BACK_LEFT_MOTOR_KI, Constants.BACK_LEFT_MOTOR_KD);
+  private PIDController backRightMotorPID = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, Constants.BACK_RIGHT_MOTOR_KI, Constants.BACK_RIGHT_MOTOR_KD);
 
 
   /*
@@ -152,7 +159,48 @@ public class Drivetrain extends SubsystemBase {
     super.setDefaultCommand(defaultCommand);
   }
 
-  // The IDEAL version of mecanum Drive. Does not inplement wheelSpeed Offsets.
+  // Drives the robot along the given path
+  public Command followPath(String path) {
+    return new PPMecanumControllerCommand(
+      PathPlanner.loadPath(path, new PathConstraints(3, 2)),                               //PathPlannerTrajectory
+      () -> getCurrentPose(),        //Pose Supplier (GETS THE CURRENT POSE EVERY TIME)
+      getKinematics(),               //Kinematics of robot
+      //X and Y PID COntrollers, using 0 for all uses feedforwards, TO BE TUNED in Constants
+      new PIDController(Constants.DRIVETRAIN_TRANSFORM_KPx, Constants.DRIVETRAIN_TRANSFORM_KIx, Constants.DRIVETRAIN_TRANSFORM_KDx),
+      new PIDController(Constants.DRIVETRAIN_TRANSFORM_KPy, Constants.DRIVETRAIN_TRANSFORM_KIy, Constants.DRIVETRAIN_TRANSFORM_KDy), 
+      //Rotation PID controller, using 0 for all uses feedforwards, TO BE TUNED in Constants
+      new PIDController(Constants.DRIVETRAIN_ROTATE_KP, Constants.DRIVETRAIN_ROTATE_KI, Constants.DRIVETRAIN_ROTATE_KD),
+      Constants.MAX_AUTONOMOUS_WHEEL_SPEED,     //Max Wheel Speed
+      output -> { setKinematicWheelSpeeds(output); },
+      this                            //Requirements
+    );
+  }
+
+  // Attempts to balance the robot on the charge station
+  public Command balance() {
+    return new ProfiledPIDCommand(
+      // The ProfiledPIDController used by the command
+      new ProfiledPIDController(
+          // The PID gains
+          Constants.DRIVETRAIN_TRANSFORM_KPx,
+          Constants.DRIVETRAIN_TRANSFORM_KIx,
+          Constants.DRIVETRAIN_TRANSFORM_KDx,
+          // The motion profile constraints
+          new TrapezoidProfile.Constraints(Constants.MAX_AUTONOMOUS_WHEEL_SPEED, Constants.MAX_AUTONOMOUS_WHEEL_ACCEL)),
+      // This should return the measurement
+      () -> imu.getGyroPitch(),
+      // This should return the goal (can also be a constant)
+      // Tl;dr THIS IS THE TARGET, and the pitch should be zero (or close to it.).
+      () -> new TrapezoidProfile.State(),
+      // This uses the output
+      (output, setpoint) -> {
+        // Use the output (and setpoint, if desired) here
+        setWheelSpeeds(new WheelSpeeds(output, output, output, output));
+      }
+    );
+  }
+
+  // The IDEAL version of mecanum Drive. Does not implement wheelSpeed Offsets.
   // Automatically sets wheels within this method, doesn't return anything.
   // Positive Directions:
   // XSpeed = forward, YSpeed = Left, zRotation = CCW

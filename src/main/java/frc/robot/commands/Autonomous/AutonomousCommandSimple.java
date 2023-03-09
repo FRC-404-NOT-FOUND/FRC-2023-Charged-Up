@@ -2,12 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Autonomous;
+package frc.robot.commands.autonomous;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -21,8 +17,6 @@ public class AutonomousCommandSimple extends SequentialCommandGroup {
   public AutonomousCommandSimple(Drivetrain drivetrain, Arm arm, Grabber grabber) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new DriveAlongPath(PathPlanner.loadPath("Autonomous Plan", new PathConstraints(1, 0.5)), drivetrain, isFinished())
-    );
+    addCommands(drivetrain.followPath("Autonomous Plan"));
   }
 }

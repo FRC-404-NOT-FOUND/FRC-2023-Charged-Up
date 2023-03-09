@@ -9,7 +9,6 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
@@ -20,10 +19,10 @@ public class TestDrivetrainPID extends CommandBase {
   
   public PIDController pid = new PIDController(0, 0, 0);
 
-  public PIDController pid_FL = new PIDController(Constants.FRONT_LEFT_MOTOR_KP, 0, Constants.FRONT_LEFT_MOTOR_KD);
-  public PIDController pid_FR = new PIDController(Constants.FRONT_RIGHT_MOTOR_KP, 0, Constants.FRONT_RIGHT_MOTOR_KD);
-  public PIDController pid_BL = new PIDController(Constants.BACK_LEFT_MOTOR_KP, 0, Constants.BACK_LEFT_MOTOR_KD);
-  public PIDController pid_BR = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, 0, Constants.BACK_RIGHT_MOTOR_KD);
+  public PIDController pid_FL = new PIDController(Constants.FRONT_LEFT_MOTOR_KP, Constants.FRONT_LEFT_MOTOR_KI, Constants.FRONT_LEFT_MOTOR_KD);
+  public PIDController pid_FR = new PIDController(Constants.FRONT_RIGHT_MOTOR_KP, Constants.FRONT_RIGHT_MOTOR_KI, Constants.FRONT_RIGHT_MOTOR_KD);
+  public PIDController pid_BL = new PIDController(Constants.BACK_LEFT_MOTOR_KP, Constants.BACK_LEFT_MOTOR_KI, Constants.BACK_LEFT_MOTOR_KD);
+  public PIDController pid_BR = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, Constants.BACK_RIGHT_MOTOR_KI, Constants.BACK_RIGHT_MOTOR_KD);
 
   public GenericEntry Velocity = tab.add("SetpointVelocity", 0)
     .withWidget(BuiltInWidgets.kNumberSlider)
