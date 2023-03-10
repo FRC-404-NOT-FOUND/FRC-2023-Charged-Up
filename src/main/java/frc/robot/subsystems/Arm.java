@@ -70,16 +70,16 @@ public class Arm extends SubsystemBase {
 
   public Command raiseContinuousCommand(DoubleSupplier d) {
     return Commands.startEnd(
-      () -> getPivot().pivotMotor.set(d.getAsDouble()),
-      () -> getPivot().pivotMotor.set(0),
+      () -> getPivot().setMotorWheel(d.getAsDouble()),
+      () -> getPivot().setMotorWheel(0),
       getPivot()
     );
   }
 
   public Command lowerContinuousCommand(DoubleSupplier d) {
     return Commands.startEnd(
-      () -> getPivot().pivotMotor.set(-d.getAsDouble()),
-      () -> getPivot().pivotMotor.set(0),
+      () -> getPivot().setMotorWheel(-d.getAsDouble()),
+      () -> getPivot().setMotorWheel(0),
       getPivot()
     );
   }
@@ -87,7 +87,7 @@ public class Arm extends SubsystemBase {
   public Command extendArmTo(double d) {
     return Commands.startEnd(
       () -> getExtension().getPIDController().setReference(d, ControlType.kPosition),
-      () -> getExtension().motorWheel.stopMotor(),
+      () -> getExtension().setMotorWheel(0),
       getExtension()
     );
   }
@@ -95,7 +95,7 @@ public class Arm extends SubsystemBase {
   public Command pivotArmTo(double d) {
     return Commands.startEnd(
       () -> getPivot().getPIDController().setReference(d, ControlType.kPosition),
-      () -> getPivot().pivotMotor.stopMotor(),
+      () -> getPivot().setMotorWheel(0),
       getPivot()
     );
   }

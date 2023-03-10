@@ -31,6 +31,10 @@ public class A_Pivot extends SubsystemBase {
     return encoder.getVelocity();
   }
 
+  public void setMotorWheel(double d) {
+    pivotMotor.set(d);
+  }
+
   public SparkMaxPIDController getPIDController(){
     return pid;
   }
