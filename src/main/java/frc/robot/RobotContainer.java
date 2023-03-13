@@ -36,8 +36,19 @@ public class RobotContainer {
     s_drivetrain, 
     () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
     () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
-    () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X)
+    () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X),
+    true
   );
+
+  private final MecanumDrive mecanumDriveFine = new MecanumDrive(
+    s_drivetrain, 
+    () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X) * Constants.DRIVETRAIN_FINE_CONTROL, 
+    () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y) * Constants.DRIVETRAIN_FINE_CONTROL,
+    () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X) * Constants.DRIVETRAIN_FINE_CONTROL,
+    false
+  );
+
+  private final Trigger oi_driveFine = new Trigger(() -> OI.gamepad.getLeftStickButton());
 
   //OI and Buttons
   private final Trigger oi_aExtend = new Trigger(() -> OI.gamepad.getRightBumper());
@@ -99,6 +110,9 @@ public class RobotContainer {
 
     oi_gSucc.whileTrue(s_grabber.intakeCommand());
     oi_gSpit.whileTrue(s_grabber.spitCommand());
+
+    //Toggles Fine Control
+    oi_driveFine.toggleOnTrue(mecanumDriveFine);
 
     oi_defaultPosition.onTrue(s_arm.moveToDefault());
     oi_cone1Place.onTrue(s_arm.moveArmTo(Constants.FIRST_CONE_ANGLE, Constants.FIRST_CONE_EXTENSION).withInterruptBehavior(InterruptionBehavior.kCancelSelf));

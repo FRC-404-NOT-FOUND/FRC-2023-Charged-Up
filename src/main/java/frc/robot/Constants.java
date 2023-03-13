@@ -72,11 +72,14 @@ public final class Constants {
     public static final double BACK_LEFT_MOTOR_SPEED_OFFSET = 1.0;
     public static final double BACK_RIGHT_MOTOR_SPEED_OFFSET = 0.60;
 
-    //Kinematics (THESE WILL NEED TO BE DEFINED)
+    //Fine Control Constant
+    public static final double DRIVETRAIN_FINE_CONTROL = 0.25;
+
+    //Kinematics
     public static Translation2d FRONT_LEFT_WHEEL_TO_CENTER = new Translation2d(0.259, 0.262);
-    public static Translation2d FRONT_RIGHT_WHEEL_TO_CENTER = new Translation2d(0.259, -0.262);;
-    public static Translation2d BACK_LEFT_WHEEL_TO_CENTER = new Translation2d(-0.259, 0.262);;
-    public static Translation2d BACK_RIGHT_WHEEL_TO_CENTER= new Translation2d(-0.259, -0.262);;
+    public static Translation2d FRONT_RIGHT_WHEEL_TO_CENTER = new Translation2d(0.259, -0.262);
+    public static Translation2d BACK_LEFT_WHEEL_TO_CENTER = new Translation2d(-0.259, 0.262);
+    public static Translation2d BACK_RIGHT_WHEEL_TO_CENTER= new Translation2d(-0.259, -0.262);
 
     //IMU
     public static final int SERIAL_BAUD_RATE = 9600;

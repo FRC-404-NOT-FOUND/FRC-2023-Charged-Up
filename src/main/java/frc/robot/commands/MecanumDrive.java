@@ -14,12 +14,14 @@ public class MecanumDrive extends CommandBase {
   Supplier<Double> horizontalFunction;
   Supplier<Double> verticalFunction;
   Supplier<Double> pivotFunction;
+  boolean isSquared;
 
-  public MecanumDrive(Drivetrain d, Supplier<Double> h, Supplier<Double> v, Supplier<Double> p) {
+  public MecanumDrive(Drivetrain d, Supplier<Double> h, Supplier<Double> v, Supplier<Double> p, boolean squared) {
     drivetrain = d;
     horizontalFunction = h;
     verticalFunction = v;
     pivotFunction = p;
+    isSquared = squared;
 
     addRequirements(d);
   }
@@ -32,9 +34,9 @@ public class MecanumDrive extends CommandBase {
     double v = verticalFunction.get();
     double z = pivotFunction.get();
 
-    System.out.println("Horiz:" + h);
-    System.out.println("Vert:" + v);
-    System.out.println("Pivot:" + z);
+    // System.out.println("Horiz:" + h);
+    // System.out.println("Vert:" + v);
+    // System.out.println("Pivot:" + z);
 
     double horizontalSign = h / Math.abs(h);
     double verticalSign = v / Math.abs(v);
@@ -44,7 +46,13 @@ public class MecanumDrive extends CommandBase {
     double vertical = v * v;
     double pivot = pivotFunction.get();
 
-    drivetrain.driveCartesian(-(vertical * verticalSign), horizontal * horizontalSign, pivot);
+    if(!isSquared){
+      drivetrain.driveCartesian(v, h, z);
+    }
+    else{
+      drivetrain.driveCartesian(-(vertical * verticalSign), horizontal * horizontalSign, pivot);
+    }
+    
     // drivetrain.driveCartesian(vertical, horizontal, pivot);
   }
 
