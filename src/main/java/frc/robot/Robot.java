@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     testCommand = new TestPathPID(m_robotContainer.getDrivetrain());
     PathPlannerServer.startServer(8888);
+    m_robotContainer.getGrabber().turnCompressorOn();
     System.out.println("Robot Inited");
   }
 

@@ -85,14 +85,14 @@ public class Arm extends SubsystemBase {
   }
 
   public Command extendArmTo(double d) {
-    return Commands.run(
+    return Commands.runOnce(
       () -> getExtension().getPIDController().setReference(d, ControlType.kPosition),
       getExtension()
     );
   }
 
   public Command pivotArmTo(double d) {
-    return Commands.run(
+    return Commands.runOnce(
       () -> getPivot().getPIDController().setReference(d, ControlType.kPosition),
       getPivot()
     );
