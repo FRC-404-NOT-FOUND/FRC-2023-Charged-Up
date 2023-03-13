@@ -93,7 +93,8 @@ public class RobotContainer {
     oi_aRaise.whileTrue(s_arm.raiseContinuousCommand(() -> OI.gamepad.getRightTriggerAxis()));
     oi_aLower.whileTrue(s_arm.lowerContinuousCommand(() -> OI.gamepad.getLeftTriggerAxis()));
 
-    oi_gCompressorToggle.toggleOnFalse(s_grabber.toggleCompressorCommand());
+    s_grabber.turnCompressorOn();
+    // oi_gCompressorToggle.toggleOnFalse(s_grabber.toggleCompressorCommand());
     oi_gPneumaticsToggle.toggleOnTrue(s_grabber.toggleGrabberCommand());
 
     oi_gSucc.whileTrue(s_grabber.intakeCommand());

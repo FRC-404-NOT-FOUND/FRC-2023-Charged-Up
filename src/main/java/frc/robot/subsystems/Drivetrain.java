@@ -154,6 +154,15 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumberArray("Botpose TargetSpace", Limelight.getTableEntry("botpose_targetspace").getDoubleArray(new double[6]));
   }
 
+  // DO NOT USE EXCEPT IN TEST!!!
+  public void resetOdometry() {
+    frontLeftEncoder.setPosition(0);
+    frontRightEncoder.setPosition(0);
+    backLeftEncoder.setPosition(0);
+    backRightEncoder.setPosition(0);
+    poseEstimator.resetPosition(new Rotation2d(), new MecanumDriveWheelPositions(), new Pose2d());
+  }
+
   @Override
   public void setDefaultCommand(Command defaultCommand) {
     super.setDefaultCommand(defaultCommand);
@@ -170,7 +179,7 @@ public class Drivetrain extends SubsystemBase {
       new PIDController(Constants.DRIVETRAIN_TRANSFORM_KPy, Constants.DRIVETRAIN_TRANSFORM_KIy, Constants.DRIVETRAIN_TRANSFORM_KDy), 
       //Rotation PID controller, using 0 for all uses feedforwards, TO BE TUNED in Constants
       new PIDController(Constants.DRIVETRAIN_ROTATE_KP, Constants.DRIVETRAIN_ROTATE_KI, Constants.DRIVETRAIN_ROTATE_KD),
-      Constants.MAX_AUTONOMOUS_WHEEL_SPEED,     //Max Wheel Speed
+      4,     //Max Wheel Speed
       output -> { setKinematicWheelSpeeds(output); },
       this                            //Requirements
     );
@@ -186,7 +195,7 @@ public class Drivetrain extends SubsystemBase {
           Constants.DRIVETRAIN_TRANSFORM_KIx,
           Constants.DRIVETRAIN_TRANSFORM_KDx,
           // The motion profile constraints
-          new TrapezoidProfile.Constraints(Constants.MAX_AUTONOMOUS_WHEEL_SPEED, Constants.MAX_AUTONOMOUS_WHEEL_ACCEL)),
+          new TrapezoidProfile.Constraints(Constants.MAX_AUTONOMOUS_WHEEL_VELOCITY, Constants.MAX_AUTONOMOUS_WHEEL_ACCEL)),
       // This should return the measurement
       () -> imu.getGyroPitch(),
       // This should return the goal (can also be a constant)

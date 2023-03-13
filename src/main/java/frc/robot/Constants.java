@@ -56,7 +56,7 @@ public final class Constants {
     public static final double DRIVETRAIN_ROTATE_KP = 0.0;
     public static final double DRIVETRAIN_ROTATE_KI = 0.0;
     public static final double DRIVETRAIN_ROTATE_KD = 0.0;
-    public static final double MAX_AUTONOMOUS_WHEEL_SPEED = 2.0; //In Meters per Second
+    public static final double MAX_AUTONOMOUS_WHEEL_VELOCITY = 2.0; //In Meters per Second
     public static final double MAX_AUTONOMOUS_WHEEL_ACCEL = 1.0;
 
     //radius in meters

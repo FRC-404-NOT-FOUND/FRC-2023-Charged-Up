@@ -85,17 +85,15 @@ public class Arm extends SubsystemBase {
   }
 
   public Command extendArmTo(double d) {
-    return Commands.startEnd(
+    return Commands.run(
       () -> getExtension().getPIDController().setReference(d, ControlType.kPosition),
-      () -> getExtension().setMotorWheel(0),
       getExtension()
     );
   }
 
   public Command pivotArmTo(double d) {
-    return Commands.startEnd(
+    return Commands.run(
       () -> getPivot().getPIDController().setReference(d, ControlType.kPosition),
-      () -> getPivot().setMotorWheel(0),
       getPivot()
     );
   }

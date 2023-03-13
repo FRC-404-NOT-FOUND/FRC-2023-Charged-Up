@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.TestDrivetrainPID;
+import frc.robot.commands.TestPathPID;
 import frc.robot.subsystems.IMU;
 
 public class Robot extends TimedRobot {
@@ -31,7 +32,7 @@ public class Robot extends TimedRobot {
     imu.connectDevices();
     //imu.connectArduino();
     m_robotContainer = new RobotContainer();
-    testCommand = new TestDrivetrainPID(m_robotContainer.getDrivetrain());
+    testCommand = new TestPathPID(m_robotContainer.getDrivetrain());
     PathPlannerServer.startServer(8888);
     System.out.println("Robot Inited");
   }
