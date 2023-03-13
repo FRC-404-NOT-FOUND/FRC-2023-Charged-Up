@@ -15,8 +15,6 @@ import frc.robot.Limelight;
 
 //X = Forward
 public class MoveToAprilTagX extends PIDCommand {
-  
-
   public MoveToAprilTagX() {
     super(
         // The controller that the command will use

@@ -29,6 +29,10 @@ public class TestPathPID extends CommandBase {
   .withWidget(BuiltInWidgets.kToggleButton)
   .getEntry();
 
+  public GenericEntry path = tab.add("Path", "Horizontal")
+    .withWidget(BuiltInWidgets.kComboBoxChooser)
+    .getEntry();
+
   public boolean isFollowing = false;
   
   public PIDController horizontalPID = new PIDController(0, 0, 0);
@@ -63,7 +67,7 @@ public class TestPathPID extends CommandBase {
   public void execute() {
     if (!isFollowing) {
       var followCommand = new PPMecanumControllerCommand(
-        PathPlanner.loadPath("Autonomous Plan", new PathConstraints(velocity.getDouble(0), accel.getDouble(0))),                               //PathPlannerTrajectory
+        PathPlanner.loadPath(path.getString("Horizontal"), new PathConstraints(velocity.getDouble(0), accel.getDouble(0))),                               //PathPlannerTrajectory
         () -> drivetrain.getCurrentPose(),        //Pose Supplier (GETS THE CURRENT POSE EVERY TIME)
         drivetrain.getKinematics(),               //Kinematics of robot
         //X and Y PID COntrollers, using 0 for all uses feedforwards, TO BE TUNED in Constants

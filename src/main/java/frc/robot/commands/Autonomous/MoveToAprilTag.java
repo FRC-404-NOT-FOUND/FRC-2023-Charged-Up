@@ -26,35 +26,34 @@ public class MoveToAprilTag extends CommandBase {
       new MoveToAprilTagY(), 
       new RotateToAprilTag()
     );
-
-    pid.addRequirements(d);
-
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     System.out.println("Attempting Approach");
+    
 
     Limelight.setAprilTag(0);
-    pid.initialize();
+    if(Limelight.isValidTarget()){
+      pid.schedule();
+    }
+    else{
+      System.out.println("No AprilTag Found!");
+      cancel();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Limelight.isValidTarget()){
-      pid.execute();
-      drivetrain.driveCartesian(Constants.aprilTagMoveX, Constants.aprilTagMoveY, Constants.aprilTagRotate);
-    }
-    else{
-      end(false);
-    }
+    drivetrain.driveCartesian(Constants.aprilTagMoveX, Constants.aprilTagMoveY, Constants.aprilTagRotate);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Stopped moving to AprilTag");
     pid.end(interrupted);
     Constants.aprilTagMoveX = 0;
     Constants.aprilTagMoveY = 0;

@@ -47,15 +47,15 @@ public final class Constants {
     //  https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-feedforward.html#the-permanent-magnet-dc-motor-feedforward-equation
 
     //General Drivetrain PID (from Cartesian movement)
-    public static final double DRIVETRAIN_TRANSFORM_KPx = 0.01;
+    public static final double DRIVETRAIN_TRANSFORM_KPx = 0.1;
     public static final double DRIVETRAIN_TRANSFORM_KIx = 0.0;
-    public static final double DRIVETRAIN_TRANSFORM_KDx = 0.0;
-    public static final double DRIVETRAIN_TRANSFORM_KPy = 0.03; //This may have to be negative to make it go towards the horizontal "line"
+    public static final double DRIVETRAIN_TRANSFORM_KDx = 0.001;
+    public static final double DRIVETRAIN_TRANSFORM_KPy = 0.1; //This may have to be negative to make it go towards the horizontal "line"
     public static final double DRIVETRAIN_TRANSFORM_KIy = 0.0;
-    public static final double DRIVETRAIN_TRANSFORM_KDy = 0.0;
-    public static final double DRIVETRAIN_ROTATE_KP = 0.0;
+    public static final double DRIVETRAIN_TRANSFORM_KDy = 0.001;
+    public static final double DRIVETRAIN_ROTATE_KP = 0.01;
     public static final double DRIVETRAIN_ROTATE_KI = 0.0;
-    public static final double DRIVETRAIN_ROTATE_KD = 0.0;
+    public static final double DRIVETRAIN_ROTATE_KD = 0.001;
     public static final double MAX_AUTONOMOUS_WHEEL_VELOCITY = 2.0; //In Meters per Second
     public static final double MAX_AUTONOMOUS_WHEEL_ACCEL = 1.0;
 
@@ -108,15 +108,15 @@ public final class Constants {
     public static final int PIVOT_MAX_POSITION = 500;
 
     //Positions
-    public static final int FIRST_CONE_ANGLE = 420;
+    public static final int FIRST_CONE_ANGLE = 126;
     public static final int FIRST_CONE_EXTENSION = 42;
-    public static final int SECOND_CONE_ANGLE = 505;
+    public static final int SECOND_CONE_ANGLE = 142;
     public static final int SECOND_CONE_EXTENSION = 200;
-    public static final int FIRST_CUBE_ANGLE = 355;
+    public static final int FIRST_CUBE_ANGLE = 95;
     public static final int FIRST_CUBE_EXTENSION = 25;
-    public static final int SECOND_CUBE_ANGLE = 455;
+    public static final int SECOND_CUBE_ANGLE = 130;
     public static final int SECOND_CUBE_EXTENSION = 160;
-    public static final int DEFAULT_ANGLE = 150;
+    public static final int DEFAULT_ANGLE = 32;
     public static final int DEFAULT_EXTENSION = 50;
 
 

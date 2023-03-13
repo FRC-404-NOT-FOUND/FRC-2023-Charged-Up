@@ -7,10 +7,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ArmRaiseContinuous;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.commands.autonomous.AutonomousCommandSimple;
+import frc.robot.commands.autonomous.MoveToAprilTag;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -63,11 +67,12 @@ public class RobotContainer {
   private final Trigger oi_cone1Place = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
   private final Trigger oi_cone2Place = new Trigger(() -> OI.gamepad.getPOV() == 0 ? true : false);
   
-
-  private final Trigger oi_gCompressorToggle = new Trigger(() -> OI.gamepad.getStartButton());
   private final Trigger oi_gPneumaticsToggle = new Trigger(() -> OI.gamepad.getXButton());
-  private final Trigger oi_gSucc = new Trigger(() -> OI.gamepad.getAButton());
-  private final Trigger oi_gSpit = new Trigger(() -> OI.gamepad.getBButton());
+  private final Trigger oi_gToggleCone = new Trigger(() -> OI.gamepad.getAButton());
+  private final Trigger oi_gToggleCube = new Trigger(() -> OI.gamepad.getBButton());
+
+  private final Trigger oi_moveToAprilTag = new Trigger(() -> OI.gamepad.getRightStickButton());
+  private boolean shouldStart = true;
 
  // private final Trigger oi_iArduinoReconnect = new Trigger(() -> OI.gamepad.getBackButtonPressed());
   
@@ -101,18 +106,20 @@ public class RobotContainer {
     oi_aExtend.whileTrue(s_arm.extendContinuousCommand());
     oi_aRetract.whileTrue(s_arm.retractContinuousCommand());
 
-    oi_aRaise.whileTrue(s_arm.raiseContinuousCommand(() -> OI.gamepad.getRightTriggerAxis()));
-    oi_aLower.whileTrue(s_arm.lowerContinuousCommand(() -> OI.gamepad.getLeftTriggerAxis()));
+    oi_aRaise.whileTrue(new ArmRaiseContinuous(s_arm, OI.gamepad::getRightTriggerAxis));
+    oi_aLower.whileTrue(new ArmRaiseContinuous(s_arm, () -> -OI.gamepad.getLeftTriggerAxis()));
 
-    s_grabber.turnCompressorOn();
     // oi_gCompressorToggle.toggleOnFalse(s_grabber.toggleCompressorCommand());
     oi_gPneumaticsToggle.toggleOnTrue(s_grabber.toggleGrabberCommand());
 
-    oi_gSucc.whileTrue(s_grabber.intakeCommand());
-    oi_gSpit.whileTrue(s_grabber.spitCommand());
+    oi_gToggleCone.toggleOnTrue(s_grabber.toggleConeCommand());
+    oi_gToggleCube.toggleOnTrue(s_grabber.toggleCubeCommand());
 
     //Toggles Fine Control
     oi_driveFine.toggleOnTrue(mecanumDriveFine);
+
+    var aprilTag = new MoveToAprilTag(s_drivetrain);
+    oi_moveToAprilTag.toggleOnTrue(new ConditionalCommand(aprilTag, Commands.run(() -> aprilTag.cancel()), () -> shouldStart).finallyDo((interruped) -> shouldStart = !shouldStart));
 
     oi_defaultPosition.onTrue(s_arm.moveToDefault());
     oi_cone1Place.onTrue(s_arm.moveArmTo(Constants.FIRST_CONE_ANGLE, Constants.FIRST_CONE_EXTENSION).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
