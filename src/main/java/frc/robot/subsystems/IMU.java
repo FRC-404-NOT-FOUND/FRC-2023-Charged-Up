@@ -137,6 +137,14 @@ public class IMU extends SubsystemBase {
     return devicesConnected && gyro.isConnected();
   }
 
+  public double getGyroRate() {
+    if (isGyroReady()) {
+      return gyro.getRate();
+    }
+
+    return 0.0;
+  }
+
   public double getGyroYaw(){
     if (isGyroReady()) {
       return gyro.getAngle();

@@ -22,9 +22,9 @@ public class RotateToAprilTag extends PIDCommand {
           Constants.DRIVETRAIN_ROTATE_KD
         ),
       // This should return the measurement
-      () -> Limelight.getTableEntry("tx").getDouble(0.0),
+      () -> Limelight.getTableEntry("botpose_targetspace").getDoubleArray(new double[6])[5],
       // This should return the setpoint (can also be a constant)
-      () -> 0.0,
+      0,
       // This uses the output
       output -> {
         Constants.aprilTagRotate = -output;
@@ -32,7 +32,7 @@ public class RotateToAprilTag extends PIDCommand {
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
     getController().enableContinuousInput(-29.8, 29.8);
-    getController().setTolerance(0.05);
+    getController().setTolerance(0.05, 0.1);
   }
 
   // Returns true when the command should end.

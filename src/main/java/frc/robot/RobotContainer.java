@@ -91,14 +91,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // oi_cubePlace.onTrue(new MoveToAprilTag(s_drivetrain));
-    // oi_cubePlace.onFalse(new MecanumDrive(
-    //   s_drivetrain, 
-    //   () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_X), 
-    //   () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_LEFT_STICK_Y),
-    //   () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X)
-    // ));
-
     // oi_iArduinoReconnect.whileTrue(imu.reconnectArduino());
 
     oi_aExtend.whileTrue(s_arm.extendContinuousCommand());

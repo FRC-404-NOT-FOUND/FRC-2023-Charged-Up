@@ -9,13 +9,16 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
@@ -57,6 +60,7 @@ public class Drivetrain extends SubsystemBase {
   private PIDController frontRightMotorPID = new PIDController(Constants.FRONT_RIGHT_MOTOR_KP, Constants.FRONT_RIGHT_MOTOR_KI, Constants.FRONT_RIGHT_MOTOR_KD);
   private PIDController backLeftMotorPID = new PIDController(Constants.BACK_LEFT_MOTOR_KP, Constants.BACK_LEFT_MOTOR_KI, Constants.BACK_LEFT_MOTOR_KD);
   private PIDController backRightMotorPID = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, Constants.BACK_RIGHT_MOTOR_KI, Constants.BACK_RIGHT_MOTOR_KD);
+  private SimpleMotorFeedforward ff = new SimpleMotorFeedforward(Constants.DRIVETRAIN_FF_KS, Constants.DRIVETRAIN_FF_KV, Constants.DRIVETRAIN_FF_KA);
 
   private MecanumDrive mDrive;
 
@@ -124,17 +128,15 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Robot Pose X", getCurrentPose().getX());
     SmartDashboard.putNumber("Robot Pose Y", getCurrentPose().getY());
     SmartDashboard.putNumber("Robot Pose Rotation", getCurrentPose().getRotation().getDegrees());
-
-    SmartDashboard.putNumberArray("Botpose TargetSpace", Limelight.getTableEntry("botpose_targetspace").getDoubleArray(new double[6]));
   }
 
   // DO NOT USE EXCEPT IN TEST!!!
-  public void resetOdometry() {
+  public void resetOdometry(Pose2d pose) {
     frontLeftEncoder.setPosition(0);
     frontRightEncoder.setPosition(0);
     backLeftEncoder.setPosition(0);
     backRightEncoder.setPosition(0);
-    poseEstimator.resetPosition(new Rotation2d(), new MecanumDriveWheelPositions(), new Pose2d());
+    poseEstimator.resetPosition(new Rotation2d(), new MecanumDriveWheelPositions(), pose);
   }
 
   @Override
@@ -188,17 +190,29 @@ public class Drivetrain extends SubsystemBase {
   // Positive Directions:
   // XSpeed = forward, YSpeed = Left, zRotation = CCW
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
-    mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
-    // var speeds = driveCartesianIK(xSpeed, ySpeed, zRotation);
-    // var mecSpeeds = new MecanumDriveWheelSpeeds(speeds.frontLeft, speeds.frontRight, speeds.rearLeft, speeds.rearRight);
-    // setKinematicWheelSpeeds(mecSpeeds);
+    driveCartesian(xSpeed, ySpeed, zRotation, false);
   }
 
-  //Returns the wheelSpeeds (From -1 to 1.) from the parameters.
-  public MecanumDrive.WheelSpeeds driveCartesianIK(double xSpeed, double ySpeed, double zRotation) {
-    MecanumDrive.WheelSpeeds wheelSpeeds = MecanumDrive.driveCartesianIK(xSpeed, ySpeed, zRotation);
+  public void driveCartesian(double xSpeed, double ySpeed, double zRotation, boolean fieldRelative) {
+    xSpeed = MathUtil.applyDeadband(xSpeed, 0.1);
+    ySpeed = MathUtil.applyDeadband(ySpeed, 0.1);
+    zRotation = MathUtil.applyDeadband(zRotation, 0.1);
 
-    return wheelSpeeds;
+    var speeds = kinematics.toWheelSpeeds(
+      fieldRelative ?
+        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zRotation, getGyroAngle()) :
+        new ChassisSpeeds(xSpeed, ySpeed, zRotation)
+    );
+
+    speeds.frontLeftMetersPerSecond *= 4.5;
+    speeds.frontRightMetersPerSecond *= 4.5;
+    speeds.rearLeftMetersPerSecond *= 4.5;
+    speeds.rearRightMetersPerSecond *= 4.5;
+    speeds.desaturate(4.5);
+
+    setKinematicWheelSpeeds(speeds);
+    mDrive.feed();
+    //mDrive.driveCartesian(xSpeed, ySpeed, zRotation, fieldRelative ? getGyroAngle() : new Rotation2d());
   }
   
   public MecanumDriveKinematics getKinematics(){
@@ -312,13 +326,25 @@ public class Drivetrain extends SubsystemBase {
     MecanumDriveWheelSpeeds currentWheelSpeeds = getKinematicWheelSpeeds();
 
     wheelSpeeds[0] =
-      frontLeftMotorPID.calculate(currentWheelSpeeds.frontLeftMetersPerSecond, kinematicWheelSpeeds.frontLeftMetersPerSecond*2.0);
+      frontLeftMotorPID.calculate(currentWheelSpeeds.frontLeftMetersPerSecond, kinematicWheelSpeeds.frontLeftMetersPerSecond*2.0)
+      + ff.calculate(kinematicWheelSpeeds.frontLeftMetersPerSecond);
     wheelSpeeds[1] = 
-      frontRightMotorPID.calculate(currentWheelSpeeds.frontRightMetersPerSecond, kinematicWheelSpeeds.frontRightMetersPerSecond*2.0);
+      frontRightMotorPID.calculate(currentWheelSpeeds.frontRightMetersPerSecond, kinematicWheelSpeeds.frontRightMetersPerSecond*2.0)
+      + ff.calculate(kinematicWheelSpeeds.frontRightMetersPerSecond);
     wheelSpeeds[2] =
-      backLeftMotorPID.calculate(currentWheelSpeeds.rearLeftMetersPerSecond, kinematicWheelSpeeds.rearLeftMetersPerSecond*2.0);
+      backLeftMotorPID.calculate(currentWheelSpeeds.rearLeftMetersPerSecond, kinematicWheelSpeeds.rearLeftMetersPerSecond*2.0)
+      + ff.calculate(kinematicWheelSpeeds.rearLeftMetersPerSecond);
     wheelSpeeds[3] =
-      backRightMotorPID.calculate(currentWheelSpeeds.rearRightMetersPerSecond, kinematicWheelSpeeds.rearRightMetersPerSecond*2.0);
+      backRightMotorPID.calculate(currentWheelSpeeds.rearRightMetersPerSecond, kinematicWheelSpeeds.rearRightMetersPerSecond*2.0)
+      + ff.calculate(kinematicWheelSpeeds.rearRightMetersPerSecond);
+
+    // for (var i = 0; i < wheelSpeeds.length; i++) {
+    //   if (wheelSpeeds[i] > 8) {
+    //     wheelSpeeds[i] = 8;
+    //   } else if (wheelSpeeds[i] < -8) {
+    //     wheelSpeeds[i] = -8;
+    //   }
+    // }
 
     setWheelVoltages(wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
   }
