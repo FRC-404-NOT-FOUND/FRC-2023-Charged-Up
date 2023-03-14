@@ -99,9 +99,7 @@ public class RobotContainer {
     //   () -> OI.gamepad.getRawAxis(Constants.GAMEPAD_RIGHT_STICK_X)
     // ));
 
-    // oi_iArduinoReconnect.whileTrue(new TryReconnectArduino(
-    //   imu
-    // ));
+    // oi_iArduinoReconnect.whileTrue(imu.reconnectArduino());
 
     oi_aExtend.whileTrue(s_arm.extendContinuousCommand());
     oi_aRetract.whileTrue(s_arm.retractContinuousCommand());

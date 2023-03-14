@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.subIMU.IMU_Gyroscope;
@@ -30,7 +31,7 @@ public class IMU extends SubsystemBase {
     return instance;
   }
 
-  public IMU(){}
+  private IMU(){}
 
   @Override
   public void periodic() {
@@ -108,6 +109,16 @@ public class IMU extends SubsystemBase {
         }
       }
     }
+  }
+
+  public Command reconnectAruino() {
+    return runOnce(() -> {
+      if(!isArduinoConnected()){
+        connectArduino();
+      } else {
+        System.out.println("Arduino is already connected dumbo.");
+      }
+    });
   }
 
   public boolean isArduinoConnected(){

@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
@@ -57,40 +58,6 @@ public class Drivetrain extends SubsystemBase {
   private PIDController backLeftMotorPID = new PIDController(Constants.BACK_LEFT_MOTOR_KP, Constants.BACK_LEFT_MOTOR_KI, Constants.BACK_LEFT_MOTOR_KD);
   private PIDController backRightMotorPID = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, Constants.BACK_RIGHT_MOTOR_KI, Constants.BACK_RIGHT_MOTOR_KD);
 
-
-  /*
-  //private MecanumDriveOdometry odometry;
-  //Rotation2d currentRot = new Rotation2d(0);
-  //Current pose = Odometry
-
-  // This plant holds a state-space model of our drivetrain. This system has the following properties:
-  //
-  // States: [x, y, theta], in meters/degrees.
-  // Inputs (what we can "put in"): [voltage], in volts.
-  // Outputs (what we can measure): [x, y, theta] in meters.
-  // private final LinearSystem<N2, N2, N2> m_mecanumLinearSystemPlant = LinearSystemId.createDrivetrainVelocitySystem(
-  //   DCMotor.getCIM(4), 
-  //   Constants.ROBOT_MASS_KG, 
-  //   Constants.DRIVETRAIN_WHEEL_RADIUS, 
-  //   Constants.FRONT_LEFT_WHEEL_TO_CENTER.getY(), 
-  //   0, 
-  //   0
-  // );
-
-  // //<State (of robot), Inputs (to plant), Outputs (From sensors)>
-  // //For more information check: 
-  // //    https://docs.wpilib.org/en/stable/docs/software/advanced-controls/state-space/state-space-observers.html
-  // private final KalmanFilter<N2, N2, N2> m_kalmanFilter =
-  //     new KalmanFilter<N2, N2, N2>(
-  //       Nat.N2(), //State: [X, Y, Heading]
-  //       Nat.N2(), //Output (From Limelight): [X, Y, Heading]
-  //       m_mecanumLinearSystemPlant,
-  //       null, 
-  //       null, 
-  //       0.02
-  //   );
-  */
-
   private MecanumDrive mDrive;
 
   private IMU imu;
@@ -116,7 +83,14 @@ public class Drivetrain extends SubsystemBase {
       initialPose = new Pose2d(); // Possibly replace with possible values for start positions based on the map
     }
 
-    poseEstimator = new MecanumDrivePoseEstimator(kinematics, getGyroAngle(), getKinematicWheelPositions(), initialPose);
+    poseEstimator = new MecanumDrivePoseEstimator(
+      kinematics,
+      getGyroAngle(),
+      getKinematicWheelPositions(),
+      initialPose,
+      VecBuilder.fill(0.2, 0.2, 0.2),
+      VecBuilder.fill(0.1, 0.1, 0.1)
+    );
   }
 
   @Override

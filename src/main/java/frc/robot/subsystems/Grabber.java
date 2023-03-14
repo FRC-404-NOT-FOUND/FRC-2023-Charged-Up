@@ -8,7 +8,6 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.subGrabber.G_Hopper;
 import frc.robot.subsystems.subGrabber.G_Intake;
@@ -41,16 +40,6 @@ public class Grabber extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  //Returns true if the pneumatics system is closed
-  public boolean pneumaticsCloseState(){
-    return hopper.pneumaticsCloseState();
-  }
-
-  //Returns true if the pneumatics system is open
-  public boolean pneumaticsOpenState(){
-    return hopper.pneumaticsOpenState();
-  }
-
   public G_Hopper getHopper(){
     return hopper;
   }
@@ -59,20 +48,8 @@ public class Grabber extends SubsystemBase {
     return intake;
   }
 
-  public void startIntake() {
-    intake.start(0.4);
-  }
-
-  public void stopIntake() {
-    intake.stop();
-  }
-
-  public void startSpit() {
-    intake.spit(0.1);
-  }
-
   public Command intakeCubeCommand() {
-    Debouncer debounce = new Debouncer(1, DebounceType.kRising);
+    Debouncer debounce = new Debouncer(0.5, DebounceType.kRising);
 
     return runOnce(() -> {
         debounce.calculate(false);
@@ -86,7 +63,7 @@ public class Grabber extends SubsystemBase {
   }
 
   public Command intakeConeCommand() {
-    Debouncer debounce = new Debouncer(1, DebounceType.kRising);
+    Debouncer debounce = new Debouncer(0.5, DebounceType.kRising);
 
     return runOnce(() -> {
         debounce.calculate(false);
@@ -105,7 +82,7 @@ public class Grabber extends SubsystemBase {
   }
 
   public Command ejectCubeCommand() {
-    return runOnce(() -> intake.spit(0.1))
+    return spitCommand(0.1)
       .andThen(Commands.waitSeconds(0.5))
       .finallyDo((interupped) -> {
         intake.stop();
@@ -114,11 +91,11 @@ public class Grabber extends SubsystemBase {
   }
 
   public Command toggleConeCommand() {
-    return new ConditionalCommand(ejectConeCommand(), intakeConeCommand(), () -> hasCone);
+    return Commands.either(ejectConeCommand(), intakeConeCommand(), () -> hasCone);
   }
 
   public Command toggleCubeCommand() {
-    return new ConditionalCommand(ejectCubeCommand(), intakeCubeCommand(), () -> hasCube);
+    return Commands.either(ejectCubeCommand(), intakeCubeCommand(), () -> hasCube);
   }
 
   public Command intakeCommand(double speed) {
@@ -127,10 +104,6 @@ public class Grabber extends SubsystemBase {
 
   public Command spitCommand(double speed) {
     return intake.spitCommand(speed);
-  }
-
-  public Command toggleCompressorCommand() {
-    return hopper.toggleCompressorCommand();
   }
 
   public Command toggleGrabberCommand() {

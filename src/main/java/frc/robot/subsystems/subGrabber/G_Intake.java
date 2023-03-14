@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class G_Intake extends SubsystemBase {
-  private final CANSparkMax main = new CANSparkMax(Constants.INTAKE_LEFT_MOTOR_INDEX, MotorType.kBrushless); // INSERT CONSTANT
-  private final CANSparkMax follower = new CANSparkMax(Constants.INTAKE_RIGHT_MOTOR_INDEX, MotorType.kBrushless); // INSERT CONSTANT
+  private final CANSparkMax main = new CANSparkMax(Constants.INTAKE_LEFT_MOTOR_INDEX, MotorType.kBrushless);
+  private final CANSparkMax follower = new CANSparkMax(Constants.INTAKE_RIGHT_MOTOR_INDEX, MotorType.kBrushless);
 
   private final LinearFilter currentFilter = LinearFilter.movingAverage(10);
   private double filteredCurrent;
@@ -42,6 +42,7 @@ public class G_Intake extends SubsystemBase {
     main.set(-speed);
   }
 
+  // Gets the current for the main motor
   public double getCurrent() {
     return main.getOutputCurrent();
   }
