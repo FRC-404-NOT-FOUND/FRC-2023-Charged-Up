@@ -24,7 +24,7 @@
               "_showGlyph": false,
               "Graph/Visible time": 3.0,
               "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
+              "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 5.0,
               "Y-axis/Lower bound": -1.0,
               "Y-axis/Unit": "ul",
@@ -33,15 +33,22 @@
           },
           "5,5": {
             "size": [
-              4,
-              3
+              5,
+              4
             ],
             "content": {
-              "_type": "Text View",
+              "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Back Right Encoder Meters/Second",
               "_title": "Back Right Encoder Meters/Second",
               "_glyph": 148,
-              "_showGlyph": false
+              "_showGlyph": false,
+              "Graph/Visible time": 3.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 5.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Back Right Encoder Meters/Second": true
             }
           },
           "0,0": {
@@ -50,24 +57,38 @@
               4
             ],
             "content": {
-              "_type": "Text View",
+              "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Front Left Encoder Meters/Second",
               "_title": "Front Left Encoder Meters/Second",
               "_glyph": 148,
-              "_showGlyph": false
+              "_showGlyph": false,
+              "Graph/Visible time": 3.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 5.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Front Left Encoder Meters/Second": true
             }
           },
           "5,0": {
             "size": [
-              7,
+              5,
               4
             ],
             "content": {
-              "_type": "Text View",
+              "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Front Right Encoder Meters/Second",
               "_title": "Front Right Encoder Meters/Second",
               "_glyph": 148,
-              "_showGlyph": false
+              "_showGlyph": false,
+              "Graph/Visible time": 3.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 5.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Front Right Encoder Meters/Second": true
             }
           },
           "19,0": {
@@ -315,7 +336,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Front Left Encoder Meters/Second",
-              "_title": "/SmartDashboard/Front Left Encoder Meters/Second",
+              "_title": "Front Left",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -328,20 +349,20 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Back Left Encoder Meters/Second",
-              "_title": "/SmartDashboard/Back Left Encoder Meters/Second",
+              "_title": "Back Left",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
-          "8,4": {
+          "5,4": {
             "size": [
-              3,
+              2,
               1
             ],
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Front Right Encoder Meters/Second",
-              "_title": "/SmartDashboard/Front Right Encoder Meters/Second",
+              "_title": "Front Right",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -524,6 +545,19 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/limelight_Stream",
               "_title": "limelight_Stream",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Back Right Encoder Meters/Second",
+              "_title": "SmartDashboard/Back Right Encoder Meters/Second",
               "_glyph": 148,
               "_showGlyph": false
             }

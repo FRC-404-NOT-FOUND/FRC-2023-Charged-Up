@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -62,12 +63,14 @@ public class TestPathPID extends CommandBase {
     System.out.println("Test PID Init");
   }
 
+  final PathPlannerTrajectory traj = PathPlanner.loadPath(path.getString("Horizontal"), new PathConstraints(velocity.getDouble(0), accel.getDouble(0)));
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (!isFollowing) {
       var followCommand = new PPMecanumControllerCommand(
-        PathPlanner.loadPath(path.getString("Horizontal"), new PathConstraints(velocity.getDouble(0), accel.getDouble(0))),                               //PathPlannerTrajectory
+        traj,                                     //PathPlannerTrajectory
         () -> drivetrain.getCurrentPose(),        //Pose Supplier (GETS THE CURRENT POSE EVERY TIME)
         drivetrain.getKinematics(),               //Kinematics of robot
         //X and Y PID COntrollers, using 0 for all uses feedforwards, TO BE TUNED in Constants
@@ -88,7 +91,7 @@ public class TestPathPID extends CommandBase {
     }
 
     if (restartPath.getBoolean(false)) {
-      drivetrain.resetOdometry();
+      drivetrain.resetOdometry(traj.getInitialHolonomicPose());
       sequence.schedule();
       restartPath.setBoolean(false);
     }

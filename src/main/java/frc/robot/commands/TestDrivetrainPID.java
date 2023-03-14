@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -24,6 +25,8 @@ public class TestDrivetrainPID extends CommandBase {
   public PIDController pid_BL = new PIDController(Constants.BACK_LEFT_MOTOR_KP, Constants.BACK_LEFT_MOTOR_KI, Constants.BACK_LEFT_MOTOR_KD);
   public PIDController pid_BR = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, Constants.BACK_RIGHT_MOTOR_KI, Constants.BACK_RIGHT_MOTOR_KD);
 
+  public SimpleMotorFeedforward ff = new SimpleMotorFeedforward(Constants.DRIVETRAIN_FF_KS, Constants.DRIVETRAIN_FF_KV, Constants.DRIVETRAIN_FF_KA);
+
   public GenericEntry Velocity = tab.add("SetpointVelocity", 0)
     .withWidget(BuiltInWidgets.kNumberSlider)
     .getEntry();
@@ -38,6 +41,18 @@ public class TestDrivetrainPID extends CommandBase {
       .withWidget(BuiltInWidgets.kNumberSlider)
       .getEntry();
   public GenericEntry kD = tab.add("kD", 0)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+
+  public GenericEntry kS = tab.add("kS", 0)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+  
+  public GenericEntry kV = tab.add("kV", 0)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .getEntry();
+  
+  public GenericEntry kA = tab.add("kA", 0)
     .withWidget(BuiltInWidgets.kNumberSlider)
     .getEntry();
 
@@ -58,40 +73,48 @@ public class TestDrivetrainPID extends CommandBase {
   @Override
   public void execute() {
     pid.setPID(kP.getDouble(0.0), kI.getDouble(0.0), kD.getDouble(0.0));
+    SimpleMotorFeedforward calcFF = new SimpleMotorFeedforward(kS.getDouble(0), kV.getDouble(0), kA.getDouble(0));
     switch((int) Motor.getInteger(0)){
       case(0):
         drivetrain
-          .setWheelVoltages(pid.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)*2), 0.0, 0.0, 0.0);
+          .setWheelVoltages(pid.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)*2) + calcFF.calculate(Velocity.getDouble(0)), 0.0, 0.0, 0.0);
         break;
       case(1):
         drivetrain
-            .setWheelVoltages(0.0, pid.calculate(drivetrain.getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)*2), 0.0, 0.0);
+            .setWheelVoltages(0.0, pid.calculate(drivetrain.getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)*2) + calcFF.calculate(Velocity.getDouble(0)), 0.0, 0.0);
         break;
       case(2):
         drivetrain
-            .setWheelVoltages(0.0, 0.0, pid.calculate(drivetrain.getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)*2), 0.0);
+            .setWheelVoltages(0.0, 0.0, pid.calculate(drivetrain.getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)*2) + calcFF.calculate(Velocity.getDouble(0)), 0.0);
         break;
       case(3):
        drivetrain
-            .setWheelVoltages(0.0, 0.0, 0.0, pid.calculate(drivetrain.getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0)*2));
+            .setWheelVoltages(0.0, 0.0, 0.0, pid.calculate(drivetrain.getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0)*2) + calcFF.calculate(Velocity.getDouble(0)));
         break;
       case(4):
         drivetrain
           .setWheelVoltages(
-            pid.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
-            pid.calculate(drivetrain.getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
-            pid.calculate(drivetrain.getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
+            pid.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0)
+            + calcFF.calculate(Velocity.getDouble(0.0)), 
+            pid.calculate(drivetrain.getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)*2.0)
+            + calcFF.calculate(Velocity.getDouble(0.0)), 
+            pid.calculate(drivetrain.getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0)
+            + calcFF.calculate(Velocity.getDouble(0.0)), 
             pid.calculate(drivetrain.getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0)*2.0)
+            + calcFF.calculate(Velocity.getDouble(0.0))
         );
         break;
       case(5):
-        System.out.println(Velocity.getDouble(0));
         drivetrain
           .setWheelVoltages(
-            pid_FL.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
-            pid_FR.calculate(drivetrain.getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
-            pid_BL.calculate(drivetrain.getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0), 
+            pid_FL.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0)
+            + ff.calculate(Velocity.getDouble(0.0)), 
+            pid_FR.calculate(drivetrain.getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)*2.0)
+            + ff.calculate(Velocity.getDouble(0.0)), 
+            pid_BL.calculate(drivetrain.getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0)
+            + ff.calculate(Velocity.getDouble(0.0)), 
             pid_BR.calculate(drivetrain.getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0)*2.0)
+            + ff.calculate(Velocity.getDouble(0.0))
         );
         break;
 
