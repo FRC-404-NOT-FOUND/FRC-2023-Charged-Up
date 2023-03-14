@@ -51,7 +51,8 @@ public class Grabber extends SubsystemBase {
   public Command intakeCubeCommand() {
     Debouncer debounce = new Debouncer(0.5, DebounceType.kRising);
 
-    return runOnce(() -> {
+    return Commands.either(
+      runOnce(() -> {
         debounce.calculate(false);
         hopper.pneumaticsOpen();
       })
@@ -59,35 +60,50 @@ public class Grabber extends SubsystemBase {
         .finallyDo((interruped) -> {
           hasCube = true;
           intake.start(CUBE_HOLD_SPEED);
-        });
+        }),
+      Commands.runOnce(() -> {}),
+      () -> !hasCube && !hasCone
+    );
   }
 
   public Command intakeConeCommand() {
     Debouncer debounce = new Debouncer(0.5, DebounceType.kRising);
 
-    return runOnce(() -> {
+    return Commands.either(
+      runOnce(() -> {
         debounce.calculate(false);
         hopper.pneumaticsClose();
       })
         .andThen(intakeCommand(0.4).until(() -> debounce.calculate(intake.getFilteredCurrent() > STALL_CURRENT)))
-        .finallyDo((interruped) -> hasCone = true);
+        .finallyDo((interruped) -> hasCone = true),
+      Commands.runOnce(() -> {}),
+      () -> !hasCone && !hasCube
+    );
   }
 
   public Command ejectConeCommand() {
-    return runOnce(() -> {
-      intake.stop();
-      hopper.pneumaticsOpen();
-      hasCone = false;
-    });
+    return Commands.either(
+      runOnce(() -> {
+        intake.stop();
+        hopper.pneumaticsOpen();
+        hasCone = false;
+      }),
+      Commands.runOnce(() -> {}),
+      () -> hasCone
+    );
   }
 
   public Command ejectCubeCommand() {
-    return spitCommand(0.1)
-      .andThen(Commands.waitSeconds(0.5))
-      .finallyDo((interupped) -> {
-        intake.stop();
-        hasCube = false;
-      });
+    return Commands.either(
+      spitCommand(0.1)
+        .andThen(Commands.waitSeconds(0.5))
+        .finallyDo((interupped) -> {
+          intake.stop();
+          hasCube = false;
+        }),
+      Commands.runOnce(() -> {}),
+      () -> hasCube
+    );
   }
 
   public Command toggleConeCommand() {
