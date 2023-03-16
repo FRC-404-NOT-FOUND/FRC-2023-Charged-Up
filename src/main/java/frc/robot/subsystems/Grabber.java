@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,8 +17,6 @@ public class Grabber extends SubsystemBase {
   /** Creates a new Grabber. */
   private G_Hopper hopper;
   private G_Intake intake;
-
-  private final double STALL_CURRENT = 4;
   private final double CUBE_HOLD_SPEED = 0.05;
 
   private boolean hasCone;
@@ -54,7 +53,7 @@ public class Grabber extends SubsystemBase {
         debounce.calculate(false);
         hopper.pneumaticsOpen();
       })
-        .andThen(intakeCommand(0.4).until(() -> debounce.calculate(intake.getFilteredCurrent() > STALL_CURRENT)))
+        .andThen(intakeCommand(0.4).until(() -> debounce.calculate(intake.hasSpiked())))
         .finallyDo((interruped) -> {
           hasCube = true;
           intake.start(CUBE_HOLD_SPEED);
@@ -72,7 +71,7 @@ public class Grabber extends SubsystemBase {
         debounce.calculate(false);
         hopper.pneumaticsClose();
       })
-        .andThen(intakeCommand(0.4).until(() -> debounce.calculate(intake.getFilteredCurrent() > STALL_CURRENT)))
+        .andThen(intakeCommand(0.4).until(() -> debounce.calculate(intake.hasSpiked())))
         .finallyDo((interruped) -> hasCone = true),
       Commands.runOnce(() -> {}),
       () -> !hasCone && !hasCube
@@ -92,10 +91,16 @@ public class Grabber extends SubsystemBase {
   }
 
   public Command ejectCubeCommand() {
+    Timer timer = new Timer();
+
     return Commands.either(
-      spitCommand(0.1)
-        .andThen(Commands.waitSeconds(0.5))
+      runOnce(() -> {
+        timer.reset();
+        timer.start();
+      })
+        .andThen(spitCommand(0.1).until(() -> timer.hasElapsed(0.5)))
         .finallyDo((interupped) -> {
+          timer.stop();
           intake.stop();
           hasCube = false;
         }),

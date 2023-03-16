@@ -16,8 +16,12 @@ public class G_Intake extends SubsystemBase {
   private final CANSparkMax main = new CANSparkMax(Constants.INTAKE_LEFT_MOTOR_INDEX, MotorType.kBrushless);
   private final CANSparkMax follower = new CANSparkMax(Constants.INTAKE_RIGHT_MOTOR_INDEX, MotorType.kBrushless);
 
-  private final LinearFilter currentFilter = LinearFilter.movingAverage(10);
-  private double filteredCurrent;
+  final double LEFT_STALL = 4;
+  final double RIGHT_STALL = 4;
+  private final LinearFilter leftCurrentFilter = LinearFilter.movingAverage(10);
+  private final LinearFilter rightCurrentFilter = LinearFilter.movingAverage(10);
+  private double leftFilteredCurrent;
+  private double rightFilteredCurrent;
   
   /** Creates a new G_Intake. */
   public G_Intake() {
@@ -27,7 +31,8 @@ public class G_Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    filteredCurrent = currentFilter.calculate(getCurrent());
+    leftFilteredCurrent = leftCurrentFilter.calculate(getLeftCurrent());
+    rightFilteredCurrent = rightCurrentFilter.calculate(getRightCurrent());
   }
 
   public void start(double speed) {
@@ -43,12 +48,16 @@ public class G_Intake extends SubsystemBase {
   }
 
   // Gets the current for the main motor
-  public double getCurrent() {
+  public double getLeftCurrent() {
     return main.getOutputCurrent();
   }
 
-  public double getFilteredCurrent() {
-    return filteredCurrent;
+  public double getRightCurrent() {
+    return follower.getOutputCurrent();
+  }
+
+  public boolean hasSpiked() {
+    return (leftFilteredCurrent > LEFT_STALL) || (rightFilteredCurrent > RIGHT_STALL);
   }
 
   public Command intakeCommand(double speed) {
