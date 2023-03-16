@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -21,6 +23,10 @@ public class IMU extends SubsystemBase {
   private IMU_Gyroscope imu_gyro;
   private BuiltInAccelerometer accel;
   private ADXRS450_Gyro gyro;
+  private double filteredRate = 0;
+  private double filteredHeading = 0;
+  private LinearFilter rateFilter = LinearFilter.movingAverage(20);
+  private LinearFilter headingFilter = LinearFilter.movingAverage(20);
   private static IMU instance = null;
 
   public static IMU create() {
@@ -44,14 +50,10 @@ public class IMU extends SubsystemBase {
     //   connectArduino();
     // }
 
-    /*
-    if(isGyroReady()){
-      System.out.println("Heading: " + getGyroYaw());
-      System.out.println("AccelX: " + getAccelX());
-      System.out.println("AccelY: " + getAccelY());
-      System.out.println("AccelZ: " + getAccelZ());
+    if (isGyroReady()) {
+      filteredRate = rateFilter.calculate(MathUtil.applyDeadband(gyro.getRate(), 0.05));
+      filteredHeading = headingFilter.calculate(MathUtil.applyDeadband(gyro.getAngle(), 0.05));
     }
-    */
   }
 
   public void readyArduino() {
@@ -139,7 +141,7 @@ public class IMU extends SubsystemBase {
 
   public double getGyroRate() {
     if (isGyroReady()) {
-      return gyro.getRate();
+      return filteredRate;
     }
 
     return 0.0;
@@ -147,7 +149,7 @@ public class IMU extends SubsystemBase {
 
   public double getGyroYaw(){
     if (isGyroReady()) {
-      return gyro.getAngle();
+      return filteredHeading;
     }
 
     return 0.0;

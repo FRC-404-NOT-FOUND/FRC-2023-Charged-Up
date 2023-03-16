@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -27,6 +28,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.drive.MecanumDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
@@ -60,9 +62,20 @@ public class Drivetrain extends SubsystemBase {
   private PIDController frontRightMotorPID = new PIDController(Constants.FRONT_RIGHT_MOTOR_KP, Constants.FRONT_RIGHT_MOTOR_KI, Constants.FRONT_RIGHT_MOTOR_KD);
   private PIDController backLeftMotorPID = new PIDController(Constants.BACK_LEFT_MOTOR_KP, Constants.BACK_LEFT_MOTOR_KI, Constants.BACK_LEFT_MOTOR_KD);
   private PIDController backRightMotorPID = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, Constants.BACK_RIGHT_MOTOR_KI, Constants.BACK_RIGHT_MOTOR_KD);
-  private SimpleMotorFeedforward ff = new SimpleMotorFeedforward(Constants.DRIVETRAIN_FF_KS, Constants.DRIVETRAIN_FF_KV, Constants.DRIVETRAIN_FF_KA);
+  private PIDController rotatePID = new PIDController(Constants.DRIVETRAIN_ROTATE_KP, Constants.DRIVETRAIN_ROTATE_KI, Constants.DRIVETRAIN_ROTATE_KD);
+
+  private SimpleMotorFeedforward frontLeftMotorFF = new SimpleMotorFeedforward(Constants.FRONT_LEFT_MOTOR_FF_KS, Constants.FRONT_LEFT_MOTOR_FF_KV, Constants.FRONT_LEFT_MOTOR_FF_KA);
+  private SimpleMotorFeedforward frontRightMotorFF = new SimpleMotorFeedforward(Constants.FRONT_RIGHT_MOTOR_FF_KS, Constants.FRONT_RIGHT_MOTOR_FF_KV, Constants.FRONT_RIGHT_MOTOR_FF_KA);
+  private SimpleMotorFeedforward backLeftMotorFF = new SimpleMotorFeedforward(Constants.BACK_LEFT_MOTOR_FF_KS, Constants.BACK_LEFT_MOTOR_FF_KV, Constants.BACK_LEFT_MOTOR_FF_KA);
+  private SimpleMotorFeedforward backRightMotorFF = new SimpleMotorFeedforward(Constants.BACK_RIGHT_MOTOR_FF_KS, Constants.BACK_RIGHT_MOTOR_FF_KV, Constants.BACK_RIGHT_MOTOR_FF_KA);
 
   private MecanumDrive mDrive;
+
+  private SlewRateLimiter xLimiter = new SlewRateLimiter(1.7);
+  private SlewRateLimiter yLimiter = new SlewRateLimiter(1.7);
+  private SlewRateLimiter zLimiter = new SlewRateLimiter(2);
+
+  private Field2d field2d = new Field2d();
 
   private IMU imu;
 
@@ -106,7 +119,9 @@ public class Drivetrain extends SubsystemBase {
 
     if (Limelight.isValidTarget() && Limelight.getPrimaryAprilTag() > 0) {
       poseEstimator.addVisionMeasurement(getVisionPose(), Timer.getFPGATimestamp());
-    } 
+    }
+
+    field2d.setRobotPose(getCurrentPose());
 
     SmartDashboard.putNumber("Front Left Encoder position", frontLeftEncoder.getPosition());
     SmartDashboard.putNumber("Front Right Encoder position", frontRightEncoder.getPosition());
@@ -125,9 +140,7 @@ public class Drivetrain extends SubsystemBase {
 
     SmartDashboard.putNumber("Gyro Angle", angle.getDegrees());
 
-    SmartDashboard.putNumber("Robot Pose X", getCurrentPose().getX());
-    SmartDashboard.putNumber("Robot Pose Y", getCurrentPose().getY());
-    SmartDashboard.putNumber("Robot Pose Rotation", getCurrentPose().getRotation().getDegrees());
+    SmartDashboard.putData(field2d);
   }
 
   // DO NOT USE EXCEPT IN TEST!!!
@@ -196,12 +209,19 @@ public class Drivetrain extends SubsystemBase {
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation, boolean fieldRelative) {
     xSpeed = MathUtil.applyDeadband(xSpeed, 0.1);
     ySpeed = MathUtil.applyDeadband(ySpeed, 0.1);
-    zRotation = MathUtil.applyDeadband(zRotation, 0.1);
+    //double rate = MathUtil.applyDeadband(imu.getGyroRate(), 0.1);
+
+    double x = xLimiter.calculate(xSpeed);
+    double y = yLimiter.calculate(ySpeed);
+
+    zRotation = MathUtil.applyDeadband(zRotation, 0.05);
+    //zRotation = rotatePID.calculate(rate, zRotation);
+    double z = zLimiter.calculate(zRotation);
 
     var speeds = kinematics.toWheelSpeeds(
       fieldRelative ?
-        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zRotation, getGyroAngle()) :
-        new ChassisSpeeds(xSpeed, ySpeed, zRotation)
+        ChassisSpeeds.fromFieldRelativeSpeeds(x, y, z, getGyroAngle()) :
+        new ChassisSpeeds(x, y, z)
     );
 
     speeds.frontLeftMetersPerSecond *= 4.5;
@@ -327,16 +347,16 @@ public class Drivetrain extends SubsystemBase {
 
     wheelSpeeds[0] =
       frontLeftMotorPID.calculate(currentWheelSpeeds.frontLeftMetersPerSecond, kinematicWheelSpeeds.frontLeftMetersPerSecond*2.0)
-      + ff.calculate(kinematicWheelSpeeds.frontLeftMetersPerSecond);
+      + frontLeftMotorFF.calculate(kinematicWheelSpeeds.frontLeftMetersPerSecond);
     wheelSpeeds[1] = 
       frontRightMotorPID.calculate(currentWheelSpeeds.frontRightMetersPerSecond, kinematicWheelSpeeds.frontRightMetersPerSecond*2.0)
-      + ff.calculate(kinematicWheelSpeeds.frontRightMetersPerSecond);
+      + frontRightMotorFF.calculate(kinematicWheelSpeeds.frontRightMetersPerSecond);
     wheelSpeeds[2] =
       backLeftMotorPID.calculate(currentWheelSpeeds.rearLeftMetersPerSecond, kinematicWheelSpeeds.rearLeftMetersPerSecond*2.0)
-      + ff.calculate(kinematicWheelSpeeds.rearLeftMetersPerSecond);
+      + backLeftMotorFF.calculate(kinematicWheelSpeeds.rearLeftMetersPerSecond);
     wheelSpeeds[3] =
       backRightMotorPID.calculate(currentWheelSpeeds.rearRightMetersPerSecond, kinematicWheelSpeeds.rearRightMetersPerSecond*2.0)
-      + ff.calculate(kinematicWheelSpeeds.rearRightMetersPerSecond);
+      + backRightMotorFF.calculate(kinematicWheelSpeeds.rearRightMetersPerSecond);
 
     // for (var i = 0; i < wheelSpeeds.length; i++) {
     //   if (wheelSpeeds[i] > 8) {

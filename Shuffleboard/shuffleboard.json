@@ -185,7 +185,7 @@
           "12,1": {
             "size": [
               5,
-              3
+              2
             ],
             "content": {
               "_type": "Number Slider",
@@ -199,7 +199,7 @@
               "Visuals/Display value": true
             }
           },
-          "12,4": {
+          "12,3": {
             "size": [
               5,
               1
@@ -212,7 +212,7 @@
               "_showGlyph": false
             }
           },
-          "10,5": {
+          "10,4": {
             "size": [
               3,
               2
@@ -229,7 +229,7 @@
               "Visuals/Display value": true
             }
           },
-          "13,5": {
+          "13,4": {
             "size": [
               3,
               2
@@ -246,7 +246,7 @@
               "Visuals/Display value": true
             }
           },
-          "16,5": {
+          "16,4": {
             "size": [
               3,
               2
@@ -266,7 +266,7 @@
           "12,0": {
             "size": [
               5,
-              2
+              1
             ],
             "content": {
               "_type": "Text View",
@@ -276,9 +276,9 @@
               "_showGlyph": false
             }
           },
-          "17,1": {
+          "10,6": {
             "size": [
-              2,
+              3,
               1
             ],
             "content": {
@@ -289,9 +289,9 @@
               "_showGlyph": false
             }
           },
-          "17,2": {
+          "13,6": {
             "size": [
-              2,
+              3,
               1
             ],
             "content": {
@@ -302,9 +302,9 @@
               "_showGlyph": false
             }
           },
-          "17,3": {
+          "16,6": {
             "size": [
-              2,
+              3,
               1
             ],
             "content": {
@@ -560,6 +560,61 @@
               "_title": "SmartDashboard/Back Right Encoder Meters/Second",
               "_glyph": 148,
               "_showGlyph": false
+            }
+          },
+          "10,7": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/PID_DrivetrainTest/kS",
+              "_title": "Shuffleboard/PID_DrivetrainTest/kS",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,7": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/PID_DrivetrainTest/kV",
+              "_title": "Shuffleboard/PID_DrivetrainTest/kV",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "16,7": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/PID_DrivetrainTest/kA",
+              "_title": "Shuffleboard/PID_DrivetrainTest/kA",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "17,3": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Field",
+              "_source0": "network_table:///SmartDashboard/Field",
+              "_title": "Field",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Game/Game": "A2023_Charged_Up",
+              "Visuals/Robot Icon Size": 50.0,
+              "Visuals/Show Outside Circles": false
             }
           }
         }

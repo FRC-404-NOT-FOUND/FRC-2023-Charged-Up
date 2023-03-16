@@ -25,7 +25,10 @@ public class TestDrivetrainPID extends CommandBase {
   public PIDController pid_BL = new PIDController(Constants.BACK_LEFT_MOTOR_KP, Constants.BACK_LEFT_MOTOR_KI, Constants.BACK_LEFT_MOTOR_KD);
   public PIDController pid_BR = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, Constants.BACK_RIGHT_MOTOR_KI, Constants.BACK_RIGHT_MOTOR_KD);
 
-  public SimpleMotorFeedforward ff = new SimpleMotorFeedforward(Constants.DRIVETRAIN_FF_KS, Constants.DRIVETRAIN_FF_KV, Constants.DRIVETRAIN_FF_KA);
+  public SimpleMotorFeedforward ff_FL = new SimpleMotorFeedforward(Constants.FRONT_LEFT_MOTOR_FF_KS, Constants.FRONT_LEFT_MOTOR_FF_KV, Constants.FRONT_LEFT_MOTOR_FF_KA);
+  public SimpleMotorFeedforward ff_FR = new SimpleMotorFeedforward(Constants.FRONT_RIGHT_MOTOR_FF_KS, Constants.FRONT_RIGHT_MOTOR_FF_KV, Constants.FRONT_RIGHT_MOTOR_FF_KA);
+  public SimpleMotorFeedforward ff_BL = new SimpleMotorFeedforward(Constants.BACK_LEFT_MOTOR_FF_KS, Constants.BACK_LEFT_MOTOR_FF_KV, Constants.BACK_LEFT_MOTOR_FF_KA);
+  public SimpleMotorFeedforward ff_BR = new SimpleMotorFeedforward(Constants.BACK_RIGHT_MOTOR_FF_KS, Constants.BACK_RIGHT_MOTOR_FF_KV, Constants.BACK_RIGHT_MOTOR_FF_KA);
 
   public GenericEntry Velocity = tab.add("SetpointVelocity", 0)
     .withWidget(BuiltInWidgets.kNumberSlider)
@@ -108,13 +111,13 @@ public class TestDrivetrainPID extends CommandBase {
         drivetrain
           .setWheelVoltages(
             pid_FL.calculate(drivetrain.getKinematicWheelSpeeds().frontLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0)
-            + ff.calculate(Velocity.getDouble(0.0)), 
+            + ff_FL.calculate(Velocity.getDouble(0.0)), 
             pid_FR.calculate(drivetrain.getKinematicWheelSpeeds().frontRightMetersPerSecond, Velocity.getDouble(0.0)*2.0)
-            + ff.calculate(Velocity.getDouble(0.0)), 
+            + ff_FR.calculate(Velocity.getDouble(0.0)), 
             pid_BL.calculate(drivetrain.getKinematicWheelSpeeds().rearLeftMetersPerSecond, Velocity.getDouble(0.0)*2.0)
-            + ff.calculate(Velocity.getDouble(0.0)), 
+            + ff_BL.calculate(Velocity.getDouble(0.0)), 
             pid_BR.calculate(drivetrain.getKinematicWheelSpeeds().rearRightMetersPerSecond, Velocity.getDouble(0.0)*2.0)
-            + ff.calculate(Velocity.getDouble(0.0))
+            + ff_BR.calculate(Velocity.getDouble(0.0))
         );
         break;
 
