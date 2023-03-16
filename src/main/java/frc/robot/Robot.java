@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
     imu.connectDevices();
     //imu.connectArduino();
     m_robotContainer = new RobotContainer();
-    testCommand = new TestDrivetrainPID(m_robotContainer.getDrivetrain());
+    testCommand = new TestPathPID(m_robotContainer.getDrivetrain());
     PathPlannerServer.startServer(8888);
     m_robotContainer.getGrabber().turnCompressorOn();
     System.out.println("Robot Inited");

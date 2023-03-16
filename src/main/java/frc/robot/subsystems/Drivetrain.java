@@ -62,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
   private PIDController frontRightMotorPID = new PIDController(Constants.FRONT_RIGHT_MOTOR_KP, Constants.FRONT_RIGHT_MOTOR_KI, Constants.FRONT_RIGHT_MOTOR_KD);
   private PIDController backLeftMotorPID = new PIDController(Constants.BACK_LEFT_MOTOR_KP, Constants.BACK_LEFT_MOTOR_KI, Constants.BACK_LEFT_MOTOR_KD);
   private PIDController backRightMotorPID = new PIDController(Constants.BACK_RIGHT_MOTOR_KP, Constants.BACK_RIGHT_MOTOR_KI, Constants.BACK_RIGHT_MOTOR_KD);
-  private PIDController rotatePID = new PIDController(Constants.DRIVETRAIN_ROTATE_KP, Constants.DRIVETRAIN_ROTATE_KI, Constants.DRIVETRAIN_ROTATE_KD);
+  //private PIDController rotatePID = new PIDController(Constants.DRIVETRAIN_ROTATE_KP, Constants.DRIVETRAIN_ROTATE_KI, Constants.DRIVETRAIN_ROTATE_KD);
 
   private SimpleMotorFeedforward frontLeftMotorFF = new SimpleMotorFeedforward(Constants.FRONT_LEFT_MOTOR_FF_KS, Constants.FRONT_LEFT_MOTOR_FF_KV, Constants.FRONT_LEFT_MOTOR_FF_KA);
   private SimpleMotorFeedforward frontRightMotorFF = new SimpleMotorFeedforward(Constants.FRONT_RIGHT_MOTOR_FF_KS, Constants.FRONT_RIGHT_MOTOR_FF_KV, Constants.FRONT_RIGHT_MOTOR_FF_KA);

@@ -30,10 +30,6 @@ public class TestPathPID extends CommandBase {
   .withWidget(BuiltInWidgets.kToggleButton)
   .getEntry();
 
-  public GenericEntry path = tab.add("Path", "Horizontal")
-    .withWidget(BuiltInWidgets.kComboBoxChooser)
-    .getEntry();
-
   public boolean isFollowing = false;
   
   public PIDController horizontalPID = new PIDController(0, 0, 0);
@@ -55,6 +51,8 @@ public class TestPathPID extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(d);
     drivetrain = d;
+
+    rotatePID.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   // Called when the command is initially scheduled.
@@ -63,7 +61,7 @@ public class TestPathPID extends CommandBase {
     System.out.println("Test PID Init");
   }
 
-  final PathPlannerTrajectory traj = PathPlanner.loadPath(path.getString("Horizontal"), new PathConstraints(velocity.getDouble(0), accel.getDouble(0)));
+  final PathPlannerTrajectory traj = PathPlanner.loadPath("Rotational Path", new PathConstraints(velocity.getDouble(0), accel.getDouble(0)));
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
