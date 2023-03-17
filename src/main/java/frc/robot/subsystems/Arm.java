@@ -85,10 +85,9 @@ public class Arm extends SubsystemBase {
   }
 
   public Command extendArmTo(double d) {
-    return Commands.runOnce(
-      () -> getExtension().getPIDController().setReference(d, ControlType.kPosition),
-      getExtension()
-    );
+    return Commands.either(retractContinuousCommand(), extendContinuousCommand(), () -> d < getExtensionEncoderPosition())
+      .until(() -> getExtensionEncoderPosition() + 3 > d && getExtensionEncoderPosition() - 3 < d)
+      .finallyDo((interrupted) -> getExtension().getPIDController().setReference(d, ControlType.kPosition));
   }
 
   public Command pivotArmTo(double d) {

@@ -44,12 +44,13 @@ public class MecanumDrive extends CommandBase {
 
     double horizontal = h * h;
     double vertical = v * v;
+    double zRotation = z * 0.5;
 
     if(!isSquared){
-      drivetrain.driveCartesian(-v, -h, -z);
+      drivetrain.driveCartesian(-v, -h, -zRotation);
     }
     else{
-      drivetrain.driveCartesian(-(vertical * verticalSign), -(horizontal * horizontalSign), -z);
+      drivetrain.driveCartesian(-(vertical * verticalSign), -(horizontal * horizontalSign), -zRotation);
     }
     
     // drivetrain.driveCartesian(vertical, horizontal, pivot);

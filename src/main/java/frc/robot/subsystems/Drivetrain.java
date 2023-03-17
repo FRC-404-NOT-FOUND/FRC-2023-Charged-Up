@@ -71,9 +71,9 @@ public class Drivetrain extends SubsystemBase {
 
   private MecanumDrive mDrive;
 
-  private SlewRateLimiter xLimiter = new SlewRateLimiter(1.7);
-  private SlewRateLimiter yLimiter = new SlewRateLimiter(1.7);
-  private SlewRateLimiter zLimiter = new SlewRateLimiter(2);
+  private SlewRateLimiter xLimiter = new SlewRateLimiter(1.8);
+  private SlewRateLimiter yLimiter = new SlewRateLimiter(1.8);
+  private SlewRateLimiter zLimiter = new SlewRateLimiter(1.9);
 
   private Field2d field2d = new Field2d();
 
@@ -160,7 +160,7 @@ public class Drivetrain extends SubsystemBase {
   // Drives the robot along the given path
   public Command followPath(String path) {
     return new PPMecanumControllerCommand(
-      PathPlanner.loadPath(path, new PathConstraints(3, 2)),                               //PathPlannerTrajectory
+      PathPlanner.loadPath(path, new PathConstraints(Constants.MAX_AUTONOMOUS_WHEEL_VELOCITY, Constants.MAX_AUTONOMOUS_WHEEL_ACCEL)),                               //PathPlannerTrajectory
       () -> getCurrentPose(),        //Pose Supplier (GETS THE CURRENT POSE EVERY TIME)
       getKinematics(),               //Kinematics of robot
       //X and Y PID COntrollers, using 0 for all uses feedforwards, TO BE TUNED in Constants

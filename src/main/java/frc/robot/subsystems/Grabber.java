@@ -17,7 +17,8 @@ public class Grabber extends SubsystemBase {
   /** Creates a new Grabber. */
   private G_Hopper hopper;
   private G_Intake intake;
-  private final double CUBE_HOLD_SPEED = 0.05;
+  private final double CUBE_HOLD_VOLTAGE = 0.5;
+  private final double CONE_HOLD_VOLTAGE = 0.75;
 
   private boolean hasCone;
   private boolean hasCube;
@@ -45,34 +46,37 @@ public class Grabber extends SubsystemBase {
     return intake;
   }
 
-  public Command intakeCubeCommand() {
-    Debouncer debounce = new Debouncer(0.5, DebounceType.kRising);
+  public Command intakeCubeCommand(Arm arm) {
+    Debouncer debounce = new Debouncer(0.75, DebounceType.kRising);
 
     return Commands.either(
-      runOnce(() -> {
+      Commands.runOnce(() -> {
         debounce.calculate(false);
         hopper.pneumaticsOpen();
       })
         .andThen(intakeCommand(0.4).until(() -> debounce.calculate(intake.hasSpiked())))
         .finallyDo((interruped) -> {
           hasCube = true;
-          intake.start(CUBE_HOLD_SPEED);
+          intake.main.setVoltage(CUBE_HOLD_VOLTAGE);
         }),
       Commands.runOnce(() -> {}),
       () -> !hasCube && !hasCone
     );
   }
 
-  public Command intakeConeCommand() {
-    Debouncer debounce = new Debouncer(0.5, DebounceType.kRising);
+  public Command intakeConeCommand(Arm arm) {
+    Debouncer debounce = new Debouncer(0.75, DebounceType.kRising);
 
     return Commands.either(
-      runOnce(() -> {
+      Commands.runOnce(() -> {
         debounce.calculate(false);
         hopper.pneumaticsClose();
       })
         .andThen(intakeCommand(0.4).until(() -> debounce.calculate(intake.hasSpiked())))
-        .finallyDo((interruped) -> hasCone = true),
+        .finallyDo((interruped) -> {
+          hasCone = true;
+          intake.main.setVoltage(CONE_HOLD_VOLTAGE);
+        }),
       Commands.runOnce(() -> {}),
       () -> !hasCone && !hasCube
     );
@@ -109,12 +113,14 @@ public class Grabber extends SubsystemBase {
     );
   }
 
-  public Command toggleConeCommand() {
-    return Commands.either(ejectConeCommand(), intakeConeCommand(), () -> hasCone);
+  public Command toggleConeCommand(Arm arm) {
+    return Commands.either(ejectConeCommand(), intakeConeCommand(arm), () -> hasCone)
+      .andThen(arm.extendArmTo(0));
   }
 
-  public Command toggleCubeCommand() {
-    return Commands.either(ejectCubeCommand(), intakeCubeCommand(), () -> hasCube);
+  public Command toggleCubeCommand(Arm arm) {
+    return Commands.either(ejectCubeCommand(), intakeCubeCommand(arm), () -> hasCube)
+      .andThen(arm.extendArmTo(0));
   }
 
   public Command intakeCommand(double speed) {

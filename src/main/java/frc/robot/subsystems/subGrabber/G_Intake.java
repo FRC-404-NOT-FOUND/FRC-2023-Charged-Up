@@ -9,15 +9,16 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class G_Intake extends SubsystemBase {
-  private final CANSparkMax main = new CANSparkMax(Constants.INTAKE_LEFT_MOTOR_INDEX, MotorType.kBrushless);
+  public final CANSparkMax main = new CANSparkMax(Constants.INTAKE_LEFT_MOTOR_INDEX, MotorType.kBrushless);
   private final CANSparkMax follower = new CANSparkMax(Constants.INTAKE_RIGHT_MOTOR_INDEX, MotorType.kBrushless);
 
-  final double LEFT_STALL = 4;
-  final double RIGHT_STALL = 4;
+  final double LEFT_STALL = 6;
+  final double RIGHT_STALL = 6;
   private final LinearFilter leftCurrentFilter = LinearFilter.movingAverage(10);
   private final LinearFilter rightCurrentFilter = LinearFilter.movingAverage(10);
   private double leftFilteredCurrent;
@@ -61,10 +62,10 @@ public class G_Intake extends SubsystemBase {
   }
 
   public Command intakeCommand(double speed) {
-    return startEnd(() -> start(speed), this::stop);
+    return Commands.startEnd(() -> start(speed), this::stop);
   }
 
   public Command spitCommand(double speed) {
-    return startEnd(() -> spit(speed), this::stop);
+    return Commands.startEnd(() -> spit(speed), this::stop);
   }
 }

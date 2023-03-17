@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ArmRaiseContinuous;
 import frc.robot.commands.MecanumDrive;
 import frc.robot.commands.autonomous.AutonomousCommandSimple;
+import frc.robot.commands.autonomous.FunnyAutonomous;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
@@ -63,10 +64,12 @@ public class RobotContainer {
   private final Trigger oi_cube2Place = new Trigger(() -> OI.gamepad.getPOV() == 90 ? true : false);
   private final Trigger oi_cone1Place = new Trigger(() -> OI.gamepad.getPOV() == 270 ? true : false);
   private final Trigger oi_cone2Place = new Trigger(() -> OI.gamepad.getPOV() == 0 ? true : false);
+  private final Trigger oi_humanPlayer = new Trigger(() -> OI.gamepad.getRightStickButton());
   
   private final Trigger oi_gPneumaticsToggle = new Trigger(() -> OI.gamepad.getXButton());
   private final Trigger oi_gToggleCone = new Trigger(() -> OI.gamepad.getAButton());
   private final Trigger oi_gToggleCube = new Trigger(() -> OI.gamepad.getBButton());
+
 
  // private final Trigger oi_iArduinoReconnect = new Trigger(() -> OI.gamepad.getBackButtonPressed());
   
@@ -96,8 +99,8 @@ public class RobotContainer {
     // oi_gCompressorToggle.toggleOnFalse(s_grabber.toggleCompressorCommand());
     oi_gPneumaticsToggle.toggleOnTrue(s_grabber.toggleGrabberCommand());
 
-    oi_gToggleCone.toggleOnTrue(s_grabber.toggleConeCommand());
-    oi_gToggleCube.toggleOnTrue(s_grabber.toggleCubeCommand());
+    oi_gToggleCone.toggleOnTrue(s_grabber.toggleConeCommand(s_arm));
+    oi_gToggleCube.toggleOnTrue(s_grabber.toggleCubeCommand(s_arm));
 
     //Toggles Fine Control
     oi_driveFine.toggleOnTrue(mecanumDriveFine);
@@ -107,6 +110,7 @@ public class RobotContainer {
     oi_cone2Place.onTrue(s_arm.moveArmTo(Constants.SECOND_CONE_ANGLE, Constants.SECOND_CONE_EXTENSION).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
     oi_cube1Place.onTrue(s_arm.moveArmTo(Constants.FIRST_CUBE_ANGLE, Constants.FIRST_CUBE_EXTENSION).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
     oi_cube2Place.onTrue(s_arm.moveArmTo(Constants.SECOND_CUBE_ANGLE, Constants.SECOND_CUBE_EXTENSION).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    oi_humanPlayer.onTrue(s_arm.moveArmTo(Constants.HUMAN_PLAYER_ANGLE, Constants.HUMAN_PLAYER_EXTENSION));
   }
 
   /**
@@ -117,7 +121,7 @@ public class RobotContainer {
    * */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new AutonomousCommandSimple(s_drivetrain, s_arm, s_grabber);
+    return new FunnyAutonomous(s_drivetrain, s_arm);
   }
 
   public Drivetrain getDrivetrain(){

@@ -17,6 +17,6 @@ public class AutonomousCommandSimple extends SequentialCommandGroup {
   public AutonomousCommandSimple(Drivetrain drivetrain, Arm arm, Grabber grabber) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(drivetrain.followPath("Autonomous Plan"));
+    addCommands(drivetrain.followPath("Horizontal Path"));
   }
 }
