@@ -26,6 +26,8 @@ public class G_Intake extends SubsystemBase {
   
   /** Creates a new G_Intake. */
   public G_Intake() {
+    main.setSmartCurrentLimit(20);
+    follower.setSmartCurrentLimit(20);
     follower.follow(main, true);
   }
 
