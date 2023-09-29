@@ -121,7 +121,7 @@ public class RobotContainer {
    * */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new FunnyAutonomous(s_drivetrain, s_arm);
+    return new FunnyAutonomous(s_drivetrain, s_arm, s_grabber);
   }
 
   public Drivetrain getDrivetrain(){

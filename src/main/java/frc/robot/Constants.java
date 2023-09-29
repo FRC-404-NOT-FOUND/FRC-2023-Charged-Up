@@ -142,7 +142,7 @@ public final class Constants {
     public static final int SECOND_CUBE_EXTENSION = 160;
     public static final int DEFAULT_ANGLE = 42;
     public static final int DEFAULT_EXTENSION = 50;
-    public static final int HUMAN_PLAYER_ANGLE = 136;
+    public static final int HUMAN_PLAYER_ANGLE = 133;
     public static final int HUMAN_PLAYER_EXTENSION = 150;
 
 

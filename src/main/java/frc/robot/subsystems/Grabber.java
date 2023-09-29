@@ -102,7 +102,7 @@ public class Grabber extends SubsystemBase {
         timer.reset();
         timer.start();
       })
-        .andThen(spitCommand(0.1).until(() -> timer.hasElapsed(0.5)))
+        .andThen(spitCommand(0.8).until(() -> timer.hasElapsed(0.5)))
         .finallyDo((interupped) -> {
           timer.stop();
           intake.stop();
@@ -114,13 +114,13 @@ public class Grabber extends SubsystemBase {
   }
 
   public Command toggleConeCommand(Arm arm) {
-    return Commands.either(ejectConeCommand(), intakeConeCommand(arm), () -> hasCone)
-      .andThen(arm.extendArmTo(0));
+    return Commands.either(ejectConeCommand(), intakeConeCommand(arm), () -> hasCone);
+      //.andThen(arm.extendArmTo(0));
   }
 
   public Command toggleCubeCommand(Arm arm) {
-    return Commands.either(ejectCubeCommand(), intakeCubeCommand(arm), () -> hasCube)
-      .andThen(arm.extendArmTo(0));
+    return Commands.either(ejectCubeCommand(), intakeCubeCommand(arm), () -> hasCube);
+      //.andThen(arm.extendArmTo(0));
   }
 
   public Command intakeCommand(double speed) {

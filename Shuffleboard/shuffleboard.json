@@ -27,8 +27,7 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 5.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Back Left Encoder Meters/Second": true
+              "Y-axis/Unit": "ul"
             }
           },
           "5,5": {
@@ -47,8 +46,7 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 5.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Back Right Encoder Meters/Second": true
+              "Y-axis/Unit": "ul"
             }
           },
           "0,0": {
@@ -67,8 +65,7 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 5.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Front Left Encoder Meters/Second": true
+              "Y-axis/Unit": "ul"
             }
           },
           "5,0": {
@@ -87,8 +84,7 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 5.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Front Right Encoder Meters/Second": true
+              "Y-axis/Unit": "ul"
             }
           },
           "19,0": {
@@ -631,14 +627,15 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "0,0": {
+          "2,0": {
             "size": [
-              4,
+              8,
               4
             ],
             "content": {
               "_type": "Camera Stream",
-              "_title": "Camera Stream",
+              "_source0": "camera_server://limelight",
+              "_title": "limelight",
               "_glyph": 148,
               "_showGlyph": false,
               "Crosshair/Show crosshair": true,
@@ -649,49 +646,6 @@
               "fps": -1,
               "imageWidth": -1,
               "imageHeight": -1
-            }
-          },
-          "7,1": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Mecanum Drivebase",
-              "_title": "Mecanum Drivebase",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Visuals/Show velocity vectors": true
-            }
-          },
-          "4,0": {
-            "size": [
-              3,
-              5
-            ],
-            "content": {
-              "_type": "PDP",
-              "_title": "PDP",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Visuals/Show voltage and current values": true
-            }
-          },
-          "7,0": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Voltage View",
-              "_title": "Voltage View",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Range/Min": 0.0,
-              "Range/Max": 5.0,
-              "Range/Center": 0.0,
-              "Visuals/Orientation": "HORIZONTAL",
-              "Visuals/Number of tick marks": 5
             }
           }
         }

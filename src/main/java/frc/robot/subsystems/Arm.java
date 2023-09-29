@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax.ControlType;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -106,6 +105,9 @@ public class Arm extends SubsystemBase {
   }
 
   public Command engage() {
-    return Commands.sequence(pivotArmTo(Constants.DEFAULT_ANGLE), extendArmTo(Constants.DEFAULT_EXTENSION));
+    return Commands.sequence(
+      pivotArmTo(Constants.DEFAULT_ANGLE),
+      extendArmTo(Constants.DEFAULT_EXTENSION)
+    );
   }
 }

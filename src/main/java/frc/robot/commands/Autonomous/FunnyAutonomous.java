@@ -8,16 +8,19 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Grabber;
 
 public class FunnyAutonomous extends CommandBase {
   Drivetrain drivetrain;
   Arm arm;
+  Grabber grabber;
   boolean hasEngaged = false;
-  public FunnyAutonomous(Drivetrain d, Arm a) {
+  public FunnyAutonomous(Drivetrain d, Arm a, Grabber g) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(d);
     drivetrain = d;
     arm = a;
+    grabber = g;
   }
 
   // Called when the command is initially scheduled.
@@ -34,12 +37,12 @@ public class FunnyAutonomous extends CommandBase {
       drivetrain.driveCartesian(-0.5, 0.0, 0.0);
     } else if (Constants.timer.get() < 1.0){
       drivetrain.driveCartesian(0.0, 0.0, 0.0);
-    } else if (Constants.timer.get() < 3.0){
+    } else if (Constants.timer.get() < 3.7 ){
       drivetrain.driveCartesian(0.5, 0.0, 0.0);
     } else {
       drivetrain.driveCartesian(0.0, 0.0, 0.0);
       if (!hasEngaged) {
-        arm.engage().schedule();
+        //arm.engage().schedule();
         hasEngaged = true;
       }
     }
